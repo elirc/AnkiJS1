@@ -1,90 +1,189 @@
-import { BookOpen, Home, Inbox, Library, PlusCircle, Settings, Zap } from 'lucide-react';
-import { NavLink, Outlet } from 'react-router-dom';
-import { SyncBadge } from './components/SyncBadge';
-import { UpdateToast } from './components/UpdateToast';
-import { cn } from './lib/cn';
+import { useEffect, useState } from "react";
+import {
+  BarChart3,
+  BookOpen,
+  ChevronRight,
+  Code2,
+  Inbox,
+  LayoutDashboard,
+  Library,
+  Plus,
+  Settings,
+  Sprout,
+  WifiOff,
+} from "lucide-react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { SyncBadge } from "./components/SyncBadge";
+import { UpdateToast } from "./components/UpdateToast";
 
-const navItems = [
-  { to: '/', label: 'Home', icon: Home },
-  { to: '/study', label: 'Study', icon: BookOpen },
-  { to: '/capture', label: 'Capture', icon: PlusCircle, center: true },
-  { to: '/inbox', label: 'Inbox', icon: Inbox },
-  { to: '/decks', label: 'Decks', icon: Library },
+const primaryNav = [
+  { to: "/", label: "Overview", icon: LayoutDashboard },
+  { to: "/decks", label: "My decks", icon: Library },
+  { to: "/study", label: "Quick study", icon: BookOpen },
+  { to: "/progress", label: "My progress", icon: BarChart3 },
 ];
-
+const mobileNav = [
+  primaryNav[0],
+  primaryNav[1],
+  primaryNav[2],
+  primaryNav[3],
+  { to: "/capture", label: "Capture", icon: Plus },
+];
 export function App() {
+  const location = useLocation();
+  const studying = location.pathname.startsWith("/study");
+  const [online, setOnline] = useState(navigator.onLine);
+  useEffect(() => {
+    const update = () => setOnline(navigator.onLine);
+    window.addEventListener("online", update);
+    window.addEventListener("offline", update);
+    return () => {
+      window.removeEventListener("online", update);
+      window.removeEventListener("offline", update);
+    };
+  }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+  const currentLabel =
+    [
+      ...primaryNav,
+      { to: "/capture", label: "Quick capture" },
+      { to: "/inbox", label: "Inbox" },
+      { to: "/settings", label: "Settings" },
+    ].find((item) =>
+      item.to === "/"
+        ? location.pathname === "/"
+        : location.pathname.startsWith(item.to),
+    )?.label ?? "Your workspace";
   return (
-    <div className="min-h-dvh text-text">
-      <header className="sticky top-0 z-20 border-b border-line bg-background/85 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
-          <NavLink
-            to="/"
-            className="flex items-center gap-2 text-lg font-semibold tracking-tight text-text outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            <span className="flex size-8 items-center justify-center rounded-[10px] bg-gradient-to-br from-primary to-primary-pressed text-white shadow-sm shadow-primary/30">
-              <Zap className="size-4" aria-hidden="true" />
-            </span>
-            Recall
-          </NavLink>
-          <nav className="hidden items-center gap-1 md:flex">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={({ isActive }) =>
-                  cn(
-                    'inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-sm font-medium text-muted outline-none transition hover:bg-primary/10 hover:text-text focus-visible:ring-2 focus-visible:ring-primary',
-                    isActive && 'bg-primary/10 font-semibold text-primary',
-                  )
-                }
-              >
-                <item.icon className="size-4" aria-hidden="true" />
-                {item.label}
-              </NavLink>
-            ))}
-          </nav>
-          <div className="ml-auto flex items-center gap-2">
-            <SyncBadge />
+    <div className={`app-shell ${studying ? "is-studying" : ""}`}>
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
+      <aside className="sidebar">
+        <NavLink to="/" className="brand">
+          <span className="brand-mark">
+            <Code2 size={23} strokeWidth={2.3} />
+          </span>
+          <span>
+            recall<span className="brand-period">.</span>
+            <small>FOR THE CURIOUS ENGINEER</small>
+          </span>
+        </NavLink>
+        <div className="sidebar-label">WORKSPACE</div>
+        <nav className="side-nav" aria-label="Main navigation">
+          {primaryNav.map((item) => (
             <NavLink
-              to="/settings"
-              className="inline-flex size-11 items-center justify-center rounded-full text-muted outline-none transition hover:bg-primary/10 hover:text-text focus-visible:ring-2 focus-visible:ring-primary"
-              aria-label="Settings"
-              title="Settings"
+              key={item.to}
+              to={item.to}
+              end={item.to === "/"}
+              className={({ isActive }) =>
+                `side-link ${isActive ? "active" : ""}`
+              }
             >
-              <Settings className="size-5" aria-hidden="true" />
+              <item.icon size={19} strokeWidth={1.8} />
+              {item.label}
             </NavLink>
-          </div>
-        </div>
-      </header>
-      <main className="mx-auto max-w-6xl px-4 pb-28 pt-6 md:pb-10">
-        <Outlet />
-      </main>
-      <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 backdrop-blur md:hidden">
-        <div className="grid grid-cols-5 pb-[env(safe-area-inset-bottom)]">
-          {navItems.map((item) => (
+          ))}
+        </nav>
+        <div className="sidebar-label second-label">MAKE IT YOURS</div>
+        <nav className="side-nav" aria-label="Your tools">
+          {[
+            { to: "/capture", label: "Quick capture", icon: Plus },
+            { to: "/inbox", label: "Inbox", icon: Inbox },
+            { to: "/settings", label: "Settings", icon: Settings },
+          ].map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               className={({ isActive }) =>
-                cn(
-                  'flex min-h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium text-muted outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
-                  isActive && !item.center && 'text-primary',
-                  item.center && 'font-semibold',
-                )
+                `side-link ${isActive ? "active" : ""}`
               }
             >
-              {item.center ? (
-                <span className="-mt-7 flex size-13 items-center justify-center rounded-full bg-gradient-to-b from-primary to-primary-pressed text-white shadow-lg shadow-primary/40 ring-4 ring-background">
-                  <item.icon className="size-6" aria-hidden="true" />
-                </span>
-              ) : (
-                <item.icon className="size-5" aria-hidden="true" />
-              )}
+              <item.icon size={19} strokeWidth={1.8} />
               {item.label}
             </NavLink>
           ))}
+        </nav>
+        <div className="sidebar-bottom">
+          <div className="growth-note">
+            <Sprout size={25} strokeWidth={1.5} />
+            <p>
+              Small steps.
+              <br />
+              Stronger engineer.
+            </p>
+            <span>A few minutes today go a long way.</span>
+          </div>
+          <div className="sidebar-footer">
+            <span className="status-dot" /> BUILT FOR YOUR NEXT LEVEL
+          </div>
         </div>
-      </nav>
+      </aside>
+      <div className="app-body">
+        <header className="topbar">
+          <NavLink to="/" className="mobile-brand">
+            <Code2 size={23} />
+            recall.
+          </NavLink>
+          <div className="breadcrumb">
+            <span>Workspace</span>
+            <ChevronRight size={14} />
+            <strong>{currentLabel}</strong>
+          </div>
+          <div className="topbar-right">
+            {!online ? (
+              <span className="offline-label">
+                <WifiOff size={14} />
+                Offline · study ready
+              </span>
+            ) : (
+              <SyncBadge />
+            )}
+            <NavLink
+              to="/settings"
+              className="profile-button"
+              aria-label="Settings"
+            >
+              <span>Y</span>
+              <Settings size={16} />
+            </NavLink>
+          </div>
+        </header>
+        <main id="main-content" className="main-content">
+          <Outlet />
+        </main>
+        <footer className="page-footer">
+          <span>Made for the moments in between.</span>
+          <span>Learn. Recall. Repeat.</span>
+        </footer>
+      </div>
+      {!studying && (
+        <nav className="mobile-nav" aria-label="Mobile navigation">
+          {mobileNav.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === "/"}
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <item.icon size={21} strokeWidth={1.8} />
+              <span>
+                {item.label === "Quick study"
+                  ? "Study"
+                  : item.label === "My progress"
+                    ? "Progress"
+                    : item.label === "Overview"
+                      ? "Today"
+                      : item.label === "My decks"
+                        ? "Decks"
+                        : item.label}
+              </span>
+            </NavLink>
+          ))}
+        </nav>
+      )}
       <UpdateToast />
     </div>
   );

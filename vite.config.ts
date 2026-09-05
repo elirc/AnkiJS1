@@ -1,71 +1,79 @@
-import tailwindcss from '@tailwindcss/vite';
-import { defineConfig } from 'vitest/config';
-import { VitePWA } from 'vite-plugin-pwa';
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vitest/config";
+import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
   plugins: [
     tailwindcss(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'],
+      registerType: "prompt",
+      includeAssets: [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "icons/maskable-512.png",
+      ],
       workbox: {
-        navigateFallback: '/index.html',
+        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,txt}"],
+        navigateFallback: "/index.html",
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
-            handler: 'NetworkOnly',
+            handler: "NetworkOnly",
             options: {
-              cacheName: 'supabase-network-only',
+              cacheName: "supabase-network-only",
             },
           },
         ],
       },
       manifest: {
-        name: 'Recall',
-        short_name: 'Recall',
-        description: 'Local-first spaced repetition with a quick-capture inbox.',
-        display: 'standalone',
-        start_url: '/',
-        scope: '/',
-        theme_color: '#0F6E56',
-        background_color: '#FAFAF7',
+        name: "Recall — Engineering practice",
+        short_name: "Recall",
+        description:
+          "Over 2,800 software engineering flashcards with beginner explanations and offline spaced repetition.",
+        display: "standalone",
+        start_url: "/",
+        scope: "/",
+        theme_color: "#24735d",
+        background_color: "#f8f9f6",
         icons: [
           {
-            src: '/icons/icon-192.png',
-            sizes: '192x192',
-            type: 'image/png',
+            src: "/icons/icon-192.png",
+            sizes: "192x192",
+            type: "image/png",
           },
           {
-            src: '/icons/icon-512.png',
-            sizes: '512x512',
-            type: 'image/png',
+            src: "/icons/icon-512.png",
+            sizes: "512x512",
+            type: "image/png",
           },
           {
-            src: '/icons/maskable-512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable',
+            src: "/icons/maskable-512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
           },
         ],
         share_target: {
-          action: '/capture',
-          method: 'GET',
+          action: "/capture",
+          method: "GET",
           params: {
-            title: 'title',
-            text: 'text',
-            url: 'url',
+            title: "title",
+            text: "text",
+            url: "url",
           },
         },
       },
     }),
   ],
   test: {
-    environment: 'jsdom',
-    setupFiles: './src/test/setup.ts',
+    exclude: ["e2e/**", "node_modules/**", "dist/**"],
+    environment: "jsdom",
+    setupFiles: "./src/test/setup.ts",
     globals: true,
     testTimeout: 30_000,
     hookTimeout: 30_000,
-    pool: 'threads',
+    pool: "threads",
     maxWorkers: 1,
     fileParallelism: false,
     isolate: false,

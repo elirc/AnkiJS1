@@ -5,25 +5,40 @@ import {
   Rating,
   State,
   type Card as FsrsCard,
-} from 'ts-fsrs';
-import type { Card, CardState, ReviewLog } from '../db/schema';
-import { humanIntervalFromMs, nowISO } from '../lib/dates';
-import { createId } from '../lib/ids';
+} from "ts-fsrs";
+import type { Card, CardState, ReviewLog } from "../db/schema";
+import { humanIntervalFromMs, nowISO } from "../lib/dates";
+import { createId } from "../lib/ids";
+import { normalizeStudyPreferences } from "./preferences";
 
 export type FsrsFieldSubset = Pick<
   Card,
-  | 'due'
-  | 'stability'
-  | 'difficulty'
-  | 'elapsed_days'
-  | 'scheduled_days'
-  | 'reps'
-  | 'lapses'
-  | 'state'
-  | 'last_review'
+  | "due"
+  | "stability"
+  | "difficulty"
+  | "elapsed_days"
+  | "scheduled_days"
+  | "learning_steps"
+  | "reps"
+  | "lapses"
+  | "state"
+  | "last_review"
 >;
 
-const scheduler = fsrs(generatorParameters({ request_retention: 0.9, enable_fuzz: true }));
+const schedulers = new Map<number, ReturnType<typeof fsrs>>();
+function getScheduler(retention: number) {
+  const target = normalizeStudyPreferences({
+    request_retention: retention,
+  }).request_retention;
+  if (!schedulers.has(target))
+    schedulers.set(
+      target,
+      fsrs(
+        generatorParameters({ request_retention: target, enable_fuzz: true }),
+      ),
+    );
+  return schedulers.get(target)!;
+}
 
 const toFsrsState: Record<CardState, State> = {
   new: State.New,
@@ -33,10 +48,10 @@ const toFsrsState: Record<CardState, State> = {
 };
 
 const fromFsrsState: Record<State, CardState> = {
-  [State.New]: 'new',
-  [State.Learning]: 'learning',
-  [State.Review]: 'review',
-  [State.Relearning]: 'relearning',
+  [State.New]: "new",
+  [State.Learning]: "learning",
+  [State.Review]: "review",
+  [State.Relearning]: "relearning",
 };
 
 const ratingMap = {
@@ -53,7 +68,7 @@ function toFsrsCard(card: Card): FsrsCard {
     difficulty: card.difficulty,
     elapsed_days: card.elapsed_days,
     scheduled_days: card.scheduled_days,
-    learning_steps: 0,
+    learning_steps: card.learning_steps ?? 0,
     reps: card.reps,
     lapses: card.lapses,
     state: toFsrsState[card.state],
@@ -68,6 +83,7 @@ function fieldsFromFsrs(card: FsrsCard): FsrsFieldSubset {
     difficulty: card.difficulty,
     elapsed_days: card.elapsed_days,
     scheduled_days: card.scheduled_days,
+    learning_steps: card.learning_steps,
     reps: card.reps,
     lapses: card.lapses,
     state: fromFsrsState[card.state],
@@ -84,8 +100,13 @@ export function rate(
   card: Card,
   rating: 1 | 2 | 3 | 4,
   now: Date,
+  retention = 0.9,
 ): { card: Card; log: ReviewLog } {
-  const result = scheduler.next(toFsrsCard(card), now, ratingMap[rating]);
+  const result = getScheduler(retention).next(
+    toFsrsCard(card),
+    now,
+    ratingMap[rating],
+  );
   const updatedFields = fieldsFromFsrs(result.card);
   const reviewed_at = nowISO(now);
   const cardAfter: Card = {
@@ -108,16 +129,24 @@ export function rate(
   return { card: cardAfter, log };
 }
 
-export function previewIntervals(card: Card, now: Date): {
+export function previewIntervals(
+  card: Card,
+  now: Date,
+  retention = 0.9,
+): {
   again: string;
   hard: string;
   good: string;
   easy: string;
 } {
-  const preview = scheduler.repeat(toFsrsCard(card), now);
-  const records = preview as Record<Rating.Again | Rating.Hard | Rating.Good | Rating.Easy, { card: FsrsCard }>;
-  const format = (rating: Rating.Again | Rating.Hard | Rating.Good | Rating.Easy) =>
-    humanIntervalFromMs(records[rating].card.due.getTime() - now.getTime());
+  const preview = getScheduler(retention).repeat(toFsrsCard(card), now);
+  const records = preview as Record<
+    Rating.Again | Rating.Hard | Rating.Good | Rating.Easy,
+    { card: FsrsCard }
+  >;
+  const format = (
+    rating: Rating.Again | Rating.Hard | Rating.Good | Rating.Easy,
+  ) => humanIntervalFromMs(records[rating].card.due.getTime() - now.getTime());
   return {
     again: format(Rating.Again),
     hard: format(Rating.Hard),

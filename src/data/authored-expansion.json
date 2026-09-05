@@ -1,0 +1,1152 @@
+[
+  {
+    "id": "a0000000-0000-4000-8000-000000003001",
+    "name": "SQL · production queries",
+    "track": "Backend",
+    "icon": "database",
+    "color": "blue",
+    "topics": [
+      "SQL",
+      "PostgreSQL",
+      "Transactions"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "PostgreSQL documentation",
+      "url": "https://www.postgresql.org/docs/current/"
+    },
+    "cards": [
+      {
+        "id": "d0000000-259b-43f8-8d64-1df65e73cc7e",
+        "front": "A join returns three copies of each order. What relationship should you investigate first?",
+        "back": "Check whether the joined table has multiple matching rows per order. Joining a parent to its children multiplies the parent rows. Aggregate the children first or use EXISTS when you only need to test whether a match exists.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-0bf9-4af4-844f-44bf88c7578d",
+        "front": "Why can a LEFT JOIN behave like an INNER JOIN after adding a WHERE condition on the right table?",
+        "back": "Rows without a match contain NULL on the right. A condition such as WHERE payments.status = 'paid' rejects those rows. Put the condition in ON when you want to preserve unmatched left rows.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-488e-482d-8055-aa1f69a70e6b",
+        "front": "What does COUNT(column) exclude that COUNT(*) includes?",
+        "back": "COUNT(column) ignores rows where that expression is NULL. COUNT(*) counts every row, including rows containing NULL values. Choose based on whether you are counting records or present values.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-e149-46c0-8ebf-024e6b0921ba",
+        "front": "Why can NOT IN unexpectedly return no rows when its subquery contains NULL?",
+        "back": "A comparison against NULL is unknown. NOT IN can therefore produce unknown rather than true, which WHERE excludes. Prefer a correlated NOT EXISTS or explicitly remove NULL from the subquery.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-9c05-4f02-844b-5da94683dda4",
+        "front": "A paginated list skips or repeats rows during inserts. How does keyset pagination help?",
+        "back": "Use a stable, unique ordering and request rows after the last observed key, such as WHERE (created_at, id) < (:time, :id) ORDER BY created_at DESC, id DESC. OFFSET positions shift as rows are inserted.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-6810-4ab9-8e5a-bbf111fb524d",
+        "front": "Why is ORDER BY created_at alone insufficient for reliable pagination?",
+        "back": "Multiple records can have identical timestamps. Add a unique tie breaker, usually id, and include both columns in the cursor and ordering. Otherwise the database can return tied rows in different orders.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-c500-49f9-8007-554d0fdf72f6",
+        "front": "When can a composite index on (tenant_id, created_at) support a query well?",
+        "back": "When the query filters by tenant_id and then filters or orders by created_at. The leading-column ordering matters. An index is not automatically useful for every query that mentions one of its columns; inspect the execution plan.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-5f57-4280-87f7-5a4551054ec7",
+        "front": "Why might an index make a write-heavy table slower?",
+        "back": "Each insert, delete, and relevant update must maintain the index. Indexes also consume space and can increase write amplification. Keep indexes justified by important queries and measure their read benefits against write costs.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-6c39-4a14-8740-fa6d30d9ea81",
+        "front": "A query is slow only for one very large customer. What should you inspect?",
+        "back": "Compare actual and estimated row counts in the execution plan for that customer's parameters. Skewed data, stale statistics, or a plan optimized for typical customers can cause poor join or scan choices.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-c933-4e76-8af9-cfd0962485b9",
+        "front": "What is the danger of running EXPLAIN ANALYZE on a production UPDATE?",
+        "back": "It actually executes the statement. EXPLAIN without ANALYZE only plans it. If execution is necessary, use an appropriate safe environment or a carefully controlled transaction and understand effects that may not roll back.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-bf68-499e-8d3b-c77db4695089",
+        "front": "Two requests read balance 100 and each writes balance 90. Why is one debit lost?",
+        "back": "Both calculated from the same stale value. Use an atomic UPDATE balance = balance - 10, plus the necessary constraints or locking. Wrapping independent read-modify-write operations in a transaction alone does not guarantee correctness.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-f5e0-4b07-8ef3-f2a43a391bd9",
+        "front": "How can a database constraint protect a rule across every code path?",
+        "back": "Define the invariant in the database, such as UNIQUE(tenant_id, external_id) or CHECK(quantity >= 0). The database enforces it even when another service, job, or migration writes data without your usual application validation.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-b148-4310-8e4b-ca6f38a0a021",
+        "front": "Why should schema migrations often add a nullable column before requiring it?",
+        "back": "Old application instances may still write rows without the new field. Add the column compatibly, deploy writers, backfill existing rows, verify completeness, then enforce the constraint. This supports rolling deployments.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-a95d-4b1d-898d-0c2013c33c6d",
+        "front": "What does SELECT ... FOR UPDATE achieve inside a transaction?",
+        "back": "It locks selected rows against conflicting row modifications until the transaction ends. It is useful for coordinated updates, but can cause waiting and deadlocks. Keep transactions short and acquire locks in a consistent order.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-6942-4eef-88d2-2b9d3f674a6c",
+        "front": "How should an application respond to a serialization failure?",
+        "back": "Retry the entire transaction using a bounded retry policy. Its reads and decisions may no longer be valid, so retrying only the final statement is insufficient. External side effects need separate idempotency protection.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-cc65-4649-86b5-67c0cfa26f27",
+        "front": "Why is selecting every column a poor default for a hot API query?",
+        "back": "It transfers and decodes unnecessary data, couples callers to schema changes, and may prevent efficient index-only access. Select the fields the response needs, while checking whether added joins cost more than the saved transfer.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003002",
+    "name": "Distributed systems · failure scenarios",
+    "track": "Backend",
+    "icon": "network",
+    "color": "violet",
+    "topics": [
+      "Reliability",
+      "Queues",
+      "Consistency"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "AWS Builders' Library",
+      "url": "https://aws.amazon.com/builders-library/"
+    },
+    "cards": [
+      {
+        "id": "d0000000-ce2c-468d-8dd4-90882ba10cde",
+        "front": "A worker commits a database update and crashes before acknowledging its message. What happens next?",
+        "back": "The broker may redeliver the message. The worker must recognize an already completed operation, for example with a unique event ID recorded in the same transaction as the update. Acknowledgment timing alone cannot prevent every duplicate.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-9532-47f9-8d6e-95707acfcdac",
+        "front": "Why is writing to a database and then publishing an event a dual-write problem?",
+        "back": "A crash between the two writes leaves inconsistent state. A transactional outbox records the business change and an outgoing event in one database transaction. A separate relay publishes the event and handles retries.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-d296-4e93-8c37-f837bd601884",
+        "front": "Does a transactional outbox eliminate duplicate events?",
+        "back": "No. A relay can publish and crash before marking the outbox record sent. Consumers still need idempotent processing or deduplication. The outbox closes a lost-event gap between the database commit and event publication.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-7749-4dcd-87f7-cbc6ebd3a581",
+        "front": "A service retries a failed request immediately five times. How can this worsen an outage?",
+        "back": "Retries increase load on a dependency already failing. Use bounded retries with exponential backoff and jitter, a total deadline, and idempotency where needed. Avoid retrying independently at every layer of a call chain.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-2d12-4bc5-8486-8c5602b0752f",
+        "front": "What is the difference between a timeout and a deadline across service calls?",
+        "back": "A timeout bounds one operation. A deadline bounds the whole request. Propagate the remaining deadline so each downstream call cannot consume a fresh full timeout and make total latency grow without bound.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-7f5d-418d-8440-e6e0a6d927cf",
+        "front": "Why should a retry policy distinguish a connection failure from a validation error?",
+        "back": "A transient transport failure may recover; invalid input will usually fail again. Retry only appropriate failure classes, respect the remaining deadline, and consider whether the operation might already have taken effect.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-476a-4908-888e-d273654a98c8",
+        "front": "A cache entry expires on a popular key and thousands of requests hit the database. What is this called and how can you reduce it?",
+        "back": "A cache stampede. Coalesce concurrent loads for the same key, refresh before expiry, add TTL jitter, or serve a bounded stale value while refreshing. The acceptable choice depends on freshness requirements.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-7804-4587-8dc9-f8af68dd992b",
+        "front": "Why can deleting a cache entry before committing a database update leave stale data cached?",
+        "back": "Another request can miss the cache, read the old database value, and refill the cache before the transaction commits. Coordinate invalidation after commit and account for races, or use versioned entries and bounded freshness.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-812d-4491-86c9-f107df9b7c8f",
+        "front": "When is stale-while-revalidate a poor fit?",
+        "back": "When serving stale data violates correctness, such as authorization revocation or a critical financial balance. It works better for data where bounded staleness is acceptable. Define the freshness contract before choosing the caching strategy.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-5c27-46ac-821d-35f4ef59b4b7",
+        "front": "How does a circuit breaker differ from a retry?",
+        "back": "A retry attempts the operation again. A circuit breaker temporarily rejects calls after enough failures, giving the dependency time to recover. A half-open state permits limited probes before normal traffic resumes.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-d683-4ce0-8097-8a1507b8f6bb",
+        "front": "What does backpressure ask an overloaded producer to do?",
+        "back": "Slow down, wait, or reject new work instead of allowing an unbounded queue to grow. Bound concurrency and queue capacity, and make overload behavior explicit so latency and memory usage remain controllable.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-d423-4ddd-8c96-67350995bec2",
+        "front": "A distributed lock lease expires while a paused worker still runs. What prevents stale writes?",
+        "back": "Use a fencing token that increases with each lock acquisition, and make the protected resource reject writes from older tokens. A lease alone cannot stop an old owner that resumes after a long pause.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-a163-45c6-85d6-929289815920",
+        "front": "Why can wall-clock timestamps be unsafe for ordering updates from different machines?",
+        "back": "Clocks can be skewed or adjusted. Two writers may disagree about which update occurred later. Use an ordering mechanism appropriate to the problem, such as database versions, logical clocks, or a single authoritative sequencer.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-7b57-4249-8a45-c1722ea6cb92",
+        "front": "What does eventual consistency promise, and what does it leave unspecified?",
+        "back": "If writes stop and updates continue propagating successfully, replicas eventually converge. It does not by itself specify how long convergence takes, whether reads see your own writes, or how concurrent conflicts are resolved.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-07b8-4fb9-847a-b3e20e410779",
+        "front": "Why can a read replica show old data immediately after a successful write?",
+        "back": "Replication may be asynchronous. For read-your-writes behavior, route the follow-up read to the primary, wait for a known replication position, or use a consistency mechanism supported by the datastore.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-1cb6-4e7a-877b-94dd37a8b0dd",
+        "front": "How can a poison message block useful work in a queue?",
+        "back": "Repeated processing failures can monopolize retries or block an ordered partition. Use bounded attempts, useful failure diagnostics, and a dead-letter workflow. Preserve enough information to repair and replay the message safely.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003003",
+    "name": "API design · contracts & edge cases",
+    "track": "Backend",
+    "icon": "globe",
+    "color": "green",
+    "topics": [
+      "HTTP",
+      "APIs",
+      "Compatibility"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "MDN HTTP documentation",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP"
+    },
+    "cards": [
+      {
+        "id": "d0000000-4246-4ca5-8eac-172522aa2a8d",
+        "front": "A client times out after creating an order. What should it send when retrying to avoid a duplicate order?",
+        "back": "Reuse the same idempotency key for the same logical operation. The server should atomically associate the key with the operation result and reject incompatible payload reuse. Generating a new key for every retry defeats deduplication.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-caa6-49b6-8ab6-e9c6cf65573a",
+        "front": "Should the server accept the same idempotency key with a different request body?",
+        "back": "Usually no. Store a fingerprint of the relevant request and return a conflict when the same key is reused for a different operation. Document key scope, retention, and behavior while the original request is still running.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-b73a-4484-8525-9ba7e3b074ee",
+        "front": "Why can returning HTTP 200 with an error-shaped body cause trouble?",
+        "back": "Intermediaries, monitoring, and generic clients may treat it as success. Use an appropriate status code and a consistent machine-readable error body. Keep the error contract stable and include a request ID when useful.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-c59f-47e3-8015-d5679598fcc4",
+        "front": "When should an API return 202 Accepted instead of 201 Created?",
+        "back": "Use 202 when work has been accepted but is not yet complete. Provide a way to check progress or receive completion. Use 201 when a resource has actually been created, often with its location.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-6cbd-4660-8392-cbb85151e7d0",
+        "front": "What should a client do with a 429 response and Retry-After?",
+        "back": "Respect the server's requested delay when practical, apply a bounded retry policy, and stay within the overall deadline. Retry-After can be a delay in seconds or an HTTP date, so parse both forms.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-39d7-46d7-8403-c97410db4b00",
+        "front": "Why should API pagination cursors be treated as opaque by clients?",
+        "back": "Their format is a server implementation detail and may change. Clients should pass cursors back unchanged. The server should validate cursor contents and bind them to relevant query constraints where necessary.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-427b-430f-8e55-66b9af2c56e8",
+        "front": "What makes adding a new enum value a potentially breaking API change?",
+        "back": "Clients may use exhaustive switches, generated validators, or fixed dropdowns that reject unknown values. Design clients for forward compatibility or version the contract when a new value cannot be handled safely.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-6717-4998-8419-c9c0b47d3111",
+        "front": "Why can removing a response field break clients even if it was undocumented?",
+        "back": "Some clients may already depend on it. Observe usage where possible, communicate deprecation, provide a migration period, and test representative consumers. An undocumented behavior can still become a real dependency.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-65e2-4a71-8766-040e72e6476e",
+        "front": "What is the purpose of an ETag in conditional updates?",
+        "back": "It represents a resource version. A client can send If-Match with the version it edited; the server rejects an update if the resource changed. This prevents accidentally overwriting another writer's newer changes.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-d319-46dc-850e-d5a5ff7d536b",
+        "front": "What should happen when If-Match does not match the current resource version?",
+        "back": "The server normally returns 412 Precondition Failed. The client should fetch the current state and resolve the conflict, rather than silently retrying an overwrite with no precondition.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-f640-4738-849d-9c840b1a447d",
+        "front": "Why should a file upload enforce limits while streaming, not only after reading the entire body?",
+        "back": "Otherwise a large request can exhaust memory or temporary storage before validation. Limit request size, stream with bounded buffers, validate content appropriately, and clean up partially written data on failure.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-3cd9-4af9-8d15-3fd36d882437",
+        "front": "What is mass assignment in an API update endpoint?",
+        "back": "Blindly copying client fields into a model can let clients change protected properties such as role or owner_id. Explicitly allow writable fields and apply authorization separately for the specific resource and operation.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-b5d5-4e91-8a50-325068ee8dfe",
+        "front": "Why should a webhook receiver verify the raw request body?",
+        "back": "Signatures are usually computed over exact bytes. Parsing and reserializing JSON may change whitespace or ordering and invalidate the signature. Verify the documented signature scheme before trusting or processing the event.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-87f9-45da-85e4-2d171cddb605",
+        "front": "How can an API handle long-running exports without holding a connection open?",
+        "back": "Create an export job, return an accepted response with a job identifier, and expose status plus a result location when finished. Handle authorization, expiry, retry behavior, and cleanup for the exported data.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-9b53-4379-80f4-8c6d40a90139",
+        "front": "What is the difference between API authentication and object-level authorization?",
+        "back": "Authentication establishes who is making the request. Object-level authorization checks whether that identity may act on this specific object. A valid login does not grant access to every record whose ID the caller can guess.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-a87a-4a7b-877f-51e7e6022404",
+        "front": "Why can automatically retrying POST requests be unsafe?",
+        "back": "The first attempt may have committed even if the response was lost. Retry only when the operation is known to be safe or protected by an idempotency mechanism. The HTTP method name alone cannot tell you whether a specific endpoint deduplicates.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003004",
+    "name": "Application security · practical defenses",
+    "track": "Backend",
+    "icon": "globe",
+    "color": "amber",
+    "topics": [
+      "Security",
+      "Authentication",
+      "Web"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/"
+    },
+    "cards": [
+      {
+        "id": "d0000000-3c78-4c34-835a-a1a223be0685",
+        "front": "Why do prepared statements prevent a typical SQL injection attack?",
+        "back": "They keep SQL structure separate from data values, so input is not interpreted as SQL syntax. Dynamic identifiers such as table names still need explicit allowlists; parameter placeholders generally represent values, not arbitrary query structure.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-dbca-4223-8cf1-3bc6ceecd5a9",
+        "front": "Why is escaping HTML not sufficient when inserting data into JavaScript or a URL?",
+        "back": "Escaping rules depend on the output context. A value safe in HTML text may be unsafe in a script, attribute, or URL. Use safe APIs and context-appropriate encoding, and avoid building executable code from untrusted strings.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-dd9c-4f23-8093-2834aaedcad1",
+        "front": "An endpoint fetches a URL supplied by a user. What security boundary is at risk?",
+        "back": "Server-side request forgery can make the server access internal services or metadata endpoints. Validate destinations and schemes, control redirects, and enforce network-level egress rules. String checks alone can be bypassed by alternate address forms or DNS changes.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-0212-4793-8a80-29ed50baef30",
+        "front": "Why is checking a filename for ../ an incomplete path traversal defense?",
+        "back": "Paths can use encoding, platform-specific separators, or symlink resolution. Resolve the destination against an approved root and verify the final path remains inside it. Prefer server-generated storage names over arbitrary user paths.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-6a79-4c08-8f5f-6001e74cc89a",
+        "front": "What does HttpOnly protect a session cookie from?",
+        "back": "It prevents ordinary page JavaScript from reading the cookie. It does not stop a script from making authenticated requests through the browser, so it is not a complete XSS defense. Use it alongside appropriate cookie and application protections.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-213c-47b3-8923-51fa8b002080",
+        "front": "Why is CORS not an authorization mechanism for your API?",
+        "back": "CORS controls whether browser JavaScript can read cross-origin responses. Non-browser clients are not constrained by it, and some cross-origin requests can still be sent. Authenticate and authorize requests on the server.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-53b1-4b68-8b4f-50999e66b3e8",
+        "front": "When can a cookie-authenticated endpoint be vulnerable to CSRF?",
+        "back": "A browser may automatically attach the user's cookie to an attacker-triggered request. Use appropriate SameSite settings, CSRF tokens or origin verification, and avoid state changes through safe methods such as GET.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-b02b-4300-8471-8cf149959f08",
+        "front": "Why should a password reset token be short-lived and single-use?",
+        "back": "A captured token should offer only a small opportunity for abuse and become invalid after use. Generate it securely, store a safe representation, bind it to the intended account and action, and avoid leaking it through logs or referrers.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-9847-4ece-8b3b-5c52101079ad",
+        "front": "Why should password reset responses avoid revealing whether an email exists?",
+        "back": "Different messages or timing can enable account enumeration. Return a consistent public response and apply rate limits while still sending a reset message only when appropriate. Keep detailed diagnostics in protected internal logs.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-0580-4436-837f-57ef64755aea",
+        "front": "What should happen to existing sessions after a high-risk account recovery?",
+        "back": "Consider revoking relevant sessions and refresh tokens, and notify the account owner. Recovery can mean credentials were compromised. The exact policy depends on risk and user experience, but should be explicit rather than accidental.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-c611-489e-83b9-eb942ebae7ac",
+        "front": "Why should access tokens be validated beyond simply decoding their payload?",
+        "back": "Decoding proves nothing about authenticity. Verify the signature with an allowed algorithm and trusted key, then check relevant claims such as issuer, audience, expiry, and not-before. Reject tokens that do not satisfy the intended contract.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-c478-4ad7-833d-cf0406e59997",
+        "front": "Why is a client-supplied role claim not sufficient for authorization?",
+        "back": "The client can alter untrusted input. Use authenticated claims from a trusted issuer or look up authoritative permissions on the server. Even a verified role may need object ownership, tenant, and current policy checks.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-1825-4070-8285-234519038735",
+        "front": "What is a tenant isolation test for a multi-tenant API?",
+        "back": "Create records under two tenants and verify that a user from one cannot read, modify, enumerate, or reference the other's records. Test direct IDs, nested resources, background jobs, and exports, not just the main listing endpoint.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-2210-416c-8e4f-0b25e9b4f856",
+        "front": "Why should secrets be excluded from application logs?",
+        "back": "Logs often have broader access, longer retention, and more downstream copies than primary data. Redact credentials and tokens before logging. If a secret is exposed, rotate it; deleting one log view may not remove every copy.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-1ac7-48e0-8c6b-baa78e924c7f",
+        "front": "Why is Math.random unsuitable for generating authentication tokens?",
+        "back": "It is not designed as a cryptographically secure random generator. Use a platform cryptographic random source with enough entropy and a suitable encoding. Unpredictability is essential because possession of the token often grants access.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-432b-452b-85b4-1775e3e6093a",
+        "front": "What does defense in depth mean for an uploaded image?",
+        "back": "Apply several independent controls: size limits, content validation, safe storage, controlled serving headers, and restricted processing. A filename extension alone does not establish file type or make a parser safe.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003005",
+    "name": "TypeScript · model the invariants",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "TypeScript",
+      "Types",
+      "Validation"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "TypeScript handbook",
+      "url": "https://www.typescriptlang.org/docs/handbook/intro.html"
+    },
+    "cards": [
+      {
+        "id": "d0000000-e1e7-46c8-89d0-7f2fca250e70",
+        "front": "Why is unknown a better type than any for an unvalidated JSON response?",
+        "back": "unknown forces callers to narrow or validate before using the value. any disables useful checking and allows unsupported assumptions to spread. Static types do not validate data arriving at runtime.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-7c16-4fa0-8604-28af3c854084",
+        "front": "What is unsafe about writing JSON.parse(text) as User?",
+        "back": "A type assertion does not check the parsed value. Invalid data still reaches the program at runtime. Parse as unknown and validate the fields and invariants before treating the result as a User.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-b164-432a-8133-79c77213df73",
+        "front": "How does a discriminated union prevent impossible request states?",
+        "back": "Give each variant a literal tag and only the fields valid for that state. For example, success carries data and failure carries an error. Narrowing on the tag makes the valid fields available without contradictory optional combinations.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-ff81-400f-8cb2-dae33badb172",
+        "front": "How can never help check an exhaustive switch?",
+        "back": "After handling every variant of a discriminated union, the remaining value should be never. Passing it to a function that accepts never makes the compiler report a missing case when a new variant is added.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-02c4-4cd7-8b01-9243763c463e",
+        "front": "Why can an optional property and a property explicitly containing undefined behave differently?",
+        "back": "An absent property is not the same runtime object shape as a present property with value undefined. Object.keys, the in operator, serialization, and exactOptionalPropertyTypes can expose the distinction. Model the intended semantics.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-344d-4f90-83e3-8c91329a66e8",
+        "front": "What does readonly on an array prevent, and what does it not guarantee?",
+        "back": "It prevents mutation through that typed reference. It does not necessarily freeze the runtime object or prevent mutation through another mutable alias. Use runtime controls or immutable data discipline when actual immutability matters.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-45aa-4a7b-851b-955c9e08c7e9",
+        "front": "Why does Object.freeze not automatically make a nested object deeply immutable?",
+        "back": "It freezes only the object passed to it. Nested objects remain separate mutable objects unless frozen too. A readonly TypeScript type is also compile-time protection rather than a recursive runtime freeze.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-11fa-4868-8363-7853c384f1e5",
+        "front": "When is a generic function more useful than one returning a union?",
+        "back": "A generic can preserve relationships between inputs and outputs, such as returning the same element type supplied in an array. A broad union often loses that relationship and forces callers to narrow again.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-8330-4d4f-84a6-9c4a411641d8",
+        "front": "What does keyof T represent?",
+        "back": "The union of property key types known on T. It can constrain a key parameter so a generic accessor only accepts valid keys. The corresponding indexed access T[K] describes the value type for that key.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-0e93-407d-8cb3-89c2a2f2d42f",
+        "front": "What does the satisfies operator help you check while preserving inference?",
+        "back": "It checks that an expression is assignable to a target type while retaining the expression's inferred type information. This is useful for configuration objects where you want structural checking without broadly annotating every value.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-06c9-403a-871c-67fc1e17c490",
+        "front": "Why can a non-null assertion hide a production bug?",
+        "back": "The exclamation mark removes null and undefined from the static type without adding a runtime check. If the assumption is wrong, the program can fail later. Narrow explicitly or handle absence where it can actually occur.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-afeb-479c-82cb-2220ce7e014c",
+        "front": "Why is an array index read potentially undefined even when the element type is string?",
+        "back": "The array might be empty or the index out of bounds. Enable and respect noUncheckedIndexedAccess where suitable, validate the index, or handle undefined instead of assuming every numeric key exists.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-331f-43b3-824f-57d7ebd2f74e",
+        "front": "What makes a type predicate dangerous if implemented incorrectly?",
+        "back": "The compiler trusts the predicate's promise. A function claiming value is User after only checking that value is an object can incorrectly narrow malformed data. Validate all required structure and relevant invariants.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-0e25-4324-89e5-67d2fc3cc570",
+        "front": "Why are structural types not enough to distinguish a UserId from an OrderId when both are strings?",
+        "back": "Both accept the same string values. Branded types can distinguish them statically after validated construction. The brand is a compile-time convention; runtime input still needs validation and correct association.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-e793-427a-8ef2-7cee014a4ff9",
+        "front": "What is the difference between Partial<User> and a safe update command?",
+        "back": "Partial<User> allows every User property to be optional, including fields that should never be writable. A dedicated update type should explicitly allow editable fields and represent operations such as clearing a value unambiguously.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-55c4-4506-8339-85979bc29cf8",
+        "front": "Why should a library return Promise<Result> instead of hiding an asynchronous result behind a callback side effect?",
+        "back": "The promise makes completion and errors composable through await and standard error handling. The exact API depends on whether there is one result or a stream, but callers should have an explicit contract for completion and failure.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003006",
+    "name": "Testing · meaningful confidence",
+    "track": "Practice",
+    "icon": "bug",
+    "color": "green",
+    "topics": [
+      "Testing",
+      "Debugging",
+      "Quality"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "Testing Library guiding principles",
+      "url": "https://testing-library.com/docs/guiding-principles/"
+    },
+    "cards": [
+      {
+        "id": "d0000000-9a08-4661-8ada-3e3e8ba74639",
+        "front": "Why is a test that mocks the function under test unable to verify its implementation?",
+        "back": "It exercises the mock's behavior, not the real function. Mock external boundaries when necessary, then call the real unit and assert an observable outcome. A passing mock interaction alone may prove very little.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-7919-4bed-8af6-d0fb95fee7ac",
+        "front": "What is a useful invariant for a money transfer test?",
+        "back": "The total balance should be conserved, exactly one debit and credit should occur, and failure should not leave a partial transfer. Test concurrency and duplicate requests where they are part of the real contract.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-0462-481f-8cc6-686c1ae226fd",
+        "front": "How can property-based testing complement a few hand-picked examples?",
+        "back": "Generate many inputs and check general properties, such as decode(encode(x)) preserving x. It can find edge cases you did not anticipate, but the property must be meaningful and the generator must cover valid and boundary cases.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-1dbd-47e8-82b4-9307cf44c4d8",
+        "front": "What is a metamorphic test when the exact output is hard to calculate?",
+        "back": "Check a relationship between outputs after a controlled input transformation. For a sorting function, permuting the input should not change the sorted result. The relationship provides an oracle without hard-coding every answer.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-f1e3-46a9-86bb-1c35586acd9b",
+        "front": "Why is sleeping for two seconds a fragile way to test asynchronous UI behavior?",
+        "back": "Machine load and scheduling vary. Wait for the expected observable condition with a bounded timeout instead. A fixed sleep can be both too slow when work is quick and too short when the environment is busy.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-7b54-48ce-8641-c6a552c00c4a",
+        "front": "How should a flaky test investigation use failure evidence?",
+        "back": "Capture the exact failure, seed, timing, environment, and relevant logs or traces. Identify uncontrolled time, shared state, races, or external dependencies. Repeating until green hides the symptom without establishing correctness.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-48df-4913-80df-3195f3d40347",
+        "front": "What should a clock-dependent unit test control?",
+        "back": "The current time, timezone assumptions, and any relevant timers. Pass a clock or explicit timestamp where possible. Include boundary cases such as midnight and expiry rather than relying on the machine's wall clock.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-ef62-4032-8fe3-6d7bfbf0f715",
+        "front": "Why is a database integration test with only one row often misleading?",
+        "back": "It does not expose duplicate joins, ordering ties, tenant leaks, NULL handling, or realistic selectivity. Use a small but deliberately varied fixture that exercises the query's important relationships and edge cases.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-db4f-40a4-8f11-f4de8fa541e0",
+        "front": "What is a contract test between two services intended to catch?",
+        "back": "Disagreements about request and response formats, required fields, status codes, and behavior at the boundary. It complements unit and end-to-end tests; it does not prove the entire deployed workflow works.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-a889-42b3-8842-3daaa094625a",
+        "front": "What makes a regression test useful after fixing a bug?",
+        "back": "It reproduces the triggering conditions and fails on the faulty behavior while passing on the corrected behavior. Assert the user-visible or domain outcome, rather than just the new helper's internal implementation.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-7250-42a9-8b18-b6e5060949aa",
+        "front": "Why can excessive snapshots make important regressions harder to see?",
+        "back": "Large snapshots contain many incidental details, making updates routine and meaningful changes easy to miss. Prefer focused assertions for behavior and reserve snapshots for small, stable structures with reviewable differences.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-129b-4408-804f-a011ef009a54",
+        "front": "How can you test idempotency beyond sending one successful request?",
+        "back": "Repeat the same logical request, including concurrent attempts and a simulated lost response. Assert that only one side effect occurs and repeated callers get the documented result. Also test key reuse with a different payload.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-8986-471c-8609-4cb72fe9eb27",
+        "front": "Why is a test for an empty collection valuable even when normal examples pass?",
+        "back": "Empty input often takes a different control path and exposes invalid reductions, missing defaults, and indexing assumptions. Decide the expected empty result explicitly instead of inheriting an accidental exception.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-5656-4941-863d-c33f5ae81856",
+        "front": "What does mutation testing reveal that line coverage does not?",
+        "back": "It changes program behavior slightly and checks whether tests fail. Surviving meaningful mutations can reveal weak assertions. High line coverage only shows that code executed, not that incorrect outcomes would be detected.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-cad6-419f-8b69-15ffa2c3d632",
+        "front": "How should an error-path test check transaction rollback?",
+        "back": "Cause a failure after an intermediate write and verify that no partial state remains. Also verify that the caller receives the expected failure. Only asserting that an exception occurred can miss corrupted persisted state.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-7ce1-4112-848a-db59ce43679f",
+        "front": "What should a mobile web test verify beyond the viewport width?",
+        "back": "Touch target sizes, scrolling and overflow, keyboard behavior, focus visibility, safe areas, offline recovery, and persistence after navigation or reload. Exercise actual actions at a narrow viewport, not just a screenshot.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003007",
+    "name": "Observability · diagnose production",
+    "track": "Practice",
+    "icon": "bug",
+    "color": "amber",
+    "topics": [
+      "Observability",
+      "SLOs",
+      "Performance"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "Google SRE books",
+      "url": "https://sre.google/books/"
+    },
+    "cards": [
+      {
+        "id": "d0000000-b890-4010-829f-2d9604f01a77",
+        "front": "Why can average latency look healthy while users report slow requests?",
+        "back": "Averages hide tail behavior. Inspect latency percentiles, distributions, request classes, and errors. A small fraction of very slow requests can hurt users badly without moving the overall mean much.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-fb97-4297-8e85-ff3d06074ffd",
+        "front": "What does p99 latency of 2 seconds mean?",
+        "back": "Approximately 99 percent of observations in the measured population are at or below 2 seconds. It does not mean every user gets that latency or that the slowest request takes 2 seconds. The window and population matter.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-e37e-40c0-88ac-af87cb93c5bf",
+        "front": "Why should you not average p99 values from several servers to obtain a fleet p99?",
+        "back": "Percentiles are not generally composable by averaging. Combine the underlying distributions or appropriate histogram data, then calculate the fleet percentile. Traffic volume and latency shape can differ across servers.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-38f7-4334-8a3f-d584da34b71b",
+        "front": "What is the difference between an SLI and an SLO?",
+        "back": "An SLI is a measured indicator of service behavior, such as the fraction of successful requests. An SLO is the target for that indicator over a defined window. Define what counts as success and which traffic is included.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-b95c-49d0-8f51-edd2c204940f",
+        "front": "How does an error budget connect reliability to change decisions?",
+        "back": "It represents the amount of unreliability allowed by an SLO. Rapid consumption can justify slowing risky changes and prioritizing reliability work. It is a decision tool tied to user-facing goals, not a generic uptime score.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-3650-48ad-8647-dbb7d4dcb81f",
+        "front": "Why is an alert on every single failed request usually noisy?",
+        "back": "Some failures are expected or transient and may not threaten the service objective. Alert on actionable symptoms, sustained error rates, or error-budget burn, and provide enough context for an operator to decide what to do.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-89fa-4069-8769-4cac575c49f9",
+        "front": "What makes a log's request ID useful during an incident?",
+        "back": "It links events belonging to the same request across components. Propagate it consistently and include it in relevant logs. A trace ID can provide a broader causal view across distributed spans when tracing is available.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-3b09-4d81-8b39-d01d0c2c3eac",
+        "front": "Why should user IDs be avoided as metric label values in a large service?",
+        "back": "They create very high cardinality, which can overwhelm metric storage and queries. Keep metric dimensions bounded and use logs or traces for per-user investigation, with appropriate privacy controls.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-5f3c-4e77-86a5-ca1b13c487fd",
+        "front": "A service's CPU is low but latency is high. What should you investigate?",
+        "back": "Waiting on dependencies, database locks, connection pools, disk or network I/O, and queueing. CPU utilization alone cannot explain response time. Trace where time is spent before optimizing computation.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-8f42-40fc-8a6b-7275aacc5f51",
+        "front": "Why can increasing a connection pool make database latency worse?",
+        "back": "More concurrent queries can exceed the database's useful capacity, increasing contention and queueing. Measure throughput and latency together, bound concurrency, and fix slow queries rather than assuming more connections always help.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-ff93-40e5-85e8-e3edfdcfff05",
+        "front": "What is saturation, and why can it precede visible errors?",
+        "back": "A resource approaches its capacity, causing requests to queue. Latency often rises before requests time out or fail. Track relevant queues, pool utilization, CPU, memory, and other bottlenecks according to the system.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-6770-4f47-85a6-d4c9256ce81f",
+        "front": "Why should deployment annotations appear on operational dashboards?",
+        "back": "They help correlate behavior changes with releases or configuration updates. Correlation is a lead, not proof of causation; compare other evidence before deciding whether to roll back.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-9016-4eee-8f31-e54c71a7d916",
+        "front": "What should a useful incident timeline record?",
+        "back": "Observed symptoms, user impact, meaningful state changes, actions taken, and their effects with timestamps. Separate observations from hypotheses so later analysis does not mistake an early guess for an established cause.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-92e6-49f4-8d96-c8a0c5ca2f28",
+        "front": "What makes a post-incident action item effective?",
+        "back": "It has a concrete change, an owner, and a way to verify completion and impact. Prefer improvements to detection, prevention, or recovery over vague reminders to be more careful.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-097a-40fa-82c7-57444d8cc14f",
+        "front": "Why is profiling preferable to optimizing code that merely looks expensive?",
+        "back": "A profile shows where representative workloads actually spend time or allocate memory. Intuition can focus effort on code that contributes little to total cost. Re-measure after the change to verify the intended improvement.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-b717-450d-873e-088e3bcfb436",
+        "front": "How can coordinated omission make a load test look better than reality?",
+        "back": "A load generator that waits for a response before sending the next request reduces offered load when the service slows. This can hide queueing experienced under a steady arrival rate. Choose a workload model matching real traffic.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003008",
+    "name": "Systems · processes & concurrency",
+    "track": "Foundations",
+    "icon": "network",
+    "color": "blue",
+    "topics": [
+      "Operating systems",
+      "Concurrency",
+      "Linux"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "Linux man-pages project",
+      "url": "https://www.kernel.org/doc/man-pages/"
+    },
+    "cards": [
+      {
+        "id": "d0000000-323f-4444-8a7a-bf78feaabf7f",
+        "front": "What is the key memory isolation difference between processes and threads?",
+        "back": "Processes normally have separate virtual address spaces. Threads in one process share its address space while keeping their own execution state and stacks. Shared memory makes communication convenient but requires coordination for mutable data.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-9e8d-4bf3-80f5-be22032e8a9c",
+        "front": "Why can a race condition exist even if each individual read and write is atomic?",
+        "back": "A larger read-modify-write sequence may not be atomic. Two workers can interleave between the steps and violate an invariant. Protect the whole critical operation with the appropriate synchronization or atomic primitive.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-f99c-4043-804a-9f8ed1ecbc4d",
+        "front": "What four conditions are commonly required for a deadlock?",
+        "back": "Mutual exclusion, holding resources while waiting, no forced resource preemption, and a circular wait. Breaking an applicable condition can prevent deadlock; for example, a consistent lock order prevents circular waiting.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-4c7a-46a8-80f5-37f9ef4494a9",
+        "front": "How does a consistent lock acquisition order reduce deadlocks?",
+        "back": "If every operation acquires locks in the same global order, operations cannot form a cycle by each holding one lock and waiting for an earlier one. The policy must cover all relevant code paths.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-dc04-4adb-80d9-ffa052a97b33",
+        "front": "What is starvation in a concurrent system?",
+        "back": "A task waits indefinitely or excessively because other tasks repeatedly receive the resources it needs. The system can keep making progress overall while that task does not. Fair scheduling or admission policies may help.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-9197-4549-8b9a-f79770274998",
+        "front": "What is the difference between concurrency and parallelism?",
+        "back": "Concurrency structures work so multiple tasks can make progress over overlapping time periods. Parallelism executes work simultaneously, usually on multiple cores or machines. An event loop can be concurrent without running JavaScript callbacks in parallel.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-82d4-4e52-84b8-b5b48d2b69a2",
+        "front": "Why can a CPU-heavy callback freeze a browser even when it uses async syntax?",
+        "back": "Async does not automatically move computation off the main thread. A long synchronous segment still blocks rendering and input. Split the work, reduce it, or move suitable computation to a worker.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-6664-437c-88f9-5a5cdb301c4e",
+        "front": "What does a file descriptor represent on Unix-like systems?",
+        "back": "It is a small integer handle for an open resource in a process, such as a file, socket, or pipe. Descriptors have lifecycle and limit constraints; leaking them can prevent the process from opening new resources.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-9994-4b07-804f-b446b9666c08",
+        "front": "Why should a server close sockets and files on both success and failure paths?",
+        "back": "Resources can leak when exceptions or early returns bypass cleanup. Use structured cleanup such as finally blocks or language resource-management constructs. A leak may only appear after the process handles many requests.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-e920-4550-8503-d68fba02ebf1",
+        "front": "What is virtual memory useful for beyond making memory look contiguous?",
+        "back": "It provides address-space isolation and maps virtual addresses to physical memory or other backing. It supports protection and flexible allocation. It does not make memory unlimited; allocation and paging still have real costs and limits.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-8f91-4112-8bcd-f0453dd85df7",
+        "front": "Why does swapping often hurt latency-sensitive services?",
+        "back": "Accessing paged-out memory can require slow storage I/O, producing large and unpredictable delays. Observe memory pressure and working-set size, and configure deployment resources appropriately rather than treating swap as equivalent to RAM.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-8704-47cb-8204-7154a6c41ee6",
+        "front": "What is a context switch, and why can excessive switching hurt throughput?",
+        "back": "The system saves one execution context and resumes another. Switching has overhead and can disrupt caches. Too many runnable threads can spend resources on scheduling rather than useful work, so concurrency should be measured and bounded.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-0972-4b22-8f8e-3159731c8223",
+        "front": "Why can a blocking operation inside an event loop delay unrelated requests?",
+        "back": "The loop cannot run other callbacks while blocked. Use non-blocking APIs where appropriate, offload blocking work, and monitor event-loop delay. A single slow synchronous operation can affect many concurrent connections.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-7936-4ac2-8d4d-cbccdc6c1abd",
+        "front": "What should graceful shutdown do before a server process exits?",
+        "back": "Stop accepting new work, signal or drain in-flight work within a deadline, release resources, and exit with appropriate status. Coordinate with readiness and load balancing so new requests are not sent to a process that is shutting down.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-856f-4e50-85b5-509203c0c431",
+        "front": "Why should a process handle SIGTERM rather than assuming it will run forever?",
+        "back": "Supervisors and deployment systems commonly use termination signals to request shutdown. Handling the signal allows bounded cleanup and draining. The process must still tolerate abrupt termination because cleanup is never guaranteed.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-c4dc-4c90-8ebd-418f79d40782",
+        "front": "What does a bounded worker pool control?",
+        "back": "The number of tasks executing concurrently. It prevents unlimited resource use, but an unbounded waiting queue can still exhaust memory. Bound both concurrency and queued work, with explicit behavior when capacity is reached.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003009",
+    "name": "Delivery · containers & safe releases",
+    "track": "Practice",
+    "icon": "git",
+    "color": "green",
+    "topics": [
+      "Docker",
+      "CI/CD",
+      "Deployment"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "Docker documentation",
+      "url": "https://docs.docker.com/"
+    },
+    "cards": [
+      {
+        "id": "d0000000-ef7c-44ae-8072-1ca99e52fa30",
+        "front": "How does a container differ from a virtual machine at the operating-system boundary?",
+        "back": "Containers typically isolate processes while sharing the host kernel. Virtual machines run guest operating systems on virtualized hardware. This affects isolation, compatibility, and resource overhead; containers are not a complete security boundary by default.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-4873-4604-8894-2fd7001304ad",
+        "front": "Why should a production container usually run as a non-root user?",
+        "back": "It reduces the privileges available if the application is compromised or misbehaves. Also restrict capabilities, filesystem access, and mounted resources. Non-root execution is one control, not a guarantee of isolation.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-b471-406a-80cc-96f3f4737555",
+        "front": "What problem does a multi-stage container build solve?",
+        "back": "It separates build tools and intermediate files from the runtime image. Copy only required artifacts into the final stage, reducing size and unnecessary components. Verify that runtime dependencies are still included.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-496e-4003-8439-22ed64a73c2a",
+        "front": "Why should secrets not be baked into container image layers?",
+        "back": "Images are copied, cached, and distributed, and earlier layers can retain files removed in later layers. Supply secrets through appropriate runtime or build-secret mechanisms. Rotate a secret if it has entered an image or repository history.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-d7e1-4404-82b4-7760484b3715",
+        "front": "Why does pinning a base image improve reproducibility?",
+        "back": "It makes the chosen image version explicit instead of silently changing with a mutable tag. A digest identifies exact content. Pinning also creates a responsibility to regularly update and rebuild for relevant fixes.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-127f-4da8-865c-7924fb824ab4",
+        "front": "What is the difference between a readiness probe and a liveness probe?",
+        "back": "Readiness asks whether an instance should receive traffic. Liveness asks whether it should be restarted. A dependency outage may make an instance unready without justifying restarts that add more load and disruption.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-475b-4503-871d-aa8650f6d419",
+        "front": "Why can an overly aggressive liveness probe cause an outage loop?",
+        "back": "A slow or overloaded instance may be repeatedly restarted before it can recover, reducing capacity further. Set thresholds based on startup and runtime behavior, and distinguish a dead process from a temporarily busy one.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-e868-4d84-8692-b77f600e3b87",
+        "front": "Why should database compatibility be considered before rolling back an application?",
+        "back": "A new release may have changed stored data or schema in ways the old code cannot understand. Use compatible migration phases and test rollback assumptions. Reverting the binary does not automatically revert data changes.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-f329-4dbf-88a4-434032a13d55",
+        "front": "What is a canary deployment intended to reveal?",
+        "back": "It exposes a limited share of real traffic to a new version and compares meaningful health and business signals. It reduces initial blast radius, but needs a representative sample, clear thresholds, and a rollback path.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-2f90-43b7-845d-cba364b3be25",
+        "front": "What makes a feature flag different from deploying a new binary?",
+        "back": "A flag can control behavior independently of code deployment, enabling gradual rollout or rapid disablement. It adds configuration states and operational complexity, so give flags owners and remove obsolete ones.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-7e61-4dc9-8d45-145d54545c76",
+        "front": "Why should CI use a lockfile when installing dependencies?",
+        "back": "It selects a reproducible dependency graph consistent with the project. Without it, fresh installations can resolve different versions. Reproducibility helps diagnose failures, but dependencies still need intentional updates and verification.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-71c4-485f-8f30-f48d29b7fe4a",
+        "front": "What should a build artifact contain to support traceability?",
+        "back": "An association with the source revision, build inputs or dependency versions, and the build process that produced it. This helps reproduce, investigate, and roll back releases without guessing which code is running.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-de6d-46b6-8830-937bd7030e45",
+        "front": "Why is building once and promoting the same artifact through environments useful?",
+        "back": "It reduces differences caused by rebuilding separately for each environment. Keep environment-specific configuration separate where practical, and verify that the promoted artifact is the one tested.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-4ca8-4db6-83b0-f6cb37e32a2e",
+        "front": "What is the risk of running database migrations concurrently from every application replica?",
+        "back": "Multiple instances can race, block each other, or apply non-idempotent operations twice. Coordinate migration execution through a dedicated step or an appropriate lock and record applied versions.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-b29b-4a6b-8e06-1f7695e46f41",
+        "front": "Why should a deployment have a time-bounded rollback decision?",
+        "back": "Prolonged uncertainty can leave users exposed while the team debates whether symptoms are related. Define actionable success and failure signals in advance, then investigate with a clear path to restore service.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-3520-4c7c-83b3-eccd8a05400a",
+        "front": "How can ephemeral application containers accidentally lose user data?",
+        "back": "Files written only to the container's writable layer may disappear when it is replaced. Store durable data in an appropriate persistent service or volume, and test backup and restore rather than relying on a long-lived container.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003010",
+    "name": "Algorithms · choose & justify",
+    "track": "Foundations",
+    "icon": "tree",
+    "color": "amber",
+    "topics": [
+      "Algorithms",
+      "Data structures",
+      "Complexity"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "MIT algorithms course",
+      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/"
+    },
+    "cards": [
+      {
+        "id": "d0000000-a35d-407f-8c23-5a48967e6196",
+        "front": "Why is a sliding window for a target sum simpler with nonnegative values than with arbitrary integers?",
+        "back": "With nonnegative values, expanding the window cannot reduce the sum and shrinking cannot increase it. Negative values break that monotonic reasoning. Choose an approach such as prefix sums with a map when the problem requires it.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-9d22-4915-8f0c-9677050e95fc",
+        "front": "How does a prefix-sum array answer repeated range-sum queries?",
+        "back": "Store the sum of elements before each position. The sum on a half-open range [l, r) is prefix[r] - prefix[l]. Construction is O(n), and each query is O(1), with O(n) additional storage.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-e4b1-4d19-8f85-165bc9647ae5",
+        "front": "When is a monotonic stack useful?",
+        "back": "When finding relationships such as the next greater or smaller element. Maintain candidates in a monotonic order and discard those made irrelevant by the current element. Each element is pushed and popped at most once, giving linear total work.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-b7f9-4f6f-8cf8-98589b31a089",
+        "front": "Why can a nested while loop in a two-pointer algorithm still be O(n)?",
+        "back": "If each pointer only moves forward and advances at most n times across the entire run, total work is linear. Count cumulative pointer movements rather than multiplying loop bounds mechanically.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-c826-4a8e-88c5-be708af78f09",
+        "front": "When does breadth-first search stop guaranteeing a minimum-cost path?",
+        "back": "When edges have different costs. BFS minimizes edge count in an unweighted or equally weighted graph. For nonnegative varying costs, use an appropriate weighted shortest-path algorithm such as Dijkstra's.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-1541-48fd-8615-535d4b0aa6f8",
+        "front": "Why does Dijkstra's algorithm require nonnegative edge weights in its standard form?",
+        "back": "Its greedy finalization assumes a settled shortest distance cannot later be improved through another path. A negative edge can violate that assumption. Use an algorithm designed for the graph's weight constraints.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-029d-403b-8d1f-2e443c936e53",
+        "front": "What does topological sorting require of a directed graph?",
+        "back": "The graph must be acyclic. A topological order places every predecessor before its successor. If the algorithm cannot include all vertices, a directed cycle exists and no such ordering is possible.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-50ad-4893-896c-b6840a4df51a",
+        "front": "What does the union-find structure efficiently answer?",
+        "back": "Whether two elements belong to the same connected component as components merge. Path compression and union by rank or size make operations very efficient amortized. It is not a general solution for arbitrary deletions or directed reachability.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-3ab5-4f44-82e1-97923b9143b2",
+        "front": "Why is a min-heap useful for maintaining the largest k elements in a stream?",
+        "back": "Keep at most k candidates, with the smallest retained value at the root. Replace it when a larger value arrives. Each relevant update costs O(log k), using O(k) space.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-8196-4c5f-811a-75cc711643df",
+        "front": "What property lets binary search work on an answer space rather than an array?",
+        "back": "A monotonic feasibility predicate. If an answer is feasible and all larger answers are also feasible, binary search can locate the smallest feasible one. Prove the monotonic direction and choose valid bounds first.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-0338-4cc0-8fc0-9d17a082143c",
+        "front": "How do you decide the state for a dynamic programming solution?",
+        "back": "Capture the information from the past that is necessary to solve the remaining subproblem. Define the state's meaning, recurrence, base cases, and evaluation order. If important history is omitted, different situations may incorrectly share one result.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-727f-4398-84e3-95f7596d9317",
+        "front": "What distinguishes memoization from bottom-up tabulation?",
+        "back": "Memoization caches results reached by a recursive or demand-driven computation. Tabulation fills states in an order where dependencies are already available. Both can implement the same recurrence but differ in traversal, overhead, and reachable-state work.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-ace1-4f57-8b8c-756185537bd0",
+        "front": "Why is the recursion stack part of an algorithm's space complexity?",
+        "back": "Each active call stores execution state. A depth-n recursion can require O(n) stack space even without an explicit array. Deep recursion may also exceed runtime stack limits, making an iterative approach preferable.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-e24d-4a1c-8466-5420b068245a",
+        "front": "When is a trie a useful alternative to a hash map of strings?",
+        "back": "When operations depend on prefixes, such as prefix lookup or autocomplete. Traversal follows characters, but node overhead can be large. A hash map is often simpler when only exact-key lookup is needed.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-d429-4697-860a-d62b7a869e0c",
+        "front": "What is the difference between a stable sort and a deterministic sort?",
+        "back": "A stable sort preserves the input order of items with equal keys. Deterministic means the same specified input and conditions produce the same result. Stability alone does not define a unique order for differently ordered tied inputs.",
+        "kind": "scenario"
+      },
+      {
+        "id": "d0000000-f31a-4a5a-8e01-d86ad3e00072",
+        "front": "How should you validate a greedy algorithm before trusting it?",
+        "back": "Justify why the locally chosen step can belong to an optimal solution, often with an exchange argument or invariant. Test counterexamples. A plausible local rule is not a proof, and some problems require dynamic programming or search.",
+        "kind": "scenario"
+      }
+    ]
+  }
+]

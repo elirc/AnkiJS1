@@ -1,4 +1,4 @@
-import Dexie, { type Table } from 'dexie';
+import Dexie, { type Table } from "dexie";
 
 export type ISODate = string;
 
@@ -12,7 +12,7 @@ export interface Deck {
   deleted_at: ISODate | null;
 }
 
-export type CardState = 'new' | 'learning' | 'review' | 'relearning';
+export type CardState = "new" | "learning" | "review" | "relearning";
 
 export interface Card {
   id: string;
@@ -27,6 +27,7 @@ export interface Card {
   difficulty: number;
   elapsed_days: number;
   scheduled_days: number;
+  learning_steps?: number;
   reps: number;
   lapses: number;
   state: CardState;
@@ -37,7 +38,7 @@ export interface Card {
   deleted_at: ISODate | null;
 }
 
-export type NoteStatus = 'inbox' | 'converted' | 'archived';
+export type NoteStatus = "inbox" | "converted" | "archived";
 
 export interface Note {
   id: string;
@@ -63,7 +64,7 @@ export interface ReviewLog {
   reviewed_at: ISODate;
 }
 
-export type SyncTableName = 'decks' | 'cards' | 'notes' | 'review_logs';
+export type SyncTableName = "decks" | "cards" | "notes" | "review_logs";
 
 export interface OutboxEntry {
   id?: number;
@@ -86,14 +87,14 @@ export class RecallDB extends Dexie {
   sync_meta!: Table<SyncMeta, string>;
 
   constructor() {
-    super('recall');
+    super("recall");
     this.version(1).stores({
-      decks: 'id, updated_at, deleted_at',
-      cards: 'id, deck_id, due, state, note_id, deleted_at, [deck_id+state]',
-      notes: 'id, status, updated_at, deleted_at',
-      review_logs: 'id, card_id, reviewed_at',
-      outbox: '++id, [table_name+row_id]',
-      sync_meta: 'key',
+      decks: "id, updated_at, deleted_at",
+      cards: "id, deck_id, due, state, note_id, deleted_at, [deck_id+state]",
+      notes: "id, status, updated_at, deleted_at",
+      review_logs: "id, card_id, reviewed_at",
+      outbox: "++id, [table_name+row_id]",
+      sync_meta: "key",
     });
   }
 }

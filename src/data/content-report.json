@@ -1,0 +1,20 @@
+{
+  "totalCards": 2803,
+  "originalCards": 448,
+  "adaptedCards": 2355,
+  "beginnerCards": 160,
+  "teachingLessons": 80,
+  "decks": 55,
+  "kinds": {
+    "complete": 917,
+    "explain": 1438
+  },
+  "source": "30-seconds/30-seconds-of-code",
+  "revision": "f1b2d5a65c32432a877de94a749be40a396ebed2",
+  "license": "CC-BY-4.0",
+  "excluded": {
+    "embedded content": 18,
+    "length or fences": 95,
+    "missing context or obsolete API": 277
+  }
+}

@@ -1,0 +1,862 @@
+[
+  {
+    "id": "a0000000-0000-4000-8000-000000000900",
+    "name": "JavaScript · arrays & collections · 1",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "JavaScript",
+      "Arrays",
+      "Maps",
+      "Sets"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000901",
+    "name": "JavaScript · arrays & collections · 2",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "JavaScript",
+      "Arrays",
+      "Maps",
+      "Sets"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000902",
+    "name": "JavaScript · arrays & collections · 3",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "JavaScript",
+      "Arrays",
+      "Maps",
+      "Sets"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000903",
+    "name": "JavaScript · arrays & collections · 4",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "JavaScript",
+      "Arrays",
+      "Maps",
+      "Sets"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 100
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001000",
+    "name": "JavaScript · objects & types · 1",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "amber",
+    "topics": [
+      "JavaScript",
+      "Objects",
+      "Types"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001001",
+    "name": "JavaScript · objects & types · 2",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "amber",
+    "topics": [
+      "JavaScript",
+      "Objects",
+      "Types"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 67
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001100",
+    "name": "JavaScript · strings & regex · 1",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "green",
+    "topics": [
+      "JavaScript",
+      "Strings",
+      "Regex"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001101",
+    "name": "JavaScript · strings & regex · 2",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "green",
+    "topics": [
+      "JavaScript",
+      "Strings",
+      "Regex"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 96
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001200",
+    "name": "JavaScript · functions & async · 1",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "JavaScript",
+      "Closures",
+      "Promises"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001201",
+    "name": "JavaScript · functions & async · 2",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "JavaScript",
+      "Closures",
+      "Promises"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 63
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001300",
+    "name": "JavaScript · numbers & algorithms · 1",
+    "track": "Foundations",
+    "icon": "tree",
+    "color": "amber",
+    "topics": [
+      "JavaScript",
+      "Numbers",
+      "Algorithms"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001301",
+    "name": "JavaScript · numbers & algorithms · 2",
+    "track": "Foundations",
+    "icon": "tree",
+    "color": "amber",
+    "topics": [
+      "JavaScript",
+      "Numbers",
+      "Algorithms"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 33
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001400",
+    "name": "JavaScript · dates & time",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "green",
+    "topics": [
+      "JavaScript",
+      "Dates",
+      "Time"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 92
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001500",
+    "name": "Browser APIs & DOM practice · 1",
+    "track": "Frontend",
+    "icon": "globe",
+    "color": "blue",
+    "topics": [
+      "DOM",
+      "Browser",
+      "Events"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001501",
+    "name": "Browser APIs & DOM practice · 2",
+    "track": "Frontend",
+    "icon": "globe",
+    "color": "blue",
+    "topics": [
+      "DOM",
+      "Browser",
+      "Events"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 67
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001600",
+    "name": "JavaScript · language mechanics · 1",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "JavaScript",
+      "Syntax",
+      "Runtime"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001601",
+    "name": "JavaScript · language mechanics · 2",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "JavaScript",
+      "Syntax",
+      "Runtime"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001602",
+    "name": "JavaScript · language mechanics · 3",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "JavaScript",
+      "Syntax",
+      "Runtime"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 35
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001700",
+    "name": "Python · practical fluency · 1",
+    "track": "Backend",
+    "icon": "braces",
+    "color": "amber",
+    "topics": [
+      "Python",
+      "Collections",
+      "Functions"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001701",
+    "name": "Python · practical fluency · 2",
+    "track": "Backend",
+    "icon": "braces",
+    "color": "amber",
+    "topics": [
+      "Python",
+      "Collections",
+      "Functions"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 25
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001800",
+    "name": "CSS · layout & interaction · 1",
+    "track": "Frontend",
+    "icon": "globe",
+    "color": "blue",
+    "topics": [
+      "CSS",
+      "Layout",
+      "Animation"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001801",
+    "name": "CSS · layout & interaction · 2",
+    "track": "Frontend",
+    "icon": "globe",
+    "color": "blue",
+    "topics": [
+      "CSS",
+      "Layout",
+      "Animation"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 26
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001900",
+    "name": "HTML · semantics & browser behavior",
+    "track": "Frontend",
+    "icon": "globe",
+    "color": "green",
+    "topics": [
+      "HTML",
+      "Accessibility",
+      "Forms"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 33
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000002000",
+    "name": "Git · everyday workflows · 1",
+    "track": "Practice",
+    "icon": "git",
+    "color": "amber",
+    "topics": [
+      "Git",
+      "Branches",
+      "History"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000002001",
+    "name": "Git · everyday workflows · 2",
+    "track": "Practice",
+    "icon": "git",
+    "color": "amber",
+    "topics": [
+      "Git",
+      "Branches",
+      "History"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 28
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000002100",
+    "name": "React · hooks & patterns · 1",
+    "track": "Frontend",
+    "icon": "react",
+    "color": "blue",
+    "topics": [
+      "React",
+      "Hooks",
+      "Components"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 120
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000002101",
+    "name": "React · hooks & patterns · 2",
+    "track": "Frontend",
+    "icon": "react",
+    "color": "blue",
+    "topics": [
+      "React",
+      "Hooks",
+      "Components"
+    ],
+    "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
+    "resource": {
+      "label": "30 seconds of code · source & further reading",
+      "url": "https://github.com/30-seconds/30-seconds-of-code"
+    },
+    "cardCount": 10
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003001",
+    "name": "SQL · production queries",
+    "track": "Backend",
+    "icon": "database",
+    "color": "blue",
+    "topics": [
+      "SQL",
+      "PostgreSQL",
+      "Transactions"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "PostgreSQL documentation",
+      "url": "https://www.postgresql.org/docs/current/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003002",
+    "name": "Distributed systems · failure scenarios",
+    "track": "Backend",
+    "icon": "network",
+    "color": "violet",
+    "topics": [
+      "Reliability",
+      "Queues",
+      "Consistency"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "AWS Builders' Library",
+      "url": "https://aws.amazon.com/builders-library/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003003",
+    "name": "API design · contracts & edge cases",
+    "track": "Backend",
+    "icon": "globe",
+    "color": "green",
+    "topics": [
+      "HTTP",
+      "APIs",
+      "Compatibility"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "MDN HTTP documentation",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003004",
+    "name": "Application security · practical defenses",
+    "track": "Backend",
+    "icon": "globe",
+    "color": "amber",
+    "topics": [
+      "Security",
+      "Authentication",
+      "Web"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003005",
+    "name": "TypeScript · model the invariants",
+    "track": "Foundations",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "TypeScript",
+      "Types",
+      "Validation"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "TypeScript handbook",
+      "url": "https://www.typescriptlang.org/docs/handbook/intro.html"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003006",
+    "name": "Testing · meaningful confidence",
+    "track": "Practice",
+    "icon": "bug",
+    "color": "green",
+    "topics": [
+      "Testing",
+      "Debugging",
+      "Quality"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "Testing Library guiding principles",
+      "url": "https://testing-library.com/docs/guiding-principles/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003007",
+    "name": "Observability · diagnose production",
+    "track": "Practice",
+    "icon": "bug",
+    "color": "amber",
+    "topics": [
+      "Observability",
+      "SLOs",
+      "Performance"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "Google SRE books",
+      "url": "https://sre.google/books/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003008",
+    "name": "Systems · processes & concurrency",
+    "track": "Foundations",
+    "icon": "network",
+    "color": "blue",
+    "topics": [
+      "Operating systems",
+      "Concurrency",
+      "Linux"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "Linux man-pages project",
+      "url": "https://www.kernel.org/doc/man-pages/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003009",
+    "name": "Delivery · containers & safe releases",
+    "track": "Practice",
+    "icon": "git",
+    "color": "green",
+    "topics": [
+      "Docker",
+      "CI/CD",
+      "Deployment"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "Docker documentation",
+      "url": "https://docs.docker.com/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003010",
+    "name": "Algorithms · choose & justify",
+    "track": "Foundations",
+    "icon": "tree",
+    "color": "amber",
+    "topics": [
+      "Algorithms",
+      "Data structures",
+      "Complexity"
+    ],
+    "description": "Reason through realistic engineering decisions and failure cases.",
+    "resource": {
+      "label": "MIT algorithms course",
+      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004001",
+    "name": "01 · Read your first program",
+    "track": "Start here",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "Beginner",
+      "JavaScript",
+      "Values",
+      "Types"
+    ],
+    "description": "Learn one idea at a time through plain English, a worked example, an analogy, and a small practice question.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004002",
+    "name": "02 · Follow the flow",
+    "track": "Start here",
+    "icon": "braces",
+    "color": "amber",
+    "topics": [
+      "Beginner",
+      "Functions",
+      "Loops",
+      "Closures"
+    ],
+    "description": "Learn one idea at a time through plain English, a worked example, an analogy, and a small practice question.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004003",
+    "name": "03 · Work with collections",
+    "track": "Start here",
+    "icon": "braces",
+    "color": "green",
+    "topics": [
+      "Beginner",
+      "Arrays",
+      "Objects",
+      "Collections"
+    ],
+    "description": "Learn one idea at a time through plain English, a worked example, an analogy, and a small practice question.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004004",
+    "name": "04 · Understand time and failures",
+    "track": "Start here",
+    "icon": "bug",
+    "color": "amber",
+    "topics": [
+      "Beginner",
+      "Async",
+      "Debugging",
+      "Tests"
+    ],
+    "description": "Learn one idea at a time through plain English, a worked example, an analogy, and a small practice question.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Async_JS"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004005",
+    "name": "05 · Understand a web page",
+    "track": "Start here",
+    "icon": "globe",
+    "color": "blue",
+    "topics": [
+      "Beginner",
+      "HTML",
+      "CSS",
+      "Accessibility"
+    ],
+    "description": "Learn one idea at a time through plain English, a worked example, an analogy, and a small practice question.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004006",
+    "name": "06 · React without the mystery",
+    "track": "Start here",
+    "icon": "react",
+    "color": "blue",
+    "topics": [
+      "Beginner",
+      "React",
+      "Components",
+      "State"
+    ],
+    "description": "Learn one idea at a time through plain English, a worked example, an analogy, and a small practice question.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://react.dev/learn"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004007",
+    "name": "07 · Databases in plain English",
+    "track": "Start here",
+    "icon": "database",
+    "color": "blue",
+    "topics": [
+      "Beginner",
+      "SQL",
+      "Data",
+      "Transactions"
+    ],
+    "description": "Learn one idea at a time through plain English, a worked example, an analogy, and a small practice question.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://www.postgresql.org/docs/current/tutorial.html"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004008",
+    "name": "08 · Git and the terminal",
+    "track": "Start here",
+    "icon": "git",
+    "color": "amber",
+    "topics": [
+      "Beginner",
+      "Git",
+      "Terminal",
+      "Teamwork"
+    ],
+    "description": "Learn one idea at a time through plain English, a worked example, an analogy, and a small practice question.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://git-scm.com/book/en/v2"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004009",
+    "name": "09 · Algorithms you can picture",
+    "track": "Start here",
+    "icon": "tree",
+    "color": "violet",
+    "topics": [
+      "Beginner",
+      "Big O",
+      "Data structures",
+      "Algorithms"
+    ],
+    "description": "Learn one idea at a time through plain English, a worked example, an analogy, and a small practice question.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004010",
+    "name": "10 · Build reliable small services",
+    "track": "Start here",
+    "icon": "network",
+    "color": "green",
+    "topics": [
+      "Beginner",
+      "APIs",
+      "Reliability",
+      "Security"
+    ],
+    "description": "Learn one idea at a time through plain English, a worked example, an analogy, and a small practice question.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side"
+    },
+    "cardCount": 16
+  }
+]

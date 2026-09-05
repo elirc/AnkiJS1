@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function UpdateToast() {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const show = () => setVisible(true);
-    window.addEventListener('recall:update-available', show);
-    return () => window.removeEventListener('recall:update-available', show);
+    window.addEventListener("recall:update-available", show);
+    return () => window.removeEventListener("recall:update-available", show);
   }, []);
   if (!visible) return null;
   return (
@@ -15,7 +15,9 @@ export function UpdateToast() {
         <button
           className="ml-auto rounded-lg px-2 py-1 font-semibold text-primary transition hover:bg-primary/10"
           type="button"
-          onClick={() => location.reload()}
+          onClick={() =>
+            window.dispatchEvent(new CustomEvent("recall:apply-update"))
+          }
         >
           Reload
         </button>
