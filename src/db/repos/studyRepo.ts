@@ -6,6 +6,7 @@ import {
 } from "../../srs/preferences";
 import { newCardCandidates } from "../../srs/siblings";
 import { buildQueue, interleaveQueues } from "../../srs/queue";
+import { getDeckInfo, type Track } from "../../data/curriculum";
 
 export async function getStudyPreferences(): Promise<StudyPreferences> {
   const raw = (await db.sync_meta.get("study_preferences"))?.value;
@@ -48,7 +49,7 @@ export function introductionCounts(
   return { total: ids.size, byDeck };
 }
 
-export async function loadStudy(deckId?: string, now = new Date()) {
+export async function loadStudy(deckId?: string, now = new Date(), track?: Track) {
   const [allDecks, allCards, logs, preferences] = await Promise.all([
     db.decks.toArray(),
     db.cards.toArray(),
@@ -56,7 +57,8 @@ export async function loadStudy(deckId?: string, now = new Date()) {
     getStudyPreferences(),
   ]);
   const decks = allDecks
-    .filter((deck) => !deck.deleted_at && (!deckId || deck.id === deckId))
+    .filter((deck) => !deck.deleted_at && (!deckId || deck.id === deckId)
+      && (!track || getDeckInfo(deck.id)?.track === track))
     .sort((a, b) => a.id.localeCompare(b.id));
   const ids = new Set(decks.map((deck) => deck.id));
   const counts = introductionCounts(allCards, logs, now);
@@ -65,7 +67,7 @@ export async function loadStudy(deckId?: string, now = new Date()) {
   const day = Math.floor(
     Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86_400_000,
   );
-  const offset = decks.length
+  const offset = decks.length && !track
     ? (day * Math.max(1, preferences.new_per_day)) % decks.length
     : 0;
   const rotated = [...decks.slice(offset), ...decks.slice(0, offset)];
@@ -85,7 +87,8 @@ export async function loadStudy(deckId?: string, now = new Date()) {
     .sort((a, b) => Date.parse(a.due) - Date.parse(b.due));
   return {
     decks,
-    queue: interleaveQueues(queues, remainingNew),
+    // A focused path introduces new cards in curriculum order; due reviews stay first.
+    queue: interleaveQueues(track ? [queues.flat()] : queues, remainingNew),
     nextDue: future[0]?.due ?? null,
     preferences,
     remainingNew,

@@ -84,16 +84,8 @@ const gitLessons = new Set([
   "gitignore",
 ]);
 // The beginner language lessons use JavaScript semantics. Python cards can
-// reuse general engineering/algorithm lessons, but not JavaScript API behavior.
+// reuse general web engineering lessons, but not JavaScript API behavior.
 const languageIndependentLessons = new Set([
-  "big-o",
-  "pairs",
-  "binary-search",
-  "hash-maps",
-  "stacks",
-  "queues",
-  "graphs",
-  "invariants",
   "tests",
   "validation",
   "debugging",
@@ -212,10 +204,6 @@ const vocabulary: [string, string][] = [
   ],
   ["invariant", "a rule that must remain true across valid changes"],
   ["latency", "the time an operation takes from the caller's point of view"],
-  [
-    "recursion",
-    "solving a problem by calling the same function on a smaller version of the problem",
-  ],
   ["atomic", "treated as one indivisible operation at the relevant boundary"],
   ["scope", "the part of a program in which a name is available"],
 ];
@@ -224,11 +212,11 @@ export function getAnswerPages(
   front: string,
   back: string,
 ): { pages: AnswerPage[]; credit: string } {
-  const explicit = parseAnswerPages(back);
-  if (explicit) return { pages: explicit, credit: "" };
   const creditAt = back.lastIndexOf("\n\n---\nAdapted from ");
   const credit = creditAt >= 0 ? back.slice(creditAt + 6).trim() : "";
   const answer = (creditAt >= 0 ? back.slice(0, creditAt) : back).trim();
+  const explicit = parseAnswerPages(answer);
+  if (explicit) return { pages: explicit, credit };
   const guide = findTeachingLesson(front, answer);
   const codeBlocks = [...answer.matchAll(/```[^\n]*\n[\s\S]*?```/g)].map(
     (match) => match[0],

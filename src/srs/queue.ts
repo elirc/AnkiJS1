@@ -34,10 +34,12 @@ export function buildQueue(
     )
     .sort(byDueAsc);
   const remainingNew = Math.max(0, deck.new_per_day - newStudiedToday);
+  const practiced = new Set(cards.filter((card) => card.state !== "new" || card.reps > 0).map(siblingKey));
   const seen = new Set<string>();
   const newCards = active
     .filter((card) => card.state === "new")
-    .sort(byCreatedAsc)
+    // Revisit an eligible familiar idea before moving to another new concept.
+    .sort((a, b) => Number(practiced.has(siblingKey(b))) - Number(practiced.has(siblingKey(a))) || byCreatedAsc(a, b))
     .filter((card) => {
       const key = siblingKey(card);
       if (seen.has(key)) return false;

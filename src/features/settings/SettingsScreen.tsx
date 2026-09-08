@@ -105,8 +105,10 @@ export function SettingsScreen() {
     event.target.value = "";
     if (!file) return;
     await perform(async () => {
-      if (file.size > 20_000_000)
-        throw new Error("Please choose a file smaller than 20 MB.");
+      const maxBytes = text ? 20_000_000 : 100_000_000;
+      if (file.size > maxBytes)
+        throw new Error(`Please choose a file smaller than ${maxBytes / 1_000_000} MB.`);
+      setMessage(text ? "Importing cards…" : "Restoring backup…");
       const contents = await file.text();
       if (text) {
         const count = await importCardText(
@@ -116,7 +118,7 @@ export function SettingsScreen() {
         return `Imported ${count} cards into a new deck. Find it in My decks.`;
       }
       await importData(JSON.parse(contents));
-      return "Backup imported. Your decks and review history are ready.";
+      return "Backup imported. Your decks, review history, and practice journal are ready.";
     });
   }
   return (
@@ -188,7 +190,7 @@ export function SettingsScreen() {
         <p>
           Start with 5–10 new cards a day. Each deck’s own limit also applies.
           Due reviews come first and never count against this allowance. Related
-          new exercises are separated until the next day.
+          new exercises revisit the same idea after 1 day, then 3 days, then 7 days. Due reviews keep their own schedule.
         </p>
         <label className="setting-label">
           Target retention
@@ -276,7 +278,7 @@ export function SettingsScreen() {
       <section className="content-panel settings-section">
         <h2>Your knowledge, kept safe</h2>
         <p>
-          Export all decks, cards, notes, and review history. Import a Recall
+          Export all decks, cards, notes, review history, and your practice journal. Import a Recall
           backup to restore or merge progress on another device.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">

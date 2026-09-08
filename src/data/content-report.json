@@ -1,13 +1,16 @@
 {
-  "totalCards": 2803,
-  "originalCards": 448,
-  "adaptedCards": 2355,
+  "totalCards": 21102,
+  "originalCards": 880,
+  "adaptedCards": 20222,
   "beginnerCards": 160,
-  "teachingLessons": 80,
-  "decks": 55,
+  "practicalCards": 200,
+  "dotnetCards": 192,
+  "dotnetLessons": 96,
+  "teachingLessons": 276,
+  "decks": 75,
   "kinds": {
-    "complete": 917,
-    "explain": 1438
+    "complete": 780,
+    "explain": 1211
   },
   "source": "30-seconds/30-seconds-of-code",
   "revision": "f1b2d5a65c32432a877de94a749be40a396ebed2",
@@ -15,6 +18,24 @@
   "excluded": {
     "embedded content": 18,
     "length or fences": 95,
-    "missing context or obsolete API": 277
-  }
+    "missing context or obsolete API": 277,
+    "outside practical CRUD scope": 364
+  },
+  "baseCards": 2799,
+  "retrievalCards": 0,
+  "curriculumVersion": 13,
+  "scenarioCards": 72,
+  "retiredRetrievalCards": 10810,
+  "baseAdaptedCards": 1991,
+  "libraryCards": 18231,
+  "librarySources": {
+    "https://github.com/dotnet/AspNetCore.Docs": 1462,
+    "https://github.com/dotnet/EntityFramework.Docs": 244,
+    "https://github.com/dotnet/docs": 4021,
+    "https://github.com/freeCodeCamp/freeCodeCamp": 642,
+    "https://github.com/github/docs": 1593,
+    "https://github.com/mdn/content": 9809,
+    "https://github.com/reactjs/react.dev": 460
+  },
+  "guidedLessons": 828
 }

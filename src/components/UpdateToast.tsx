@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { hasAppUpdate } from "../lib/appUpdate";
 
 export function UpdateToast() {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(hasAppUpdate);
   useEffect(() => {
     const show = () => setVisible(true);
     window.addEventListener("recall:update-available", show);
+    if (hasAppUpdate()) show();
     return () => window.removeEventListener("recall:update-available", show);
   }, []);
   if (!visible) return null;
@@ -13,7 +15,7 @@ export function UpdateToast() {
       <div className="flex items-center gap-3">
         <span className="text-text">Update available</span>
         <button
-          className="ml-auto rounded-lg px-2 py-1 font-semibold text-primary transition hover:bg-primary/10"
+          className="ml-auto min-h-11 rounded-lg px-3 py-2 font-semibold text-primary transition hover:bg-primary/10"
           type="button"
           onClick={() =>
             window.dispatchEvent(new CustomEvent("recall:apply-update"))

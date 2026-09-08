@@ -30,6 +30,7 @@ import {
 } from "../../db/repos/deckRepo";
 import { formatDue } from "../../lib/dates";
 import { getDeckInfo } from "../../data/curriculum";
+import { DOTNET_TRACK } from "../../data/dotnet-path";
 import { CreateDeckDialog } from "./CreateDeckDialog";
 import { useNow } from "../../lib/useNow";
 export function DeckDetailScreen() {
@@ -66,6 +67,7 @@ export function DeckDetailScreen() {
     );
   const { deck, counts, cards } = data;
   const info = getDeckInfo(deck.id);
+  const backTo = info?.track === DOTNET_TRACK ? "/dotnet" : "/decks";
   async function action(work: () => Promise<void>) {
     if (busy) return;
     setBusy(true);
@@ -80,9 +82,9 @@ export function DeckDetailScreen() {
   }
   return (
     <div className="space-y-5">
-      <Link to="/decks" className="back-link">
+      <Link to={backTo} className="back-link">
         <ArrowLeft size={14} />
-        All decks
+        {info?.track === DOTNET_TRACK ? "C# & .NET path" : "All decks"}
       </Link>
       <div className="page-heading">
         <div>
@@ -161,7 +163,7 @@ export function DeckDetailScreen() {
         </p>
         {info && (
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            {info.topics.map((topic) => (
+            {[...new Set(info.topics)].map((topic) => (
               <span className="deck-category" key={topic}>
                 {topic}
               </span>
@@ -312,7 +314,7 @@ export function DeckDetailScreen() {
                 void action(async () => {
                   if (deleting.deck) {
                     await deleteDeck(deleting.id);
-                    navigate("/decks");
+                    navigate(backTo);
                   } else await deleteCard(deleting.id);
                   setDeleting(null);
                 })

@@ -1,0 +1,527 @@
+[
+  {
+    "id": "a0000000-0000-4000-8000-000000000002",
+    "name": "JavaScript & TypeScript",
+    "track": "Frontend",
+    "cardCount": 16,
+    "contentHash": "62ef06a6d119447893ef4c817f4ab51b513e7eb446114906fc462b4d1379213f"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000003",
+    "name": "React & frontend",
+    "track": "Frontend",
+    "cardCount": 16,
+    "contentHash": "8d3e25926b67a79fe156738f67fe0641b78592b4c3375452d952f40753a83636"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000004",
+    "name": "System design",
+    "track": "Backend",
+    "cardCount": 16,
+    "contentHash": "3e52aa0ebb3fd61d505b0cf26131d7a5b69efa586fa7d4b54a3c2abd1a98e26b"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000005",
+    "name": "Databases & SQL",
+    "track": "Backend",
+    "cardCount": 16,
+    "contentHash": "1915dd551383a238f8af88ea812f64d2e1e3a20e060e82fb3ab369b770611970"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000006",
+    "name": "APIs & networking",
+    "track": "Backend",
+    "cardCount": 16,
+    "contentHash": "5355aed54ff19d75ff583889ce5d013ccff6a43f4ded4a7161a80031ef0d1bcd"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000007",
+    "name": "Testing & debugging",
+    "track": "Practice",
+    "cardCount": 16,
+    "contentHash": "d7b9f9e795289cb135dddf3d8831214243b66c9757ef5373216f07e9dd3f7336"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000008",
+    "name": "Engineering craft",
+    "track": "Practice",
+    "cardCount": 16,
+    "contentHash": "ef3d0e939a764f30d347bb7d8de1aeb4c8638c20f25c4870dc7023e4a9dfa3d7"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000900",
+    "name": "JavaScript · arrays & collections · 1",
+    "track": "Foundations",
+    "cardCount": 87,
+    "contentHash": "be7b89e0cdc3a0f5157bb586198f2018c3a0dff1f51340f9144b07dfdd6abaf0"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000901",
+    "name": "JavaScript · arrays & collections · 2",
+    "track": "Foundations",
+    "cardCount": 99,
+    "contentHash": "43a0801729d279138310b8490fd7da561a5be9f17b4ea529260d8fb1250ae3de"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000902",
+    "name": "JavaScript · arrays & collections · 3",
+    "track": "Foundations",
+    "cardCount": 68,
+    "contentHash": "c613acc5fda79232c37879ca1ff82995eea6abe875ae735ca1f45f17d779436c"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000903",
+    "name": "JavaScript · arrays & collections · 4",
+    "track": "Foundations",
+    "cardCount": 67,
+    "contentHash": "4f9dd1b5c076a3356bdd7a82c8fe0995c0335d3df3257276edad4aefbabc6d2b"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001000",
+    "name": "JavaScript · objects & types · 1",
+    "track": "Foundations",
+    "cardCount": 118,
+    "contentHash": "1099f84911a1bbcd89b923fd512790fe86e9648cc8a49e285f2b8619c8fcbf4e"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001001",
+    "name": "JavaScript · objects & types · 2",
+    "track": "Foundations",
+    "cardCount": 67,
+    "contentHash": "75deaf890584e2c2c2bf0431603e6d29e88c603665d3ac5e50152e2aa4b9491b"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001100",
+    "name": "JavaScript · strings & regex · 1",
+    "track": "Foundations",
+    "cardCount": 95,
+    "contentHash": "9e38ccb7a37abbdce7743d3039985d8e7b01e14d49cbbe1cf2898f5e3674b295"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001101",
+    "name": "JavaScript · strings & regex · 2",
+    "track": "Foundations",
+    "cardCount": 67,
+    "contentHash": "8ddfc7569d0a703242e91e2bc2ac5f2349e77d4fcc7cce23e5e5bf06b58d6c2c"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001200",
+    "name": "JavaScript · functions & async · 1",
+    "track": "Foundations",
+    "cardCount": 115,
+    "contentHash": "61a7060860346c6e6cdda460530934462d09c34b90a9f23dde094383a74e1b29"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001201",
+    "name": "JavaScript · functions & async · 2",
+    "track": "Foundations",
+    "cardCount": 61,
+    "contentHash": "0097a59b59d5d00d4aa6cc070d9d6ec6c428e24d801abd8aac0ad20c5594050e"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001300",
+    "name": "JavaScript · numbers & form values · 1",
+    "track": "Foundations",
+    "cardCount": 50,
+    "contentHash": "65475862eb97faa4d67f853dc507072a18b5cc44ec8753d470c8878f56375078"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001301",
+    "name": "JavaScript · numbers & form values · 2",
+    "track": "Foundations",
+    "cardCount": 13,
+    "contentHash": "2d74ad8f34713903e7137c874636c6f002c2580128597ab3681a498e4ac28c4a"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001400",
+    "name": "JavaScript · dates & time",
+    "track": "Foundations",
+    "cardCount": 92,
+    "contentHash": "fe3f2663a97600bf38397060466e37b01e78c098d72e5811914c5199466574a7"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001500",
+    "name": "Browser APIs & DOM practice · 1",
+    "track": "Frontend",
+    "cardCount": 120,
+    "contentHash": "0a8ff7920ce3a5b12e8e9ccff5001682b2e872ea3e7157ee1fc921787180bb1f"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001501",
+    "name": "Browser APIs & DOM practice · 2",
+    "track": "Frontend",
+    "cardCount": 67,
+    "contentHash": "8658fdd25668177d6bbdbd21b1ce9d3e7d0e1f889498c55f0694fdc53025f37e"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001600",
+    "name": "JavaScript · language mechanics · 1",
+    "track": "Foundations",
+    "cardCount": 76,
+    "contentHash": "7cac7193488d341fd1d8fcacbf4d586d3d7fcf23e2a3fbc44caf7d46ccfdb1b1"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001601",
+    "name": "JavaScript · language mechanics · 2",
+    "track": "Foundations",
+    "cardCount": 102,
+    "contentHash": "1bea25571d9b509329046c1f0b9419bdfc78cc174feada950c719460c52356a1"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001602",
+    "name": "JavaScript · language mechanics · 3",
+    "track": "Foundations",
+    "cardCount": 35,
+    "contentHash": "12a5844fd7c4e9231c366cc74b0ab48ada6e1855ea430a9d170b6517e473ea7d"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001700",
+    "name": "Python · practical fluency · 1",
+    "track": "Backend",
+    "cardCount": 114,
+    "contentHash": "b374361a3b7839ae434fab33445a755ec7d2e0370db45f7e916fe2fd8a281493"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001701",
+    "name": "Python · practical fluency · 2",
+    "track": "Backend",
+    "cardCount": 21,
+    "contentHash": "6b7616b22fe92d18a2c5b8af56d3eeb0a5ac775c4cdf101c7f1a47cd5df5bd5f"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001800",
+    "name": "CSS · layout & interaction · 1",
+    "track": "Frontend",
+    "cardCount": 120,
+    "contentHash": "77cf95b67048305b1bb9afd46c9a2051159630a6088d313ce534aad1c4959051"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001801",
+    "name": "CSS · layout & interaction · 2",
+    "track": "Frontend",
+    "cardCount": 26,
+    "contentHash": "88ff30f7406d5fd1baa2f4d9409f86022e1673a45db9fe653999115b250a411a"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000001900",
+    "name": "HTML · semantics & browser behavior",
+    "track": "Frontend",
+    "cardCount": 33,
+    "contentHash": "fa6d35751ae872e4efa5c38251ed307f5610bd00b401b96470bdd46ef7c68611"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000002000",
+    "name": "Git · everyday workflows · 1",
+    "track": "Practice",
+    "cardCount": 120,
+    "contentHash": "ebdbccbc2f5f334e4c1b88a8a6f7d220978b2fa68a6794426f0a5357ba005fc1"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000002001",
+    "name": "Git · everyday workflows · 2",
+    "track": "Practice",
+    "cardCount": 28,
+    "contentHash": "8937bce68497ee4e86c73e1b4e645e6175d61c7411ef9e5207c1aa0d5ce94d43"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000002100",
+    "name": "React · hooks & patterns · 1",
+    "track": "Frontend",
+    "cardCount": 120,
+    "contentHash": "813d17fa4e82cf48c34e4811e7755f262e9f2d017a128505160379d5cbf1870a"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000002101",
+    "name": "React · hooks & patterns · 2",
+    "track": "Frontend",
+    "cardCount": 10,
+    "contentHash": "87bfd7c47a07d377c9a86289d6edbe7677ab28a3e1d1863283863fdcbd866dad"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003001",
+    "name": "SQL · production queries",
+    "track": "Backend",
+    "cardCount": 16,
+    "contentHash": "3064a7052b768de6b9af9cb4c0a31c5d99dec172268692e4e71e64ec0e0b3be3"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003002",
+    "name": "Distributed systems · failure scenarios",
+    "track": "Backend",
+    "cardCount": 16,
+    "contentHash": "8cf0f5b8d021e83857734c28fcaf41faf9df772106a5507fa1c93cfe75e7cbd0"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003003",
+    "name": "API design · contracts & edge cases",
+    "track": "Backend",
+    "cardCount": 16,
+    "contentHash": "f73e17652db9bbce60e354309d864318ff03805570d66c2b07b808209c9fdd7e"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003004",
+    "name": "Application security · practical defenses",
+    "track": "Backend",
+    "cardCount": 16,
+    "contentHash": "371a5e6d6c7758ba6604fd70c603d3f9633b8916a05168c09552b02fc2a9d1cd"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003005",
+    "name": "TypeScript · model the invariants",
+    "track": "Foundations",
+    "cardCount": 16,
+    "contentHash": "3174d332e252427e7ae43cb744c4c6630631b5eed57af478e92eed472c0514dd"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003006",
+    "name": "Testing · meaningful confidence",
+    "track": "Practice",
+    "cardCount": 16,
+    "contentHash": "3e7cd93be6782c34cb83200c2837b1df8f5bc3cd6e7cf58845b4107b774ecc23"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003007",
+    "name": "Observability · diagnose production",
+    "track": "Practice",
+    "cardCount": 16,
+    "contentHash": "5345c40f7c2e2fefe7243fc20adfc089f36b522d17fdd603e58c692ac11e4302"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003008",
+    "name": "Systems · processes & concurrency",
+    "track": "Foundations",
+    "cardCount": 16,
+    "contentHash": "62df44e84072012509910b770cb77836617f35533be1faef9301128e28c32ba1"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000003009",
+    "name": "Delivery · containers & safe releases",
+    "track": "Practice",
+    "cardCount": 16,
+    "contentHash": "a80ebf954642785d3a6dff3dd00f927a3f4ab6a10d94f82a6e9ba77d352b15ed"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004001",
+    "name": "01 · Read your first program",
+    "track": "Start here",
+    "cardCount": 16,
+    "contentHash": "e3639c0ceda783476f5b23fb11d1695561daf991be78c9f931acf3cd5b973989"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004002",
+    "name": "02 · Follow the flow",
+    "track": "Start here",
+    "cardCount": 16,
+    "contentHash": "1a707496bb40b84009e2921d33a6d7f35bb35a79c7a30cbbf31665bdf718d8de"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004003",
+    "name": "03 · Work with collections",
+    "track": "Start here",
+    "cardCount": 16,
+    "contentHash": "82883472ad4da21f6056bcd0bc6b5ed49ad10bf17b0247a177f25bffb7d12e1e"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004004",
+    "name": "04 · Understand time and failures",
+    "track": "Start here",
+    "cardCount": 16,
+    "contentHash": "4ded410ecfc95757e50a612923b8e7fe21f16d528c48bc1abc795d4e0c588f8c"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004005",
+    "name": "05 · Understand a web page",
+    "track": "Start here",
+    "cardCount": 16,
+    "contentHash": "e023018a2d1085fa77af3121e9f1358d3780f61893cc2b4836367d43fb3056f1"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004006",
+    "name": "06 · React without the mystery",
+    "track": "Start here",
+    "cardCount": 16,
+    "contentHash": "6a0abad4bb0354141930d802a31a1137a267819bfd123efb35724cd39bd86fcf"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004007",
+    "name": "07 · Databases in plain English",
+    "track": "Start here",
+    "cardCount": 16,
+    "contentHash": "68911c62c11782ca139ad9f8fa65eb202066ad2a7d90e8403cfa675eaebd7784"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004008",
+    "name": "08 · Git and the terminal",
+    "track": "Start here",
+    "cardCount": 16,
+    "contentHash": "cfb6c493d7f866dc797623ca0bbc02f43fb0958a312b4b672130ed7008694e61"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004011",
+    "name": "09 · Build your first CRUD feature",
+    "track": "Start here",
+    "cardCount": 16,
+    "contentHash": "829e35ca17a86e7e10c2e765ab3995db89c18353c2f9684f8b3e0e45d00b7146"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004010",
+    "name": "10 · Build reliable small services",
+    "track": "Start here",
+    "cardCount": 16,
+    "contentHash": "5e543e331e128ef5934c1c29ff201aada48d2e8c9141d84e1f8ab288500dc00f"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005001",
+    "name": "11 · TypeScript you can read",
+    "track": "Keep going",
+    "cardCount": 20,
+    "contentHash": "aa389e6247c2ed6ea6d8c3cfe9930b8d05bb83226176af4249dd73b0965481fd"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005002",
+    "name": "12 · Python step by step",
+    "track": "Keep going",
+    "cardCount": 20,
+    "contentHash": "37ca7265f817693189ddfd73724e14147be15c1936771be7a663ae321903acc6"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005003",
+    "name": "13 · Debug without guessing",
+    "track": "Keep going",
+    "cardCount": 20,
+    "contentHash": "68a5be46c9dda4c1813773efafe3500d2da4daf875bc4eebb032059b399c716b"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005004",
+    "name": "14 · Tests that teach you what broke",
+    "track": "Keep going",
+    "cardCount": 20,
+    "contentHash": "e20799011090d34a3fdcfb14c0167aef94f04647eacbfc94b952d2fdbbc54359"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005005",
+    "name": "15 · Build interfaces people can use",
+    "track": "Keep going",
+    "cardCount": 20,
+    "contentHash": "231ab0d26094c524810a9318db9fd544f83e360072aa961b7858dda1c943e383"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005006",
+    "name": "16 · Read and design an API",
+    "track": "Keep going",
+    "cardCount": 20,
+    "contentHash": "cc7df4e3bca9c08e1666d9100d0b2d36cc16e306c3df5f817e20edb7bf82c0dd"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005007",
+    "name": "17 · Reason about your database",
+    "track": "Keep going",
+    "cardCount": 20,
+    "contentHash": "d160b15257dd941a417a3f6b9e62edb642259f9aa6d359176097a4d61007c047"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005008",
+    "name": "18 · Security habits for your first app",
+    "track": "Keep going",
+    "cardCount": 20,
+    "contentHash": "7caf20de78adf7737c2d850f5d5cbe62f502999fc817c39622cae8e24fdc16fa"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005009",
+    "name": "19 · Ship and maintain a small app",
+    "track": "Keep going",
+    "cardCount": 20,
+    "contentHash": "c312fec697e86bb94741003c01de9717501c96c2de6811cf2ca314fb32abb481"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005011",
+    "name": "20 · Fix real CRUD app problems",
+    "track": "Keep going",
+    "cardCount": 20,
+    "contentHash": "b046925cea0a978c966decc81fb966bb3f1a82e567e9e5830ff5112579a1c2a4"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006001",
+    "name": "01 · C# from your first line",
+    "track": "C# & .NET",
+    "cardCount": 16,
+    "contentHash": "351f918e1dbb70d2e5c1bc9c214d9a40e8f7c2791ea069ed9d44e0e738c604d5"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006002",
+    "name": "02 · Model your web app in C#",
+    "track": "C# & .NET",
+    "cardCount": 16,
+    "contentHash": "89ac46ab61a06c9f13851a07b88f11fcaed5211cfe48282783d07d1c29008cb3"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006003",
+    "name": "03 · Collections and LINQ for web data",
+    "track": "C# & .NET",
+    "cardCount": 16,
+    "contentHash": "7b9c73629bec4ef4ad349f2d350981de6c3988420948b5f61dedcd78684403ad"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006004",
+    "name": "04 · Async C# without the confusion",
+    "track": "C# & .NET",
+    "cardCount": 16,
+    "contentHash": "8ef1d90a24ec5e9d7e9c9368c24a18a8224d899d787bc89856a529bcee314a7d"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006005",
+    "name": "05 · Build ASP.NET Core endpoints",
+    "track": "C# & .NET",
+    "cardCount": 16,
+    "contentHash": "6118dc03cbdb66cf7486798a2fe84391ed8dea8872b4f7a409a5405132a9afdc"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006006",
+    "name": "06 · Services, middleware, and configuration",
+    "track": "C# & .NET",
+    "cardCount": 16,
+    "contentHash": "4c932335c07ea693789f124d3bfa390b3a2b96efaf8af77725a5420dc18e1080"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006007",
+    "name": "07 · Persist data with EF Core",
+    "track": "C# & .NET",
+    "cardCount": 16,
+    "contentHash": "a7c6e3cd66058a88710d9f9d7660c3284adb915e7d7c00ef9766a5efd56f8665"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006008",
+    "name": "08 · Validation and web security",
+    "track": "C# & .NET",
+    "cardCount": 16,
+    "contentHash": "9ba5299b4ef997aa016d3f4d8f807f1ca863ce05cd7f447e97620c8be4b6f393"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006009",
+    "name": "09 · Choose and build a .NET web UI",
+    "track": "C# & .NET",
+    "cardCount": 16,
+    "contentHash": "73657a1b226990c3ba376426a9f81dd46c702be64b4c2e11a83b117cca44fbeb"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006010",
+    "name": "10 · Test and debug .NET web apps",
+    "track": "C# & .NET",
+    "cardCount": 16,
+    "contentHash": "0fa873b990ac4dd93a2f63324fd3b8f6ad825a50fe58136bf8811f5ec93734a7"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006011",
+    "name": "11 · Run a reliable .NET service",
+    "track": "C# & .NET",
+    "cardCount": 16,
+    "contentHash": "150695c80ec08193350be7fbd7adf393aebcf85ee7a04875b539a4b517ac7487"
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006012",
+    "name": "12 · Build a real notes app, one decision at a time",
+    "track": "C# & .NET",
+    "cardCount": 16,
+    "contentHash": "3ee633c3d9cea2b09d8fe14879f95cbbf4e8bba56f1a2d014e4a82485f582861"
+  }
+]

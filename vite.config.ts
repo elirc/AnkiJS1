@@ -30,7 +30,7 @@ export default defineConfig({
         name: "Recall — Engineering practice",
         short_name: "Recall",
         description:
-          "Over 2,800 software engineering flashcards with beginner explanations and offline spaced repetition.",
+          "Practical software engineering flashcards, hands-on missions, and an offline evidence journal.",
         display: "standalone",
         start_url: "/",
         scope: "/",

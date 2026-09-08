@@ -1,0 +1,72 @@
+[
+  {
+    "id": "c0000000-71a1-4202-88b3-d84815140ad0",
+    "front": "A post object contains id, title, body, and ownerEmail. A public preview needs only id and title. How should a serializer construct that preview?",
+    "back": "Build an explicit output object instead of spreading the model.\n\n```js\nconst preview = post => ({ id: post.id, title: post.title });\nconst post = { id: 7, title: 'Release notes', body: 'Details', ownerEmail: 'private@example.test' };\nconsole.log(preview(post)); // { id: 7, title: 'Release notes' }\n```\n\nThe output contract is independent of the storage model. Adding a private model field later must not automatically add it to the response. This example needs no undefined Author, Post, or serializer classes.\n\n**Check:** Assert the exact output keys and verify the input object is unchanged. An explicit response shape complements authorization; it does not replace it."
+  },
+  {
+    "id": "c0000000-71a1-4202-88b3-d84815140ad1",
+    "front": "Implement publicPreview(post) for an object with id, title, body, and ownerEmail. Return a new object with exactly id and title, without mutating the input or exposing other fields.",
+    "back": "```js\nfunction publicPreview(post) {\n  return { id: post.id, title: post.title };\n}\n```\n\nThis is an output allowlist. `{ ...post }` would leak body and ownerEmail; deleting fields from post would mutate the caller's model.\n\n**Check:** Call the function with an additional private field and assert that the result still has exactly two keys. Confirm the original object retains all of its fields."
+  },
+  {
+    "id": "c0000000-6f87-4459-80fb-708aed631fc0",
+    "front": "A JavaScript helper removes substrings matching HTML tags with a regular expression. Why must its output not be treated as sanitized HTML?",
+    "back": "Removing apparent tags is a text transformation, not a security guarantee. HTML parsing includes malformed markup, entities, attributes, and context-dependent rules that a simple tag regex does not model.\n\nIf the goal is to display user input literally, put it into a text sink such as an element's textContent or ordinary React text children. If the product intentionally permits HTML, use a maintained sanitizer configured for that output context.\n\n**Check:** Render `<img src=x onerror=alert(1)>` as text in a disposable test and verify it stays visible text, not an element. Do not insert a home-grown tag stripper's output with innerHTML."
+  },
+  {
+    "id": "c0000000-6f87-4459-80fb-708aed631fc1",
+    "front": "A page must show a user's comment literally, including any angle brackets. Given a DOM element named output and a string named comment, write the assignment that does not parse comment as HTML.",
+    "back": "```js\noutput.textContent = comment;\n```\n\ntextContent treats the string as text. Replacing tags with a regex and then assigning innerHTML adds an unnecessary and unsafe parsing step. This requirement is literal text display, not rich HTML support.\n\n**Check:** Try both `Hello` and `<strong>Hello</strong>`. The second input should visibly retain its angle brackets and must not create a strong element inside output."
+  },
+  {
+    "id": "c0000000-082c-4fef-8735-296f4cecaf90",
+    "front": "A page needs one expandable explanation with a heading that works by mouse and keyboard. Which native HTML elements can provide this without custom React state?",
+    "back": "Use details with a summary label.\n\n```jsx\nfunction Explanation() {\n  return (\n    <details>\n      <summary>Why did this save fail?</summary>\n      <p>The title was empty. Enter a title and try again.</p>\n    </details>\n  );\n}\n```\n\nThe browser owns the disclosure interaction and open state. Keep the summary meaningful and verify the native control in the browsers and assistive technology relevant to the product.\n\n**Check:** Reach the summary with Tab and toggle it with the keyboard. The explanation should appear and disappear without submitting a surrounding form."
+  },
+  {
+    "id": "c0000000-082c-4fef-8735-296f4cecaf91",
+    "front": "Implement a React disclosure for the text 'Your draft is saved locally.' Use native HTML disclosure behavior and a visible label 'Save details'; no state hook is needed.",
+    "back": "```jsx\nfunction SaveDetails() {\n  return (\n    <details>\n      <summary>Save details</summary>\n      <p>Your draft is saved locally.</p>\n    </details>\n  );\n}\n```\n\nsummary supplies the interactive label and details contains the revealed content. A clickable div would require recreating keyboard and state semantics.\n\n**Check:** Toggle by mouse and keyboard. Confirm the hidden paragraph becomes visible and that the label remains available while collapsed."
+  },
+  {
+    "id": "c0000000-7aa1-4050-87cd-f919c0212a70",
+    "front": "A React component looks like tabs but is only a row of buttons that hides panels with CSS. What interaction and accessibility contract is still missing before it can be called an accessible tab widget?",
+    "back": "A tab widget needs coordinated tablist, tab, and tabpanel roles; selected-state reporting; connections between each tab and its panel; and a defined keyboard focus model. Horizontal tabs normally use Left/Right arrows to move among tabs, with activation following a deliberate automatic or manual policy.\n\nUse an established accessible tabs component when available. Styling an active button is not enough, and filtering children by a function's name is fragile under wrappers and production transforms. Use explicit item data with stable IDs.\n\n**Check:** Navigate with Tab and arrow keys, activate each tab, and verify the selected state, focused control, and visible associated panel. Test a single tab and dynamically removed items too."
+  },
+  {
+    "id": "c0000000-c7cf-4e40-882d-a7f818365500",
+    "front": "An accordion panel is hidden when isCollapsed is true. Its code puts aria-expanded={isCollapsed} on the panel. What is wrong with both the value and its placement?",
+    "back": "The expanded value is inverted, and the state belongs on the controlling button. Use aria-expanded={!isCollapsed} on that button and connect it to the panel with aria-controls.\n\n```jsx\nfunction Section({ open, onToggle, buttonId, panelId, label, children }) {\n  return (\n    <section>\n      <h3><button type=\"button\" id={buttonId}\n        aria-expanded={open} aria-controls={panelId}\n        onClick={onToggle}>{label}</button></h3>\n      <div id={panelId} hidden={!open}>{children}</div>\n    </section>\n  );\n}\n```\n\nThe parent supplies unique IDs and toggles open. This example is one accordion section; multi-section policy belongs to its parent.\n\n**Check:** When open is false, the panel is hidden and the button reports false. Toggle once and verify both switch together."
+  },
+  {
+    "id": "c0000000-d78e-4910-8a4e-518b21806570",
+    "front": "A carousel computes (index + 1) % items.length. What must it do when items is empty, and what behavior should a one-item carousel expose?",
+    "back": "Handle an empty collection before using modulo; modulo zero produces NaN. Render an empty state with no enabled navigation. For one item, show the item and disable or omit navigation that cannot change the result.\n\nFor larger collections, keep a valid selected identity when items are removed or reordered, use labeled native buttons, and provide a visible position such as '2 of 4'. Auto-rotation adds pause and focus requirements and is unnecessary for a basic carousel.\n\n**Check:** Test zero, one, and several items, then remove the selected item. No render should access an undefined slide or report an impossible position."
+  },
+  {
+    "id": "c0000000-d78e-4910-8a4e-518b21806571",
+    "front": "Write nextIndex(index, length) for a carousel: return null when length is 0, otherwise wrap to 0 after the last item. Assume length is a nonnegative integer and index is valid for a nonempty list.",
+    "back": "```js\nfunction nextIndex(index, length) {\n  return length === 0 ? null : (index + 1) % length;\n}\n```\n\nThe empty case is explicit instead of producing NaN. null means there is no selected item, so the caller must render an empty state rather than index into the array.\n\n**Check:** nextIndex(0, 0) is null, nextIndex(0, 1) is 0, nextIndex(1, 3) is 2, and nextIndex(2, 3) is 0."
+  },
+  {
+    "id": "c0000000-6fc9-45fe-8ef9-1c5ace6c34a0",
+    "front": "A tag-entry field is inside a form. Pressing Enter should add a trimmed, nonempty tag without submitting the form or accepting text still being composed by an input method. What should the key handler check?",
+    "back": "```jsx\nfunction onKeyDown(event) {\n  if (event.key !== 'Enter' || event.nativeEvent.isComposing) return;\n  event.preventDefault();\n  const tag = event.currentTarget.value.trim();\n  if (!tag) return;\n  setTags(current => current.includes(tag) ? current : [...current, tag]);\n  setDraft('');\n}\n```\n\nThis handler assumes a controlled input with setDraft and a tag array with setTags. Duplicate matching is case-sensitive here; choose normalization deliberately. Use labeled buttons to remove individual tags.\n\n**Check:** Try blank input, an existing tag, a new tag, and Enter during composition. Only the new completed tag should be appended, and Enter should not submit the enclosing form."
+  },
+  {
+    "id": "c0000000-7091-4040-8bcc-7cc6b4f882b0",
+    "front": "A tooltip appears only on mouse hover. Keyboard users cannot discover it. What behavior and content restrictions should the tooltip have?",
+    "back": "Show supplementary tooltip text when its trigger receives keyboard focus as well as hover, connect it through aria-describedby, and allow Escape to dismiss it. The trigger still needs its own accessible name.\n\nKeep interactive controls out of a tooltip; use a popover or dialog when the content needs focusable actions. Essential instructions should be persistently available rather than discoverable only through a tooltip.\n\n**Check:** Reach the trigger using Tab, confirm the description is associated with it, dismiss with Escape, and verify that the control still has a meaningful name without the tooltip."
+  },
+  {
+    "id": "c0000000-7091-4040-8bcc-7cc6b4f882b1",
+    "front": "A button already has the accessible name 'Export backup'. Supplementary explanatory text has id='export-help'. Which attribute connects the button to that description without replacing its name?",
+    "back": "Use aria-describedby=\"export-help\" on the button.\n\n```jsx\n<button type=\"button\" aria-describedby=\"export-help\">Export backup</button>\n```\n\nThe referenced text supplements the visible name. aria-labelledby would instead supply the accessible name, which is a different requirement. ID references must point to the intended content and remain unique.\n\n**Check:** Inspect the accessibility tree: the name should still be 'Export backup' and the description should contain the help text."
+  },
+  {
+    "id": "c0000000-a9bf-45f1-822a-b4f15aba1c90",
+    "front": "A save failure appears in a React banner that is removed after two seconds. Why can this make recovery difficult, and how should an actionable error behave?",
+    "back": "Keep the error available until the user resolves or dismisses it. Preserve the draft, state what failed, and provide a retry when appropriate. Use a live-region pattern such as role=\"alert\" for an important new error without unexpectedly moving keyboard focus.\n\n```jsx\n<div role=\"alert\">\n  <p>Your draft could not be saved. It is still in the editor.</p>\n  <button type=\"button\" onClick={retry}>Retry save</button>\n</div>\n```\n\nThis snippet assumes retry performs the application's existing save operation. Do not claim persistence succeeded until that operation commits.\n\n**Check:** Trigger a failed save, wait longer than two seconds, and retry with the keyboard. The error and draft must remain usable until recovery."
+  }
+]

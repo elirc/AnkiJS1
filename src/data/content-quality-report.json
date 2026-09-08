@@ -1,0 +1,20 @@
+{
+  "version": 13,
+  "baseCards": 2799,
+  "scenarioCards": 72,
+  "libraryCards": 18231,
+  "activeCards": 21102,
+  "guidedLessons": 828,
+  "retiredRetrievalCards": 10810,
+  "retiredKinds": {
+    "code-recall": 3390,
+    "explanation-recall": 6780,
+    "output-recall": 640
+  },
+  "legacyPackBytes": 11992599,
+  "scenarioPackBytes": 67236,
+  "rewrittenBaseCards": 14,
+  "correctedBaseCards": 18,
+  "correctedLibraryCards": 3,
+  "scope": "All generated retrieval packs reviewed by construction rule and structural checks. Base library checked structurally; selected authored and adapted lessons reviewed semantically. Not a claim that every retained example has been executed."
+}

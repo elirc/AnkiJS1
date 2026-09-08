@@ -1,7 +1,8 @@
 import expandedCatalog from "./expanded-catalog.json";
+import { loadSectionExpansion, sectionAdditionCount } from "./section-expansion";
 
 export type Track =
-  "Start here" | "Foundations" | "Frontend" | "Backend" | "Practice";
+  "Start here" | "Keep going" | "C# & .NET" | "Foundations" | "Frontend" | "Backend" | "Practice";
 export interface StarterDeck {
   id: string;
   name: string;
@@ -28,85 +29,6 @@ const deckId = (n: number) =>
 // Original, bite-sized prompts: explain, predict, debug, and choose a tradeoff.
 // IDs and card order are permanent so installing a curriculum never resets a review.
 export const originalCurriculum: StarterDeck[] = [
-  {
-    id: deckId(1),
-    name: "Data structures & algorithms",
-    track: "Foundations",
-    icon: "tree",
-    color: "violet",
-    description: "Recognize the pattern. Find a better solution.",
-    topics: ["Big O", "Patterns", "Data structures"],
-    resource: {
-      label: "MIT · Introduction to algorithms",
-      url: "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/",
-    },
-    cards: [
-      [
-        "An array has n items. What is the time complexity of checking every pair?",
-        "**O(n²)** time. There are n(n − 1)/2 distinct pairs.\n\nAsk whether a hash map or sorting can avoid repeated work.",
-      ],
-      [
-        "When would you choose a hash map over an array?",
-        "When the main operation is lookup by a key rather than by position. Typical hash tables offer expected **O(1)** lookup and insertion, using extra memory. Worst-case lookup can be O(n).",
-      ],
-      [
-        "Explain binary search’s most important precondition.",
-        "The search space must have a **monotonic decision boundary** (a sorted array is one example). Each comparison must safely discard half the remaining candidates.\n\nTime: O(log n).",
-      ],
-      [
-        "Two Sum: how can you avoid a nested loop?",
-        "Scan once while storing previously seen numbers in a map. For each x, check whether target − x is already present, then store x.\n\nExpected **O(n) time, O(n) space**. Check before inserting so you cannot reuse the same item.",
-      ],
-      [
-        "Which structure finds a shortest path in an unweighted graph: a stack or a queue?",
-        "A **queue**, using breadth-first search. BFS explores by distance in edges. Mark vertices visited when enqueuing to avoid duplicates.\n\nO(V + E) with adjacency lists.",
-      ],
-      [
-        "What two properties make a problem a good candidate for dynamic programming?",
-        "**Overlapping subproblems** and **optimal substructure**. Define the state and transition, then memoize or tabulate results.\n\nStart by writing what each table entry means.",
-      ],
-      [
-        "Find the bug:\n```ts\nwhile (low < high) {\n  const mid = Math.floor((low + high) / 2);\n  if (items[mid] < target) low = mid;\n  else high = mid;\n}\n```",
-        "When high = low + 1, mid equals low, so low = mid makes no progress. For a lower-bound search on [low, high), use **low = mid + 1** when items[mid] < target.",
-      ],
-      [
-        "When does a sliding window help?",
-        "When a contiguous range can be expanded and shrunk while maintaining a useful invariant, such as unique characters.\n\nNot every range problem fits: negative numbers can break the monotonicity of a sum-based window.",
-      ],
-      [
-        "What does “amortized O(1) append” mean for a dynamic array?",
-        "An occasional resize costs O(n), but geometric growth spreads that cost over many appends. A sequence of n appends takes O(n) total time.\n\nIt does **not** mean every append is constant time.",
-      ],
-      [
-        "How do you detect a cycle in a linked list using O(1) extra space?",
-        "Use slow and fast pointers. Move slow one node and fast two nodes. If they meet, there is a cycle; if fast reaches the end, there is none.\n\nO(n) time, O(1) extra space.",
-      ],
-      [
-        "A service needs the 10 largest values from a huge stream. Which structure fits?",
-        "Keep a **min-heap of size 10**. Replace its minimum whenever a larger value arrives.\n\nFor general k: O(n log k) time, O(k) memory.",
-      ],
-      [
-        "DFS recursion crashes on a very deep graph. How can you keep the traversal?",
-        "Use an explicit stack and a visited set. Recursion consumes the call stack; an explicit stack avoids the runtime’s recursion depth limit.\n\nThe worst-case auxiliary space is still O(V).",
-      ],
-      [
-        "What invariant makes two pointers work for pair-sum in a sorted array?",
-        "If the sum is too small, moving the left pointer right can increase it. If too large, moving the right pointer left can decrease it.\n\nThe sorted order makes each discarded candidate safe.",
-      ],
-      [
-        "What does topological sorting tell you about a dependency graph?",
-        "It orders a **directed acyclic graph** so each prerequisite appears before its dependent. If Kahn’s algorithm processes fewer than V vertices, a directed cycle exists.",
-      ],
-      [
-        "Before optimizing an interview solution, what should you establish?",
-        "Clarify inputs and constraints, work a small example, state a correct baseline, and estimate its time and space. Then improve the bottleneck and check edge cases.",
-      ],
-      [
-        "How do you check whether two strings are anagrams without sorting?",
-        "Count character frequencies and compare counts, or increment for one string and decrement for the other.\n\nO(n + m) time. Agree on case, whitespace, and Unicode handling first.",
-      ],
-    ],
-  },
   {
     id: deckId(2),
     name: "JavaScript & TypeScript",
@@ -663,9 +585,11 @@ export type DeckInfo = Omit<StarterDeck, "cards"> & { cardCount: number };
 export const curriculum: DeckInfo[] = [
   ...originalCurriculum.map(({ cards, ...info }) => ({
     ...info,
-    cardCount: cards.length,
+    cardCount: cards.length + sectionAdditionCount(info.id),
   })),
-  ...(expandedCatalog as DeckInfo[]),
+  ...(expandedCatalog as DeckInfo[]).map((deck) => ({
+    ...deck, cardCount: deck.cardCount + sectionAdditionCount(deck.id),
+  })),
 ];
 const deckInfoById = new Map(curriculum.map((deck) => [deck.id, deck]));
 export function getDeckInfo(id: string) {
@@ -685,17 +609,20 @@ export async function loadStarterCards(): Promise<Map<string, StarterCard[]>> {
   // Keep the expanded content out of the application shell; load it only for installation.
   const expanded = (await import("./expanded-cards.json")).default;
   const entries: [string, StarterCard[]][] = originalCurriculum.map(
-    (deck, deckIndex) => [
+    (deck) => [
       deck.id,
       deck.cards.map(([front, back], index) => ({
-        id: `b0000000-0000-4000-8000-${String((deckIndex + 1) * 1000 + index + 1).padStart(12, "0")}`,
+        id: `b0000000-0000-4000-8000-${String(Number(deck.id.slice(-12)) * 1000 + index + 1).padStart(12, "0")}`,
         front,
         back,
       })),
     ],
   );
-  return new Map([
+  const content = new Map([
     ...entries,
     ...expanded.map((deck) => [deck.id, deck.cards] as [string, StarterCard[]]),
   ]);
+  for (const pack of await loadSectionExpansion())
+    content.set(pack.id, [...(content.get(pack.id) ?? []), ...pack.cards]);
+  return content;
 }

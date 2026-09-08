@@ -16,7 +16,7 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 120
+    "cardCount": 87
   },
   {
     "id": "a0000000-0000-4000-8000-000000000901",
@@ -35,7 +35,7 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 120
+    "cardCount": 99
   },
   {
     "id": "a0000000-0000-4000-8000-000000000902",
@@ -54,7 +54,7 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 120
+    "cardCount": 68
   },
   {
     "id": "a0000000-0000-4000-8000-000000000903",
@@ -73,7 +73,7 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 100
+    "cardCount": 67
   },
   {
     "id": "a0000000-0000-4000-8000-000000001000",
@@ -91,7 +91,7 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 120
+    "cardCount": 118
   },
   {
     "id": "a0000000-0000-4000-8000-000000001001",
@@ -127,7 +127,7 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 120
+    "cardCount": 95
   },
   {
     "id": "a0000000-0000-4000-8000-000000001101",
@@ -145,7 +145,7 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 96
+    "cardCount": 67
   },
   {
     "id": "a0000000-0000-4000-8000-000000001200",
@@ -163,7 +163,7 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 120
+    "cardCount": 115
   },
   {
     "id": "a0000000-0000-4000-8000-000000001201",
@@ -181,43 +181,43 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 63
+    "cardCount": 61
   },
   {
     "id": "a0000000-0000-4000-8000-000000001300",
-    "name": "JavaScript · numbers & algorithms · 1",
+    "name": "JavaScript · numbers & form values · 1",
     "track": "Foundations",
-    "icon": "tree",
+    "icon": "braces",
     "color": "amber",
     "topics": [
       "JavaScript",
       "Numbers",
-      "Algorithms"
+      "Form values"
     ],
     "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
     "resource": {
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 120
+    "cardCount": 50
   },
   {
     "id": "a0000000-0000-4000-8000-000000001301",
-    "name": "JavaScript · numbers & algorithms · 2",
+    "name": "JavaScript · numbers & form values · 2",
     "track": "Foundations",
-    "icon": "tree",
+    "icon": "braces",
     "color": "amber",
     "topics": [
       "JavaScript",
       "Numbers",
-      "Algorithms"
+      "Form values"
     ],
     "description": "Explain the idea, then put it into code. Short exercises for everyday engineering.",
     "resource": {
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 33
+    "cardCount": 13
   },
   {
     "id": "a0000000-0000-4000-8000-000000001400",
@@ -289,7 +289,7 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 120
+    "cardCount": 76
   },
   {
     "id": "a0000000-0000-4000-8000-000000001601",
@@ -307,7 +307,7 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 120
+    "cardCount": 102
   },
   {
     "id": "a0000000-0000-4000-8000-000000001602",
@@ -343,7 +343,7 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 120
+    "cardCount": 114
   },
   {
     "id": "a0000000-0000-4000-8000-000000001701",
@@ -361,7 +361,7 @@
       "label": "30 seconds of code · source & further reading",
       "url": "https://github.com/30-seconds/30-seconds-of-code"
     },
-    "cardCount": 25
+    "cardCount": 21
   },
   {
     "id": "a0000000-0000-4000-8000-000000001800",
@@ -652,24 +652,6 @@
     "cardCount": 16
   },
   {
-    "id": "a0000000-0000-4000-8000-000000003010",
-    "name": "Algorithms · choose & justify",
-    "track": "Foundations",
-    "icon": "tree",
-    "color": "amber",
-    "topics": [
-      "Algorithms",
-      "Data structures",
-      "Complexity"
-    ],
-    "description": "Reason through realistic engineering decisions and failure cases.",
-    "resource": {
-      "label": "MIT algorithms course",
-      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/"
-    },
-    "cardCount": 16
-  },
-  {
     "id": "a0000000-0000-4000-8000-000000004001",
     "name": "01 · Read your first program",
     "track": "Start here",
@@ -822,21 +804,22 @@
     "cardCount": 16
   },
   {
-    "id": "a0000000-0000-4000-8000-000000004009",
-    "name": "09 · Algorithms you can picture",
+    "id": "a0000000-0000-4000-8000-000000004011",
+    "name": "09 · Build your first CRUD feature",
     "track": "Start here",
-    "icon": "tree",
-    "color": "violet",
+    "icon": "network",
+    "color": "green",
     "topics": [
       "Beginner",
-      "Big O",
-      "Data structures",
-      "Algorithms"
+      "CRUD",
+      "Forms",
+      "Validation",
+      "Persistence"
     ],
     "description": "Learn one idea at a time through plain English, a worked example, an analogy, and a small practice question.",
     "resource": {
       "label": "Keep learning · official guide",
-      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/"
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side"
     },
     "cardCount": 16
   },
@@ -856,6 +839,450 @@
     "resource": {
       "label": "Keep learning · official guide",
       "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005001",
+    "name": "11 · TypeScript you can read",
+    "track": "Keep going",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "Guided practice",
+      "TypeScript",
+      "Types",
+      "Validation"
+    ],
+    "description": "Build on the basics with everyday scenarios, clear explanations, worked examples, and a practice question for each idea.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://www.typescriptlang.org/docs/handbook/intro.html"
+    },
+    "cardCount": 20
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005002",
+    "name": "12 · Python step by step",
+    "track": "Keep going",
+    "icon": "braces",
+    "color": "amber",
+    "topics": [
+      "Guided practice",
+      "Python",
+      "Collections",
+      "Functions"
+    ],
+    "description": "Build on the basics with everyday scenarios, clear explanations, worked examples, and a practice question for each idea.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://docs.python.org/3/tutorial/"
+    },
+    "cardCount": 20
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005003",
+    "name": "13 · Debug without guessing",
+    "track": "Keep going",
+    "icon": "bug",
+    "color": "amber",
+    "topics": [
+      "Guided practice",
+      "Debugging",
+      "DevTools",
+      "Problem solving"
+    ],
+    "description": "Build on the basics with everyday scenarios, clear explanations, worked examples, and a practice question for each idea.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://developer.chrome.com/docs/devtools/javascript/"
+    },
+    "cardCount": 20
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005004",
+    "name": "14 · Tests that teach you what broke",
+    "track": "Keep going",
+    "icon": "bug",
+    "color": "green",
+    "topics": [
+      "Guided practice",
+      "Testing",
+      "Boundaries",
+      "Async"
+    ],
+    "description": "Build on the basics with everyday scenarios, clear explanations, worked examples, and a practice question for each idea.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Testing"
+    },
+    "cardCount": 20
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005005",
+    "name": "15 · Build interfaces people can use",
+    "track": "Keep going",
+    "icon": "globe",
+    "color": "blue",
+    "topics": [
+      "Guided practice",
+      "HTML",
+      "Accessibility",
+      "Forms",
+      "Mobile"
+    ],
+    "description": "Build on the basics with everyday scenarios, clear explanations, worked examples, and a practice question for each idea.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://www.w3.org/WAI/tutorials/"
+    },
+    "cardCount": 20
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005006",
+    "name": "16 · Read and design an API",
+    "track": "Keep going",
+    "icon": "network",
+    "color": "green",
+    "topics": [
+      "Guided practice",
+      "HTTP",
+      "APIs",
+      "JSON",
+      "Reliability"
+    ],
+    "description": "Build on the basics with everyday scenarios, clear explanations, worked examples, and a practice question for each idea.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP"
+    },
+    "cardCount": 20
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005007",
+    "name": "17 · Reason about your database",
+    "track": "Keep going",
+    "icon": "database",
+    "color": "blue",
+    "topics": [
+      "Guided practice",
+      "SQL",
+      "PostgreSQL",
+      "Data modeling"
+    ],
+    "description": "Build on the basics with everyday scenarios, clear explanations, worked examples, and a practice question for each idea.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://www.postgresql.org/docs/current/tutorial.html"
+    },
+    "cardCount": 20
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005008",
+    "name": "18 · Security habits for your first app",
+    "track": "Keep going",
+    "icon": "network",
+    "color": "amber",
+    "topics": [
+      "Guided practice",
+      "Security",
+      "Authorization",
+      "Secrets"
+    ],
+    "description": "Build on the basics with everyday scenarios, clear explanations, worked examples, and a practice question for each idea.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://cheatsheetseries.owasp.org/"
+    },
+    "cardCount": 20
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005009",
+    "name": "19 · Ship and maintain a small app",
+    "track": "Keep going",
+    "icon": "git",
+    "color": "green",
+    "topics": [
+      "Guided practice",
+      "Git",
+      "CI",
+      "Deployment",
+      "Docker"
+    ],
+    "description": "Build on the basics with everyday scenarios, clear explanations, worked examples, and a practice question for each idea.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://docs.github.com/en/actions/about-github-actions/understanding-github-actions"
+    },
+    "cardCount": 20
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005011",
+    "name": "20 · Fix real CRUD app problems",
+    "track": "Keep going",
+    "icon": "network",
+    "color": "green",
+    "topics": [
+      "Guided practice",
+      "CRUD",
+      "Forms",
+      "APIs",
+      "Persistence"
+    ],
+    "description": "Build on the basics with everyday scenarios, clear explanations, worked examples, and a practice question for each idea.",
+    "resource": {
+      "label": "Keep learning · official guide",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side"
+    },
+    "cardCount": 20
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006001",
+    "name": "01 · C# from your first line",
+    "track": "C# & .NET",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "C#",
+      ".NET web development",
+      "C#",
+      ".NET",
+      "Types",
+      "Methods"
+    ],
+    "description": "Understand types, null, decisions, and methods by reading small C# programs one line at a time.",
+    "resource": {
+      "label": "Microsoft Learn · official guide",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006002",
+    "name": "02 · Model your web app in C#",
+    "track": "C# & .NET",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "C#",
+      ".NET web development",
+      "Classes",
+      "Interfaces",
+      "Records",
+      "DTOs"
+    ],
+    "description": "Turn a web app idea into classes, properties, interfaces, records, and clear request models.",
+    "resource": {
+      "label": "Microsoft Learn · official guide",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/object-oriented/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006003",
+    "name": "03 · Collections and LINQ for web data",
+    "track": "C# & .NET",
+    "icon": "braces",
+    "color": "violet",
+    "topics": [
+      "C#",
+      ".NET web development",
+      "LINQ",
+      "Collections",
+      "Queries"
+    ],
+    "description": "Filter, transform, and look up data while understanding when a LINQ query actually runs.",
+    "resource": {
+      "label": "Microsoft Learn · official guide",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/linq/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006004",
+    "name": "04 · Async C# without the confusion",
+    "track": "C# & .NET",
+    "icon": "network",
+    "color": "violet",
+    "topics": [
+      "C#",
+      ".NET web development",
+      "async",
+      "Task",
+      "Cancellation",
+      "HttpClient"
+    ],
+    "description": "Understand await, tasks, cancellation, and resource lifetimes without blocking your web server.",
+    "resource": {
+      "label": "Microsoft Learn · official guide",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006005",
+    "name": "05 · Build ASP.NET Core endpoints",
+    "track": "C# & .NET",
+    "icon": "network",
+    "color": "violet",
+    "topics": [
+      "C#",
+      ".NET web development",
+      "Minimal APIs",
+      "Routing",
+      "HTTP",
+      "JSON"
+    ],
+    "description": "Follow URLs, query strings, and JSON into a handler, then choose the right HTTP response.",
+    "resource": {
+      "label": "Microsoft Learn · official guide",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/parameter-binding?view=aspnetcore-10.0"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006006",
+    "name": "06 · Services, middleware, and configuration",
+    "track": "C# & .NET",
+    "icon": "network",
+    "color": "violet",
+    "topics": [
+      "C#",
+      ".NET web development",
+      "Dependency injection",
+      "Middleware",
+      "Configuration"
+    ],
+    "description": "Connect services, follow the request pipeline, and give your app the settings and logs it needs.",
+    "resource": {
+      "label": "Microsoft Learn · official guide",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-10.0"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006007",
+    "name": "07 · Persist data with EF Core",
+    "track": "C# & .NET",
+    "icon": "database",
+    "color": "violet",
+    "topics": [
+      "C#",
+      ".NET web development",
+      "EF Core",
+      "SQL",
+      "DbContext",
+      "Migrations"
+    ],
+    "description": "Follow an entity from C# to the database: queries, tracking, saves, migrations, and conflicting edits.",
+    "resource": {
+      "label": "Microsoft Learn · official guide",
+      "url": "https://learn.microsoft.com/en-us/ef/core/"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006008",
+    "name": "08 · Validation and web security",
+    "track": "C# & .NET",
+    "icon": "network",
+    "color": "violet",
+    "topics": [
+      "C#",
+      ".NET web development",
+      "Validation",
+      "Authentication",
+      "Authorization",
+      "Security"
+    ],
+    "description": "Validate requests, recognize the caller, and protect each operation and private resource.",
+    "resource": {
+      "label": "Microsoft Learn · official guide",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/security/?view=aspnetcore-10.0"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006009",
+    "name": "09 · Choose and build a .NET web UI",
+    "track": "C# & .NET",
+    "icon": "globe",
+    "color": "violet",
+    "topics": [
+      "C#",
+      ".NET web development",
+      "MVC",
+      "Razor Pages",
+      "Blazor",
+      "Forms"
+    ],
+    "description": "Choose between MVC, Razor Pages, and Blazor, then reason about forms, rendering, and state.",
+    "resource": {
+      "label": "Microsoft Learn · official guide",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-10.0"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006010",
+    "name": "10 · Test and debug .NET web apps",
+    "track": "C# & .NET",
+    "icon": "bug",
+    "color": "violet",
+    "topics": [
+      "C#",
+      ".NET web development",
+      "Tests",
+      "WebApplicationFactory",
+      "Debugging",
+      "EF Core"
+    ],
+    "description": "Write tests that check real behavior and trace a broken request from the browser to storage.",
+    "resource": {
+      "label": "Microsoft Learn · official guide",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-10.0"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006011",
+    "name": "11 · Run a reliable .NET service",
+    "track": "C# & .NET",
+    "icon": "network",
+    "color": "violet",
+    "topics": [
+      "C#",
+      ".NET web development",
+      "Performance",
+      "Deployment",
+      "Caching",
+      "Operations"
+    ],
+    "description": "Bound expensive work, handle failures, and understand what your app needs to run after deployment.",
+    "resource": {
+      "label": "Microsoft Learn · official guide",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/fundamentals/best-practices?view=aspnetcore-10.0"
+    },
+    "cardCount": 16
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006012",
+    "name": "12 · Build a real notes app, one decision at a time",
+    "track": "C# & .NET",
+    "icon": "tree",
+    "color": "violet",
+    "topics": [
+      "C#",
+      ".NET web development",
+      "Web projects",
+      "CRUD",
+      "Architecture",
+      "Scenarios"
+    ],
+    "description": "Apply what you learned to creating, reading, editing, and shipping a useful notes application.",
+    "resource": {
+      "label": "Microsoft Learn · official guide",
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api?view=aspnetcore-10.0"
     },
     "cardCount": 16
   }

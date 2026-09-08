@@ -3,6 +3,7 @@ import { mergeCard, mergeDeck, mergeNote, mergeReviewLog, type RemoteRow } from 
 import { removeOutboxIfUnchanged } from './outbox';
 import { getSession, getSupabaseClient } from './supabaseClient';
 import { nowISO } from '../../lib/dates';
+import { retireLegacyCurriculum } from '../retiredCurriculum';
 
 export type SyncPhase = 'idle' | 'pushing' | 'pulling' | 'error';
 
@@ -73,6 +74,8 @@ async function syncLoop(): Promise<void> {
     await pushOutbox(session.user.id);
     setSyncState('pulling');
     await pullRemote(session.user.id);
+    // An older device can still send the former bundled curriculum.
+    if (await retireLegacyCurriculum()) await pushOutbox(session.user.id);
     await db.sync_meta.put({ key: 'last_sync_ok_at', value: nowISO() });
     await db.sync_meta.delete('last_error');
     backoffMs = 5_000;

@@ -1,12 +1,20 @@
 import { describe, expect, it } from "vitest";
+import manifest from "./section-expansion-manifest.json";
 import { curriculum, loadStarterCards, starterCardCount } from "./curriculum";
 
 describe("expanded curriculum integrity", () => {
-  it("ships 20–30 times the original library with stable unique IDs and complete offline answers", async () => {
+  it("ships the declared curriculum with stable IDs and self-contained offline answers", async () => {
     const packs = await loadStarterCards();
     const cards = [...packs.values()].flat();
-    expect(starterCardCount).toBeGreaterThanOrEqual(128 * 20);
-    expect(starterCardCount).toBeLessThanOrEqual(128 * 30);
+    expect(starterCardCount).toBe(manifest.baseCards + manifest.addedCards);
+    expect(cards.some(card => card.id.startsWith("a1000000-"))).toBe(false);
+    const scenarios = cards.filter(card => card.id.startsWith("a2000000-"));
+    expect(scenarios).toHaveLength(manifest.kinds.scenario);
+    for (const card of scenarios) {
+      expect(card.front).not.toMatch(/\[recall\]|____/);
+      expect(card.back).toContain("## Why it works");
+      expect(card.back).toContain("## Verify it");
+    }
     expect(cards).toHaveLength(starterCardCount);
     expect(new Set(cards.map((card) => card.id)).size).toBe(cards.length);
     expect(

@@ -3,9 +3,11 @@ The two cards per lesson ask for understanding and application; they are sibling
 Run this, then build-curriculum.py. No model service or network is needed.
 """
 from pathlib import Path
+import runpy
 import hashlib
 import json
 
+CRUD = runpy.run_path(str(Path(__file__).with_name('crud_lessons.py')))
 LESSONS = []
 def add(key, title, aliases, question, plain, analogy, example, mistake, check, answer):
     LESSONS.append(dict(key=key, title=title, aliases=aliases.split('|'), question=question,
@@ -134,16 +136,8 @@ add('closures', 'Closures', 'closure|lexical|captured|capture variable',
     'A closure can observe a variable changing, so do not assume it always remembers the value from the first moment. In UI code, also consider which render created a callback and which values that render captured.',
     'If you call makeCounter() twice, do the two returned counters share the same count?',
     '**No.** Each call creates its own local count. Each returned function closes over the variable from its own call. Calling the first counter does not increment the second counter\'s variable.')
-add('recursion', 'Recursion', 'recursion|recursive|base case',
-    'What must a recursive function have so it can finish?',
-    'It needs a stopping case and a way to move toward it. Recursion means a function calls itself to solve a smaller version of a problem. The stopping case handles a simple situation directly, so the calls do not continue forever.',
-    'Picture opening nested boxes until you reach a box with no smaller box inside. That final box is the stopping case. If each box somehow contained an equally complicated copy of itself, you would never finish.',
-    '```js\nfunction sumDown(n) {\n  if (n === 0) return 0;\n  return n + sumDown(n - 1);\n}\nsumDown(3); // 3 + 2 + 1 + 0 = 6\n```\n\nThis example assumes a nonnegative integer. Each call reduces n by one, eventually reaching zero.',
-    'A stopping case is not enough if the input never reaches it. The example does not work correctly for arbitrary negative or fractional inputs. Validate the input and consider stack limits for very deep recursion.',
-    'Why would changing `sumDown(n - 1)` to `sumDown(n)` prevent this function from finishing for n = 3?',
-    'The problem no longer gets smaller. Every call receives 3 again, so n never reaches zero. Calls keep piling up until the runtime eventually reports a stack overflow or similar failure.')
+LESSONS.append(CRUD['GUARD'])
 
-# 03 — Work with collections
 add('arrays', 'Arrays and positions', 'array|arrays|list|index|slice',
     'What is an array, and why is its first position usually zero?',
     'An array holds an ordered collection of values. You can find an item by its position, called an index. JavaScript starts positions at zero, so an array with three items uses indexes 0, 1, and 2. The length is the number of items, not the index of the last one.',
@@ -540,72 +534,8 @@ add('gitignore', 'Ignore generated files and protect secrets', 'gitignore|.gitig
     '**No.** The key remains in history and may have been copied. Revoke or rotate it and handle the exposure; ignoring the file only affects appropriate future untracked files.')
 
 # 09: Algorithms you can picture.
-add('big-o', 'Big O describes growth', 'Big O|complexity|O(n)|O(1)|linear time',
-    'What does Big O tell you about an algorithm?',
-    'Big O describes an upper bound on how required work or memory grows as the input grows. In everyday algorithm discussions, we usually use it to describe the dominant growth pattern. It does not directly tell you the number of milliseconds on your computer.',
-    'If checking one ticket takes one step, checking every ticket takes roughly twice as many steps when there are twice as many tickets. That is linear growth. A fixed setup cost matters in practice, but it does not change the long-run growth pattern.',
-    'Looking at every element once is typically O(n) work. Looking up an array element by a valid index is typically O(1). Two consecutive loops over n elements still give O(n): approximately 2n grows linearly. Two nested full loops give O(n²).',
-    'Do not treat O(1) as “instant” or assume the algorithm with the smaller growth rate always wins on tiny inputs. Constants, memory access, and the actual workload still affect measured performance.',
-    'A function loops over n items once and then loops over the same n items again. What is its usual time complexity?',
-    '**O(n)**. The work is approximately n + n = 2n. The constant factor 2 does not change the linear growth pattern.')
-add('pairs', 'Why checking every pair is quadratic', 'every pair|distinct pairs|nested loop|nested loops|O(n²)|O(n^2)',
-    'Why does checking every pair of items usually take O(n²) time?',
-    'Each item can be compared with many other items. As you add items, you add both more starting items and more possible partners. For distinct unordered pairs, the count is n × (n − 1) ÷ 2. That grows proportionally to n squared for large n.',
-    'Imagine everyone in a room shaking hands once with every other person. Four people need six handshakes: AB, AC, AD, BC, BD, CD. A new person must shake hands with everyone already present, so the total grows faster than the head count.',
-    '```js\nconst names = ["A", "B", "C"];\nfor (let i = 0; i < names.length; i++) {\n  for (let j = i + 1; j < names.length; j++) {\n    console.log(names[i], names[j]);\n  }\n}\n```\n\nThis prints A B, A C, and B C. Starting j at i + 1 avoids comparing a person with themselves or repeating B A after A B.',
-    'Two nested loops are not automatically quadratic: inspect their bounds. If the inner loop always runs exactly three times, total work grows like 3n, which is O(n). The pair example grows because the number of partners grows with the input.',
-    'Five people each shake hands once with every other person. How many distinct handshakes happen?',
-    '**10.** Count 4 + 3 + 2 + 1 = 10, or calculate 5 × 4 ÷ 2. Dividing by two prevents counting both AB and BA as separate handshakes.')
-add('binary-search', 'Binary search keeps halving', 'binary search|monotonic|lower-bound|O(log n)',
-    'Why must ordinary binary search use a sorted array?',
-    'Binary search checks a middle value and uses the ordering to discard an entire half of the remaining candidates. Without that ordering, a value smaller than the middle item might still appear on either side. The discard decision would no longer be justified.',
-    'In an alphabetized dictionary, seeing a word starting with M tells you that a word starting with B must be earlier. You can discard the later pages. This only works because the dictionary is organized in a known order.',
-    'Search for 9 in `[1, 3, 5, 7, 9, 11, 13]`. The middle is 7, so keep the values to its right. The next middle is 11, so look to its left. You reach 9 after narrowing the range twice.',
-    'Each iteration must shrink the candidate range. Setting a boundary back to the same middle position can cause an infinite loop with some boundary conventions. State whether your upper bound is included or excluded before writing the updates.',
-    'You compare a target of 4 with the middle value 10 in a sorted ascending array. Which side can you discard?',
-    'Discard **the middle value and everything to its right** for an exact-match search. Those values are at least 10, so none can equal 4.')
-add('hash-maps', 'Look up values by key', 'hash map|hash table|Map|dictionary|Two Sum',
-    'Why is a hash map useful when you repeatedly look things up by a key?',
-    'A hash map associates keys with values. It uses a hash function and collision-handling rules to locate entries without a normal full scan. Typical hash tables provide expected constant-time lookup under suitable assumptions, while worst cases can be slower.',
-    'A coat check uses a ticket number to locate a coat. You ask for the coat associated with ticket 42 instead of examining every coat. Real hash tables also need a way to handle keys that initially point to the same storage location.',
-    '```js\nconst scores = new Map();\nscores.set("Ada", 12);\nscores.set("Jo", 9);\nconsole.log(scores.get("Ada")); // 12\n```\n\nThe key Ada retrieves its associated score. Setting Ada again replaces that key\'s value; it does not create an additional independent Ada entry.',
-    'A map is not the same thing as calling an array\'s map method. Array.map transforms items into a new array; a Map stores key-value associations. Also, object keys are matched by identity in JavaScript Map.',
-    'For a Two Sum target of 10, you are currently reading 7. What previously seen value should you look for in a map?',
-    '**3**, because 10 − 7 = 3. Check previously seen values before storing the current item so that one array position is not accidentally reused as both members of the pair.')
-add('stacks', 'A stack handles the newest item first', 'stack|LIFO|depth-first|DFS',
-    'What does “last in, first out” mean for a stack?',
-    'The most recently added item is the first one removed. Adding is often called push; removing is called pop. A stack fits work where you must finish the most recent unfinished step before returning to an earlier one, such as nested function calls.',
-    'Put plates on top of a pile and remove them from the top. The last plate added is the first one you take. You cannot directly remove the bottom plate through the normal stack operations.',
-    '```js\nconst stack = [];\nstack.push("A");\nstack.push("B");\nconsole.log(stack.pop()); // "B"\nconsole.log(stack.pop()); // "A"\n```\n\nB arrives last and leaves first. An explicit stack can hold pending nodes in a depth-first traversal.',
-    'Using a stack for a task that needs arrival order reverses that order. Deep recursive calls also consume the runtime call stack and can exceed its limit; an explicit data structure may be needed.',
-    'You push 1, then 2, then 3 onto an empty stack. What do the next two pops return?',
-    '**3, then 2.** A stack removes the newest remaining item each time. The value 1 remains at the bottom.')
-add('queues', 'A queue handles the oldest item first', 'queue|FIFO|enqueue|dequeue',
-    'How does a queue differ from a stack?',
-    'A queue removes the oldest waiting item first: first in, first out. New items join at the back, and processing removes items from the front. This fits arrival-ordered work and algorithms that explore one layer before moving to the next.',
-    'A line at a shop normally serves the first person who joined before people who arrive later. A stack instead serves the newest arrival first. These rules create very different processing orders.',
-    'If a queue contains A then B, removing an item gives A. Adding C leaves B then C. With an array, a moving head index can avoid repeatedly shifting every remaining element, though you should eventually reclaim consumed storage.',
-    'JavaScript array.shift can move remaining elements, so repeated shifting may be costly for large queues. Also, a queue\'s logical order does not automatically mean parallel workers finish tasks in that same order.',
-    'A queue receives jobs A, B, and C in that order. With one worker processing one job at a time, which job starts first?',
-    '**A.** It has waited longest. The first-in, first-out rule then selects B, followed by C.')
-add('graphs', 'Explore connections with BFS', 'breadth-first|BFS|unweighted graph|adjacency list|graph',
-    'How can breadth-first search find a shortest path in an unweighted graph?',
-    'A graph contains nodes and connections called edges. Breadth-first search visits nodes by their number of edges from the start: first one edge away, then two, then three. A queue preserves that layer order, so the first discovery of a node gives a path with the fewest edges.',
-    'Ask your direct friends first, then friends of those friends, expanding one social circle at a time. The first circle containing a person tells you the smallest number of friendship links needed, assuming each link counts equally.',
-    'Suppose A connects to B and C, and B connects to D. Start with A in a queue. Visit A and enqueue B and C. Visiting B discovers D, at distance two. Mark nodes visited when enqueuing them to avoid repeatedly adding the same node.',
-    'Fewest edges is not always lowest cost. If edges have different weights, ordinary BFS may choose an expensive route with fewer steps. Also track visited nodes so cycles do not keep reintroducing work.',
-    'One route has two edges costing 100 each; another has three edges costing 1 each. Does ordinary BFS necessarily find the cheapest route?',
-    '**No.** BFS minimizes the number of edges when each edge is treated equally. Here the three-edge route costs only 3, while the two-edge route costs 200. Weighted shortest paths need an appropriate algorithm.')
-add('invariants', 'Keep one useful fact true', 'invariant|loop invariant|correctness|sliding window',
-    'What is an invariant, and how does it help you understand a loop?',
-    'An invariant is a statement that remains true at a chosen point as an algorithm runs. A loop invariant helps connect each step to the final result. Check that it is true initially, that one iteration preserves it, and that it implies the desired answer when the loop finishes.',
-    'While counting a pile of coins, keep a clear rule: the written total equals the value of all coins already moved into the counted pile. Each move adds exactly that coin\'s value, preserving the rule.',
-    '```js\nlet total = 0;\nfor (const number of [2, 4, 1]) {\n  total += number;\n}\n```\n\nAfter each iteration, total equals the sum of the numbers processed so far. Initially no numbers are processed and the sum is zero. At the end, all numbers are processed.',
-    'An invariant must say something precise enough to check. “The loop works” is not useful. State what each variable represents, which items have been processed, and what remains to be done.',
-    'While finding the largest number in a nonempty array, what could a variable called best mean after each processed item?',
-    '**best is the largest value among the items processed so far.** Initialize it from a valid item, then update it whenever the next item is larger. At the end it describes the whole array.')
+LESSONS.extend(CRUD['BEGINNER'])
 
-# 10: Build reliable small services.
 add('apis', 'An API is an agreed interface', 'API|endpoint|request body|response body|REST',
     'What is an API, explained without assuming you know web programming?',
     'An API is a defined way for one piece of software to ask another to do something or provide data. A web API often specifies a URL, an HTTP method, input data, and possible responses. The agreement lets callers use the service without knowing all of its internal code.',
@@ -680,7 +610,7 @@ GROUPS = [
     ('React without the mystery', 'react', 'blue', ['React', 'Components', 'State'], 'https://react.dev/learn'),
     ('Databases in plain English', 'database', 'blue', ['SQL', 'Data', 'Transactions'], 'https://www.postgresql.org/docs/current/tutorial.html'),
     ('Git and the terminal', 'git', 'amber', ['Git', 'Terminal', 'Teamwork'], 'https://git-scm.com/book/en/v2'),
-    ('Algorithms you can picture', 'tree', 'violet', ['Big O', 'Data structures', 'Algorithms'], 'https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/'),
+    ('Build your first CRUD feature', 'network', 'green', ['CRUD', 'Forms', 'Validation', 'Persistence'], 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side'),
     ('Build reliable small services', 'network', 'green', ['APIs', 'Reliability', 'Security'], 'https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side'),
 ]
 
@@ -705,7 +635,7 @@ if __name__ == '__main__':
     packs = []
     for i, (name, icon, color, topics, resource) in enumerate(GROUPS):
         packs.append({
-            'id': f'a0000000-0000-4000-8000-{4001 + i:012}',
+            'id': f'a0000000-0000-4000-8000-{4011 if i == 8 else 4001 + i:012}',
             'name': f'{i + 1:02} · {name}', 'track': 'Start here', 'icon': icon, 'color': color,
             'topics': ['Beginner'] + topics,
             'description': 'Learn one idea at a time through plain English, a worked example, an analogy, and a small practice question.',

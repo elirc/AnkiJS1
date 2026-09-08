@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Plus, Search } from "lucide-react";
 import { Button } from "../../components/Button";
@@ -8,14 +8,31 @@ import { getDashboard } from "../../db/repos/dashboardRepo";
 import { getDeckInfo } from "../../data/curriculum";
 import { CreateDeckDialog } from "./CreateDeckDialog";
 import { useNow } from "../../lib/useNow";
+
+const filters = [
+  "All decks", "Start here", "Keep going", "C# & .NET", "Foundations", "Frontend",
+  "Backend", "Practice", "Personal",
+];
+
 export function DeckListScreen() {
-  const [params] = useSearchParams();
+  const [params, setParams] = useSearchParams();
   const now = useNow();
   const data = useLiveQuery(() => getDashboard(now), [now.getTime()]);
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState(
-    params.get("track") === "Start here" ? "Start here" : "All decks",
-  );
+  const query = params.get("q") ?? "";
+  const setQuery = (value: string) => setParams((current) => {
+    const next = new URLSearchParams(current);
+    if (value) next.set("q", value);
+    else next.delete("q");
+    return next;
+  }, { replace: true });
+  const requestedTrack = params.get("track") ?? "All decks";
+  const filter = filters.includes(requestedTrack) ? requestedTrack : "All decks";
+  const setFilter = (value: string) => setParams((current) => {
+    const next = new URLSearchParams(current);
+    if (value === "All decks") next.delete("track");
+    else next.set("track", value);
+    return next;
+  }, { replace: true });
   const [creating, setCreating] = useState(false);
   if (!data) return <p className="loading-state">Loading your library…</p>;
   const rows = data.summaries.filter(
@@ -53,15 +70,7 @@ export function DeckListScreen() {
         />
       </div>
       <div className="filter-row" role="group" aria-label="Filter decks">
-        {[
-          "All decks",
-          "Start here",
-          "Foundations",
-          "Frontend",
-          "Backend",
-          "Practice",
-          "Personal",
-        ].map((value) => (
+        {filters.map((value) => (
           <button
             key={value}
             aria-pressed={filter === value}
@@ -71,6 +80,9 @@ export function DeckListScreen() {
           </button>
         ))}
       </div>
+      {filter === "C# & .NET" && <Link to="/dotnet" className="next-step-link">
+        Follow the C# & .NET learning path and start a focused study session
+      </Link>}
       {rows.length ? (
         <div className="deck-grid">
           {rows.map((summary) => (

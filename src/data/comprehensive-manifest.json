@@ -1,0 +1,820 @@
+{
+  "version": 13,
+  "baseline": {
+    "version": 12,
+    "cards": 7034,
+    "lessons": 276,
+    "missions": 16,
+    "sections": [
+      {
+        "id": "a0000000-0000-4000-8000-000000000002",
+        "name": "JavaScript & TypeScript",
+        "cards": 60
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000000003",
+        "name": "React & frontend",
+        "cards": 74
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000000004",
+        "name": "System design",
+        "cards": 57
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000000005",
+        "name": "Databases & SQL",
+        "cards": 29
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000000006",
+        "name": "APIs & networking",
+        "cards": 110
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000000007",
+        "name": "Testing & debugging",
+        "cards": 194
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000000008",
+        "name": "Engineering craft",
+        "cards": 54
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000000900",
+        "name": "JavaScript · arrays & collections · 1",
+        "cards": 127
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000000901",
+        "name": "JavaScript · arrays & collections · 2",
+        "cards": 145
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000000902",
+        "name": "JavaScript · arrays & collections · 3",
+        "cards": 99
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000000903",
+        "name": "JavaScript · arrays & collections · 4",
+        "cards": 98
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001000",
+        "name": "JavaScript · objects & types · 1",
+        "cards": 171
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001001",
+        "name": "JavaScript · objects & types · 2",
+        "cards": 97
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001100",
+        "name": "JavaScript · strings & regex · 1",
+        "cards": 171
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001101",
+        "name": "JavaScript · strings & regex · 2",
+        "cards": 120
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001200",
+        "name": "JavaScript · functions & async · 1",
+        "cards": 243
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001201",
+        "name": "JavaScript · functions & async · 2",
+        "cards": 129
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001300",
+        "name": "JavaScript · numbers & form values · 1",
+        "cards": 72
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001301",
+        "name": "JavaScript · numbers & form values · 2",
+        "cards": 19
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001400",
+        "name": "JavaScript · dates & time",
+        "cards": 147
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001500",
+        "name": "Browser APIs & DOM practice · 1",
+        "cards": 430
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001501",
+        "name": "Browser APIs & DOM practice · 2",
+        "cards": 241
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001600",
+        "name": "JavaScript · language mechanics · 1",
+        "cards": 187
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001601",
+        "name": "JavaScript · language mechanics · 2",
+        "cards": 251
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001602",
+        "name": "JavaScript · language mechanics · 3",
+        "cards": 87
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001700",
+        "name": "Python · practical fluency · 1",
+        "cards": 124
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001701",
+        "name": "Python · practical fluency · 2",
+        "cards": 23
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001800",
+        "name": "CSS · layout & interaction · 1",
+        "cards": 132
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001801",
+        "name": "CSS · layout & interaction · 2",
+        "cards": 29
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000001900",
+        "name": "HTML · semantics & browser behavior",
+        "cards": 49
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000002000",
+        "name": "Git · everyday workflows · 1",
+        "cards": 268
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000002001",
+        "name": "Git · everyday workflows · 2",
+        "cards": 63
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000002100",
+        "name": "React · hooks & patterns · 1",
+        "cards": 369
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000002101",
+        "name": "React · hooks & patterns · 2",
+        "cards": 31
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000003001",
+        "name": "SQL · production queries",
+        "cards": 20
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000003002",
+        "name": "Distributed systems · failure scenarios",
+        "cards": 38
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000003003",
+        "name": "API design · contracts & edge cases",
+        "cards": 39
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000003004",
+        "name": "Application security · practical defenses",
+        "cards": 73
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000003005",
+        "name": "TypeScript · model the invariants",
+        "cards": 19
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000003006",
+        "name": "Testing · meaningful confidence",
+        "cards": 129
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000003007",
+        "name": "Observability · diagnose production",
+        "cards": 34
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000003008",
+        "name": "Systems · processes & concurrency",
+        "cards": 34
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000003009",
+        "name": "Delivery · containers & safe releases",
+        "cards": 36
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000004001",
+        "name": "01 · Read your first program",
+        "cards": 40
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000004002",
+        "name": "02 · Follow the flow",
+        "cards": 40
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000004003",
+        "name": "03 · Work with collections",
+        "cards": 24
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000004004",
+        "name": "04 · Understand time and failures",
+        "cards": 38
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000004005",
+        "name": "05 · Understand a web page",
+        "cards": 24
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000004006",
+        "name": "06 · React without the mystery",
+        "cards": 50
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000004007",
+        "name": "07 · Databases in plain English",
+        "cards": 20
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000004008",
+        "name": "08 · Git and the terminal",
+        "cards": 36
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000004011",
+        "name": "09 · Build your first CRUD feature",
+        "cards": 72
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000004010",
+        "name": "10 · Build reliable small services",
+        "cards": 73
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000005001",
+        "name": "11 · TypeScript you can read",
+        "cards": 23
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000005002",
+        "name": "12 · Python step by step",
+        "cards": 22
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000005003",
+        "name": "13 · Debug without guessing",
+        "cards": 47
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000005004",
+        "name": "14 · Tests that teach you what broke",
+        "cards": 161
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000005005",
+        "name": "15 · Build interfaces people can use",
+        "cards": 72
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000005006",
+        "name": "16 · Read and design an API",
+        "cards": 48
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000005007",
+        "name": "17 · Reason about your database",
+        "cards": 25
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000005008",
+        "name": "18 · Security habits for your first app",
+        "cards": 92
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000005009",
+        "name": "19 · Ship and maintain a small app",
+        "cards": 45
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000005011",
+        "name": "20 · Fix real CRUD app problems",
+        "cards": 66
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000006001",
+        "name": "01 · C# from your first line",
+        "cards": 175
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000006002",
+        "name": "02 · Model your web app in C#",
+        "cards": 134
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000006003",
+        "name": "03 · Collections and LINQ for web data",
+        "cards": 32
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000006004",
+        "name": "04 · Async C# without the confusion",
+        "cards": 27
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000006005",
+        "name": "05 · Build ASP.NET Core endpoints",
+        "cards": 56
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000006006",
+        "name": "06 · Services, middleware, and configuration",
+        "cards": 175
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000006007",
+        "name": "07 · Persist data with EF Core",
+        "cards": 139
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000006008",
+        "name": "08 · Validation and web security",
+        "cards": 65
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000006009",
+        "name": "09 · Choose and build a .NET web UI",
+        "cards": 24
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000006010",
+        "name": "10 · Test and debug .NET web apps",
+        "cards": 122
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000006011",
+        "name": "11 · Run a reliable .NET service",
+        "cards": 34
+      },
+      {
+        "id": "a0000000-0000-4000-8000-000000006012",
+        "name": "12 · Build a real notes app, one decision at a time",
+        "cards": 111
+      }
+    ]
+  },
+  "addedCards": 14068,
+  "totalCards": 21102,
+  "guidedLessons": 552,
+  "totalGuidedLessons": 828,
+  "chunks": [
+    "reviewed-comprehensive-001.json",
+    "reviewed-comprehensive-002.json",
+    "reviewed-comprehensive-003.json",
+    "reviewed-comprehensive-004.json",
+    "reviewed-comprehensive-005.json",
+    "reviewed-comprehensive-006.json",
+    "reviewed-comprehensive-007.json",
+    "reviewed-comprehensive-008.json",
+    "reviewed-comprehensive-009.json",
+    "reviewed-comprehensive-010.json",
+    "reviewed-comprehensive-011.json",
+    "reviewed-comprehensive-012.json",
+    "reviewed-comprehensive-013.json",
+    "reviewed-comprehensive-014.json",
+    "reviewed-comprehensive-015.json",
+    "reviewed-comprehensive-016.json",
+    "reviewed-comprehensive-017.json",
+    "reviewed-comprehensive-018.json",
+    "reviewed-comprehensive-019.json",
+    "reviewed-comprehensive-020.json",
+    "reviewed-comprehensive-021.json",
+    "reviewed-comprehensive-022.json",
+    "reviewed-comprehensive-023.json",
+    "reviewed-comprehensive-024.json",
+    "reviewed-comprehensive-025.json",
+    "reviewed-comprehensive-026.json",
+    "reviewed-comprehensive-027.json",
+    "reviewed-comprehensive-028.json",
+    "reviewed-comprehensive-029.json",
+    "reviewed-comprehensive-030.json",
+    "reviewed-comprehensive-031.json",
+    "reviewed-comprehensive-032.json",
+    "reviewed-comprehensive-033.json",
+    "reviewed-comprehensive-034.json",
+    "reviewed-comprehensive-035.json",
+    "reviewed-comprehensive-036.json",
+    "reviewed-comprehensive-037.json",
+    "reviewed-comprehensive-038.json",
+    "reviewed-comprehensive-039.json",
+    "reviewed-comprehensive-040.json",
+    "reviewed-comprehensive-041.json",
+    "reviewed-comprehensive-042.json",
+    "reviewed-comprehensive-043.json",
+    "reviewed-comprehensive-044.json",
+    "reviewed-comprehensive-045.json",
+    "reviewed-comprehensive-046.json",
+    "reviewed-comprehensive-047.json",
+    "reviewed-comprehensive-048.json",
+    "reviewed-comprehensive-049.json",
+    "reviewed-comprehensive-050.json",
+    "reviewed-comprehensive-051.json",
+    "reviewed-comprehensive-052.json",
+    "reviewed-comprehensive-053.json",
+    "reviewed-comprehensive-054.json",
+    "reviewed-comprehensive-055.json",
+    "reviewed-comprehensive-056.json",
+    "reviewed-comprehensive-057.json",
+    "reviewed-comprehensive-058.json",
+    "reviewed-comprehensive-059.json",
+    "reviewed-comprehensive-060.json",
+    "reviewed-comprehensive-061.json",
+    "reviewed-comprehensive-062.json"
+  ],
+  "sections": [
+    {
+      "id": "a0000000-0000-4000-8000-000000000002",
+      "added": 121
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000003",
+      "added": 25
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000004",
+      "added": 59
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000005",
+      "added": 16
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000006",
+      "added": 343
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000007",
+      "added": 340
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000008",
+      "added": 159
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000900",
+      "added": 49
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000901",
+      "added": 56
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000902",
+      "added": 39
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000903",
+      "added": 38
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001000",
+      "added": 79
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001001",
+      "added": 45
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001100",
+      "added": 53
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001101",
+      "added": 37
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001200",
+      "added": 89
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001201",
+      "added": 47
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001300",
+      "added": 93
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001301",
+      "added": 25
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001400",
+      "added": 482
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001500",
+      "added": 1757
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001501",
+      "added": 985
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001600",
+      "added": 377
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001601",
+      "added": 505
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001602",
+      "added": 175
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001700",
+      "added": 74
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001701",
+      "added": 14
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001800",
+      "added": 540
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001801",
+      "added": 119
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001900",
+      "added": 201
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000002000",
+      "added": 789
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000002001",
+      "added": 186
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000002100",
+      "added": 124
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000002101",
+      "added": 11
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003001",
+      "added": 41
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003002",
+      "added": 156
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003003",
+      "added": 122
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003004",
+      "added": 212
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003005",
+      "added": 4
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003006",
+      "added": 87
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003007",
+      "added": 60
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003008",
+      "added": 139
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003009",
+      "added": 78
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004001",
+      "added": 81
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004002",
+      "added": 81
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004003",
+      "added": 11
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004004",
+      "added": 77
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004005",
+      "added": 99
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004006",
+      "added": 17
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004007",
+      "added": 41
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004008",
+      "added": 106
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004011",
+      "added": 188
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004010",
+      "added": 228
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005001",
+      "added": 4
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005002",
+      "added": 13
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005003",
+      "added": 83
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005004",
+      "added": 109
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005005",
+      "added": 295
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005006",
+      "added": 150
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005007",
+      "added": 51
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005008",
+      "added": 267
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005009",
+      "added": 97
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005011",
+      "added": 172
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006001",
+      "added": 715
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006002",
+      "added": 548
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006003",
+      "added": 93
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006004",
+      "added": 111
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006005",
+      "added": 134
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006006",
+      "added": 417
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006007",
+      "added": 279
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006008",
+      "added": 188
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006009",
+      "added": 33
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006010",
+      "added": 83
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006011",
+      "added": 81
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006012",
+      "added": 265
+    }
+  ],
+  "kinds": {
+    "guided-source": 552,
+    "source-reference": 13516
+  },
+  "sources": [
+    {
+      "repository": "mdn/content",
+      "revision": "3a04b53622d472799bacec2b79ef7bd44b43f1d9",
+      "archiveSha256": "c2333a3ea83674a9ddfca00f2ed4916107a43d95c7b34ff953261feaa59893dc",
+      "cards": 8246
+    },
+    {
+      "repository": "dotnet/docs",
+      "revision": "6b94bd8af573d315cd45b8d7dd8adc38bb3f6693",
+      "archiveSha256": "bb834fcd2e11d5a02f3ad01f467f0bb815e2f1feae5863545e505021369594f0",
+      "cards": 3184
+    },
+    {
+      "repository": "github/docs",
+      "revision": "ec3629a841129ae28189d7bb2274a7b3d40c5095",
+      "archiveSha256": "00e2aa8c9f6e9b85d9f061ca021403cb4261ed45e78ab10e3ad427531648a8f9",
+      "cards": 1381
+    },
+    {
+      "repository": "freeCodeCamp/freeCodeCamp",
+      "revision": "3b1f8191e48ac026487fa532ec6cbdb4b3fd8592",
+      "archiveSha256": "5ecf6173e060c29e753d6cd6985e86394b02b48817c8afe58833b50713a97987",
+      "cards": 213
+    },
+    {
+      "repository": "dotnet/AspNetCore.Docs",
+      "revision": "c8ab8d7254e1b3cafa82eee538939c82d88cc8e5",
+      "archiveSha256": "e08270620b33b3400f1242b727b06657ed4aff588f5fd7c2d6a6341b12872942",
+      "cards": 802
+    },
+    {
+      "repository": "dotnet/EntityFramework.Docs",
+      "revision": "bec05b95412189caed4165947660a249a6bfece8",
+      "archiveSha256": "32a7887473df1280acc116f1aa33915a9b4bbe2c42e45adf26815454b611841c",
+      "cards": 101
+    },
+    {
+      "repository": "reactjs/react.dev",
+      "revision": "f3d9794fc31f4a3faf7e863984d37f4ae86b3290",
+      "archiveSha256": "e0eeab1153a5dabc60e41883f09e24e9996be7c3040adc762aac78e452dada2f",
+      "cards": 141
+    }
+  ],
+  "exclusions": {
+    "unresolved source directive": 18121,
+    "incomplete or oversized section": 38357,
+    "retained or repeated explanation": 3397,
+    "external media or unsupported markup": 5376,
+    "unstable API": 2061,
+    "external context": 1429,
+    "missing example": 297,
+    "incomplete snippet": 233,
+    "outside practical scope": 36,
+    "unsafe shell example": 2,
+    "outside engineering curriculum": 4612,
+    "nonportable or navigation-only section": 350,
+    "duplicate after source normalization": 148
+  },
+  "reviewScope": "Structured-source extraction, exact identities, deduplication, full answer sections, semantic sampling. Source code is not executed by this builder."
+}

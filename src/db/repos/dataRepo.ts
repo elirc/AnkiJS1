@@ -1,11 +1,13 @@
 import { db, type Card, type Deck, type Note, type ReviewLog } from "../schema";
 import { mergeCard, mergeDeck, mergeNote, mergeReviewLog } from "../sync/merge";
-import { enqueueOutbox } from "../sync/outbox";
+import { enqueueMany } from "../sync/outbox";
 import { nowISO } from "../../lib/dates";
 import { getCurrentSession } from "../sync/auth";
+import { retireLegacyCurriculum } from "../retiredCurriculum";
 
 import { getStudyPreferences, saveStudyPreferences } from "./studyRepo";
 import type { StudyPreferences } from "../../srs/preferences";
+import { listPracticeEntries, mergePracticeEntries, validatePracticeEntries, waitForPracticeWrites, type PracticeEntry } from "./practiceRepo";
 
 export interface RecallBackup {
   version: 1;
@@ -14,6 +16,7 @@ export interface RecallBackup {
   cards: Card[];
   notes: Note[];
   review_logs: ReviewLog[];
+  practice?: PracticeEntry[];
   preferences?: { daily_goal?: number } & Partial<StudyPreferences>;
 }
 
@@ -30,6 +33,7 @@ function isBackup(value: unknown): value is RecallBackup {
 }
 
 export async function exportData(): Promise<RecallBackup> {
+  await waitForPracticeWrites();
   return db.transaction(
     "r",
     db.decks,
@@ -44,6 +48,7 @@ export async function exportData(): Promise<RecallBackup> {
       cards: await db.cards.toArray(),
       notes: await db.notes.toArray(),
       review_logs: await db.review_logs.toArray(),
+      practice: await listPracticeEntries(),
       preferences: {
         ...(await getStudyPreferences()),
         daily_goal: Number((await db.sync_meta.get("daily_goal"))?.value ?? 20),
@@ -147,47 +152,49 @@ function validateRows(backup: RecallBackup) {
 export async function importData(value: unknown): Promise<void> {
   if (!isBackup(value)) throw new Error("This file is not a Recall backup.");
   validateRows(value);
+  if (value.practice !== undefined) validatePracticeEntries(value.practice);
+  await waitForPracticeWrites();
   const uid = getCurrentSession()?.user.id ?? null;
   await db.transaction(
     "rw",
     [db.decks, db.cards, db.notes, db.review_logs, db.outbox, db.sync_meta],
     async () => {
+      const localDecks = new Map((await db.decks.toArray()).map((deck) => [deck.id, deck]));
       const deckIds = new Set([
-        ...(await db.decks.toArray()).map((deck) => deck.id),
+        ...localDecks.keys(),
         ...value.decks.map((deck) => deck.id),
       ]);
       if (value.cards.some((card) => !deckIds.has(card.deck_id)))
         throw new Error(
           "A card refers to a missing deck. No data was imported.",
         );
-      for (const deck of value.decks) {
-        const local = await db.decks.get(deck.id);
-        await db.decks.put(
-          mergeDeck(local, { ...deck, user_id: local?.user_id ?? uid }),
-        );
-        await enqueueOutbox("decks", deck.id);
-      }
-      for (const note of value.notes) {
-        const local = await db.notes.get(note.id);
-        await db.notes.put(
-          mergeNote(local, { ...note, user_id: local?.user_id ?? uid }),
-        );
-        await enqueueOutbox("notes", note.id);
-      }
-      for (const card of value.cards) {
-        const local = await db.cards.get(card.id);
-        await db.cards.put(
-          mergeCard(local, { ...card, user_id: local?.user_id ?? uid }),
-        );
-        await enqueueOutbox("cards", card.id);
-      }
-      for (const log of value.review_logs) {
-        const local = await db.review_logs.get(log.id);
-        await db.review_logs.put(
-          mergeReviewLog(local, { ...log, user_id: local?.user_id ?? uid }),
-        );
-        await enqueueOutbox("review_logs", log.id);
-      }
+      // Merge in memory, then write each table in a batch. A full-library restore
+      // keeps the same atomic transaction without thousands of read/write round trips.
+      await db.decks.bulkPut(value.decks.map((deck) => {
+        const local = localDecks.get(deck.id);
+        return mergeDeck(local, { ...deck, user_id: local?.user_id ?? uid });
+      }));
+      const localNotes = await db.notes.bulkGet(value.notes.map((note) => note.id));
+      await db.notes.bulkPut(value.notes.map((note, index) => {
+        const local = localNotes[index];
+        return mergeNote(local, { ...note, user_id: local?.user_id ?? uid });
+      }));
+      const localCards = await db.cards.bulkGet(value.cards.map((card) => card.id));
+      await db.cards.bulkPut(value.cards.map((card, index) => {
+        const local = localCards[index];
+        return mergeCard(local, { ...card, user_id: local?.user_id ?? uid });
+      }));
+      const localLogs = await db.review_logs.bulkGet(value.review_logs.map((log) => log.id));
+      await db.review_logs.bulkPut(value.review_logs.map((log, index) => {
+        const local = localLogs[index];
+        return mergeReviewLog(local, { ...log, user_id: local?.user_id ?? uid });
+      }));
+      await enqueueMany("decks", value.decks.map((deck) => deck.id));
+      await enqueueMany("notes", value.notes.map((note) => note.id));
+      await enqueueMany("cards", value.cards.map((card) => card.id));
+      await enqueueMany("review_logs", value.review_logs.map((log) => log.id));
+      await retireLegacyCurriculum();
+      if (value.practice) await mergePracticeEntries(value.practice);
       if (
         value.preferences &&
         (value.preferences.new_per_day !== undefined ||

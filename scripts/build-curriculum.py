@@ -18,7 +18,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = "30-seconds/30-seconds-of-code"
 REVISION = "f1b2d5a65c32432a877de94a749be40a396ebed2"
 CACHE = ROOT / "artifacts/content-sources/30-seconds"
-TARGET = 3200
 
 if not (CACHE / "provenance.json").exists():
     archive = zipfile.ZipFile(io.BytesIO(urllib.request.urlopen(
@@ -53,7 +52,7 @@ DECKS = {
     "js-object": ("JavaScript · objects & types", "Foundations", "braces", "amber", ["JavaScript", "Objects", "Types"]),
     "js-string": ("JavaScript · strings & regex", "Foundations", "braces", "green", ["JavaScript", "Strings", "Regex"]),
     "js-function": ("JavaScript · functions & async", "Foundations", "braces", "violet", ["JavaScript", "Closures", "Promises"]),
-    "js-math": ("JavaScript · numbers & algorithms", "Foundations", "tree", "amber", ["JavaScript", "Numbers", "Algorithms"]),
+    "js-math": ("JavaScript · numbers & form values", "Foundations", "braces", "amber", ["JavaScript", "Numbers", "Form values"]),
     "js-date": ("JavaScript · dates & time", "Foundations", "braces", "green", ["JavaScript", "Dates", "Time"]),
     "js-browser": ("Browser APIs & DOM practice", "Frontend", "globe", "blue", ["DOM", "Browser", "Events"]),
     "js-core": ("JavaScript · language mechanics", "Foundations", "braces", "violet", ["JavaScript", "Syntax", "Runtime"]),
@@ -69,6 +68,16 @@ def deck_key(lang, tags):
     for tag, group in [("array", "array"), ("object", "object"), ("string", "string"), ("function", "function"), ("math", "math"), ("date", "date"), ("browser", "browser"), ("node", "function")]:
         if tag in tags: return "js-" + group
     return "js-core"
+
+policy = json.loads((ROOT / "scripts/crud-content-policy.json").read_text(encoding="utf-8"))
+excluded_stems = set(policy["excludedSourceStems"])
+
+def allowed(card):
+    stem = Path(card["source"]).stem
+    if stem in excluded_stems: return False
+    context = card["front"].split("\n")[2]
+    return not any(context.endswith("— " + heading)
+                   for heading in policy.get("excludedSections", {}).get(stem, []))
 
 cards = []
 seen = set()
@@ -138,8 +147,13 @@ cards.sort(key=lambda c: (c["deck"].startswith("js-"), hashlib.sha256(c["id"].en
 authored_path = ROOT / "src/data/authored-expansion.json"
 authored = json.loads(authored_path.read_text(encoding="utf-8")) if authored_path.exists() else []
 beginner = json.loads((ROOT / "src/data/beginner-expansion.json").read_text(encoding="utf-8"))
+practical = json.loads((ROOT / "src/data/practical-expansion.json").read_text(encoding="utf-8"))
+dotnet = json.loads((ROOT / "src/data/dotnet-expansion.json").read_text(encoding="utf-8"))
 authored.extend(beginner)
-cards = cards[:TARGET - 128 - sum(len(d["cards"]) for d in authored)]
+authored.extend(practical)
+authored.extend(dotnet)
+# Add original lessons without displacing cards from the pinned source corpus.
+# Trimming this list as authored content grows would silently move deck boundaries.
 grouped = defaultdict(list)
 for card in cards: grouped[card.pop("deck")].append(card)
 catalog = []
@@ -149,7 +163,10 @@ for index, (key, (name, track, icon, color, topics)) in enumerate(DECKS.items(),
     # Give each part a manageable library size; the part boundary is frozen in output.
     own.sort(key=lambda c: (c["source"], c["id"]))
     for part in range((len(own) + 119) // 120):
-        chunk = own[part * 120:(part + 1) * 120]
+        # Filter AFTER assigning the original part boundary. Retained cards must
+        # stay in the same deck with the same identity across upgrades.
+        chunk = [card for card in own[part * 120:(part + 1) * 120] if allowed(card)]
+        if not chunk: continue
         deck_id = f"a0000000-0000-4000-8000-{index * 100 + part:012}"
         display = name + (f" · {part + 1}" if len(own) > 120 else "")
         metadata = {"id": deck_id, "name": display, "track": track, "icon": icon, "color": color, "topics": topics,
@@ -161,16 +178,31 @@ for deck in authored:
     catalog.append({k: v for k, v in deck.items() if k != "cards"} | {"cardCount": len(deck["cards"])})
     packs.append({"id": deck["id"], "cards": deck["cards"]})
 
+excluded["outside practical CRUD scope"] = sum(not allowed(card) for card in cards)
+cards = [card for card in cards if allowed(card)]
 out = ROOT / "src/data"
 (out / "expanded-catalog.json").write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + '\n', encoding="utf-8")
 (out / "expanded-cards.json").write_text(json.dumps(packs, ensure_ascii=False, separators=(',', ':')) + '\n', encoding="utf-8")
 licenses = ROOT / "public/licenses"
 licenses.mkdir(parents=True, exist_ok=True)
 (licenses / "30-seconds.txt").write_text((CACHE / "LICENSE").read_text(encoding="utf-8"), encoding="utf-8")
-total = 128 + sum(len(pack["cards"]) for pack in packs)
-report = {"totalCards": total, "originalCards": 128 + sum(len(d["cards"]) for d in authored), "adaptedCards": len(cards),
-          "beginnerCards": sum(len(d["cards"]) for d in beginner), "teachingLessons": 80,
-          "decks": len(catalog) + 8, "kinds": dict(Counter(c["kind"] for c in cards)), "source": SOURCE, "revision": REVISION,
+total = 112 + sum(len(pack["cards"]) for pack in packs)
+report = {"totalCards": total, "originalCards": 112 + sum(len(d["cards"]) for d in authored), "adaptedCards": len(cards),
+          "beginnerCards": sum(len(d["cards"]) for d in beginner),
+          "practicalCards": sum(len(d["cards"]) for d in practical),
+          "dotnetCards": sum(len(d["cards"]) for d in dotnet),
+          "dotnetLessons": len(json.loads((out / "dotnet-lessons.json").read_text(encoding="utf-8"))),
+          "teachingLessons": sum(len(json.loads((out / name).read_text(encoding="utf-8")))
+                                 for name in ("teaching-lessons.json", "practical-lessons.json", "dotnet-lessons.json")),
+          "decks": len(catalog) + 7, "kinds": dict(Counter(c["kind"] for c in cards)), "source": SOURCE, "revision": REVISION,
           "license": "CC-BY-4.0", "excluded": dict(excluded)}
 (out / "content-report.json").write_text(json.dumps(report, indent=2) + '\n', encoding="utf-8")
 print(json.dumps(report, indent=2))
+
+# Keep the shipped related-practice manifest and report consistent after a base
+# rebuild. These commands read local data only and preserve stable identities.
+if (out / "section-expansion-manifest.json").exists():
+    import subprocess
+    subprocess.run(["node", "scripts/export-retrieval-baseline.mjs"], cwd=ROOT, check=True)
+    subprocess.run(["node", "scripts/build-reviewed-content.mjs"], cwd=ROOT, check=True)
+    subprocess.run(["node", "scripts/check-reviewed-content.mjs"], cwd=ROOT, check=True)

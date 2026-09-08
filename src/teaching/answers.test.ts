@@ -27,18 +27,10 @@ describe("beginner explanations", () => {
     expect(added.match(/recall:teaching:v1/g)).toHaveLength(1);
   });
 
-  it("gives a pair-counting question a concrete beginner explanation", () => {
-    const front =
-      "An array has n items. What is the time complexity of checking every pair?";
-    const back =
-      "**O(n²)** time. There are n(n − 1)/2 distinct pairs.\n\nAsk whether a hash map or sorting can avoid repeated work.";
-    expect(findTeachingLesson(front, back)?.key).toBe("pairs");
-    const { pages } = getAnswerPages(front, back);
-    expect(pages[0].body).toContain("O(n²)");
-    expect(
-      pages.find((p) => p.title === "Picture it another way")?.body,
-    ).toContain("handshakes");
-    expect(pages.at(-1)?.body).toBe(back);
+  it("does not suggest retired algorithm teaching", () => {
+    expect(findTeachingLesson("Explain Two Sum and binary search", "A puzzle")).toBeUndefined();
+    expect(teachingLessons.some((lesson) =>
+      ["pairs", "big-o", "binary-search", "recursion"].includes(lesson.key))).toBe(false);
   });
 
   it("keeps the actual missing code and attribution when adding background teaching", () => {

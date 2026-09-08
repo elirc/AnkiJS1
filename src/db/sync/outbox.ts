@@ -18,8 +18,20 @@ export async function enqueueOutbox(
 }
 
 export async function enqueueMany(table_name: SyncTableName, rowIds: string[], queued_at = nowISO()) {
-  for (const row_id of rowIds) {
-    await enqueueOutbox(table_name, row_id, queued_at);
+  const ids = [...new Set(rowIds)];
+  if (!ids.length) return;
+  await db.transaction('rw', db.outbox, async () => {
+    // A bulk read avoids a cursor round trip for each queued row during restore.
+    const existing = await db.outbox.toArray();
+    const byRow = new Map(existing.filter((entry) => entry.table_name === table_name)
+      .map((entry) => [entry.row_id, entry]));
+    await db.outbox.bulkPut(ids.map((row_id) => ({
+      ...(byRow.get(row_id)?.id !== undefined ? { id: byRow.get(row_id)!.id } : {}),
+      table_name, row_id, queued_at,
+    })));
+  });
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('recall:outbox-enqueued'));
   }
 }
 

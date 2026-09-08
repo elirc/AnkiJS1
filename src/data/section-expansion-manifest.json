@@ -1,0 +1,703 @@
+{
+  "version": 13,
+  "baseCards": 2799,
+  "addedCards": 18303,
+  "totalCards": 21102,
+  "chunks": [
+    "reviewed-01.json",
+    "reviewed-library-01.json",
+    "reviewed-library-02.json",
+    "reviewed-library-03.json",
+    "reviewed-library-04.json",
+    "reviewed-library-05.json",
+    "reviewed-library-06.json",
+    "reviewed-library-07.json",
+    "reviewed-library-08.json",
+    "reviewed-library-09.json",
+    "reviewed-library-10.json",
+    "reviewed-library-11.json",
+    "reviewed-library-12.json",
+    "reviewed-library-13.json",
+    "reviewed-library-14.json",
+    "reviewed-library-15.json",
+    "reviewed-library-16.json",
+    "reviewed-library-17.json",
+    "reviewed-library-18.json",
+    "reviewed-library-19.json",
+    "reviewed-library-20.json",
+    "reviewed-library-21.json",
+    "reviewed-library-22.json",
+    "reviewed-comprehensive-001.json",
+    "reviewed-comprehensive-002.json",
+    "reviewed-comprehensive-003.json",
+    "reviewed-comprehensive-004.json",
+    "reviewed-comprehensive-005.json",
+    "reviewed-comprehensive-006.json",
+    "reviewed-comprehensive-007.json",
+    "reviewed-comprehensive-008.json",
+    "reviewed-comprehensive-009.json",
+    "reviewed-comprehensive-010.json",
+    "reviewed-comprehensive-011.json",
+    "reviewed-comprehensive-012.json",
+    "reviewed-comprehensive-013.json",
+    "reviewed-comprehensive-014.json",
+    "reviewed-comprehensive-015.json",
+    "reviewed-comprehensive-016.json",
+    "reviewed-comprehensive-017.json",
+    "reviewed-comprehensive-018.json",
+    "reviewed-comprehensive-019.json",
+    "reviewed-comprehensive-020.json",
+    "reviewed-comprehensive-021.json",
+    "reviewed-comprehensive-022.json",
+    "reviewed-comprehensive-023.json",
+    "reviewed-comprehensive-024.json",
+    "reviewed-comprehensive-025.json",
+    "reviewed-comprehensive-026.json",
+    "reviewed-comprehensive-027.json",
+    "reviewed-comprehensive-028.json",
+    "reviewed-comprehensive-029.json",
+    "reviewed-comprehensive-030.json",
+    "reviewed-comprehensive-031.json",
+    "reviewed-comprehensive-032.json",
+    "reviewed-comprehensive-033.json",
+    "reviewed-comprehensive-034.json",
+    "reviewed-comprehensive-035.json",
+    "reviewed-comprehensive-036.json",
+    "reviewed-comprehensive-037.json",
+    "reviewed-comprehensive-038.json",
+    "reviewed-comprehensive-039.json",
+    "reviewed-comprehensive-040.json",
+    "reviewed-comprehensive-041.json",
+    "reviewed-comprehensive-042.json",
+    "reviewed-comprehensive-043.json",
+    "reviewed-comprehensive-044.json",
+    "reviewed-comprehensive-045.json",
+    "reviewed-comprehensive-046.json",
+    "reviewed-comprehensive-047.json",
+    "reviewed-comprehensive-048.json",
+    "reviewed-comprehensive-049.json",
+    "reviewed-comprehensive-050.json",
+    "reviewed-comprehensive-051.json",
+    "reviewed-comprehensive-052.json",
+    "reviewed-comprehensive-053.json",
+    "reviewed-comprehensive-054.json",
+    "reviewed-comprehensive-055.json",
+    "reviewed-comprehensive-056.json",
+    "reviewed-comprehensive-057.json",
+    "reviewed-comprehensive-058.json",
+    "reviewed-comprehensive-059.json",
+    "reviewed-comprehensive-060.json",
+    "reviewed-comprehensive-061.json",
+    "reviewed-comprehensive-062.json"
+  ],
+  "sections": [
+    {
+      "id": "a0000000-0000-4000-8000-000000000002",
+      "name": "JavaScript & TypeScript",
+      "track": "Frontend",
+      "before": 16,
+      "added": 165,
+      "after": 181
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000003",
+      "name": "React & frontend",
+      "track": "Frontend",
+      "before": 16,
+      "added": 83,
+      "after": 99
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000004",
+      "name": "System design",
+      "track": "Backend",
+      "before": 16,
+      "added": 100,
+      "after": 116
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000005",
+      "name": "Databases & SQL",
+      "track": "Backend",
+      "before": 16,
+      "added": 29,
+      "after": 45
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000006",
+      "name": "APIs & networking",
+      "track": "Backend",
+      "before": 16,
+      "added": 437,
+      "after": 453
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000007",
+      "name": "Testing & debugging",
+      "track": "Practice",
+      "before": 16,
+      "added": 518,
+      "after": 534
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000008",
+      "name": "Engineering craft",
+      "track": "Practice",
+      "before": 16,
+      "added": 197,
+      "after": 213
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000900",
+      "name": "JavaScript · arrays & collections · 1",
+      "track": "Foundations",
+      "before": 87,
+      "added": 89,
+      "after": 176
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000901",
+      "name": "JavaScript · arrays & collections · 2",
+      "track": "Foundations",
+      "before": 99,
+      "added": 102,
+      "after": 201
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000902",
+      "name": "JavaScript · arrays & collections · 3",
+      "track": "Foundations",
+      "before": 68,
+      "added": 70,
+      "after": 138
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000903",
+      "name": "JavaScript · arrays & collections · 4",
+      "track": "Foundations",
+      "before": 67,
+      "added": 69,
+      "after": 136
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001000",
+      "name": "JavaScript · objects & types · 1",
+      "track": "Foundations",
+      "before": 118,
+      "added": 132,
+      "after": 250
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001001",
+      "name": "JavaScript · objects & types · 2",
+      "track": "Foundations",
+      "before": 67,
+      "added": 75,
+      "after": 142
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001100",
+      "name": "JavaScript · strings & regex · 1",
+      "track": "Foundations",
+      "before": 95,
+      "added": 129,
+      "after": 224
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001101",
+      "name": "JavaScript · strings & regex · 2",
+      "track": "Foundations",
+      "before": 67,
+      "added": 90,
+      "after": 157
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001200",
+      "name": "JavaScript · functions & async · 1",
+      "track": "Foundations",
+      "before": 115,
+      "added": 217,
+      "after": 332
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001201",
+      "name": "JavaScript · functions & async · 2",
+      "track": "Foundations",
+      "before": 61,
+      "added": 115,
+      "after": 176
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001300",
+      "name": "JavaScript · numbers & form values · 1",
+      "track": "Foundations",
+      "before": 50,
+      "added": 115,
+      "after": 165
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001301",
+      "name": "JavaScript · numbers & form values · 2",
+      "track": "Foundations",
+      "before": 13,
+      "added": 31,
+      "after": 44
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001400",
+      "name": "JavaScript · dates & time",
+      "track": "Foundations",
+      "before": 92,
+      "added": 537,
+      "after": 629
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001500",
+      "name": "Browser APIs & DOM practice · 1",
+      "track": "Frontend",
+      "before": 120,
+      "added": 2067,
+      "after": 2187
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001501",
+      "name": "Browser APIs & DOM practice · 2",
+      "track": "Frontend",
+      "before": 67,
+      "added": 1159,
+      "after": 1226
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001600",
+      "name": "JavaScript · language mechanics · 1",
+      "track": "Foundations",
+      "before": 76,
+      "added": 488,
+      "after": 564
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001601",
+      "name": "JavaScript · language mechanics · 2",
+      "track": "Foundations",
+      "before": 102,
+      "added": 654,
+      "after": 756
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001602",
+      "name": "JavaScript · language mechanics · 3",
+      "track": "Foundations",
+      "before": 35,
+      "added": 227,
+      "after": 262
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001700",
+      "name": "Python · practical fluency · 1",
+      "track": "Backend",
+      "before": 114,
+      "added": 84,
+      "after": 198
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001701",
+      "name": "Python · practical fluency · 2",
+      "track": "Backend",
+      "before": 21,
+      "added": 16,
+      "after": 37
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001800",
+      "name": "CSS · layout & interaction · 1",
+      "track": "Frontend",
+      "before": 120,
+      "added": 552,
+      "after": 672
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001801",
+      "name": "CSS · layout & interaction · 2",
+      "track": "Frontend",
+      "before": 26,
+      "added": 122,
+      "after": 148
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000001900",
+      "name": "HTML · semantics & browser behavior",
+      "track": "Frontend",
+      "before": 33,
+      "added": 217,
+      "after": 250
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000002000",
+      "name": "Git · everyday workflows · 1",
+      "track": "Practice",
+      "before": 120,
+      "added": 937,
+      "after": 1057
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000002001",
+      "name": "Git · everyday workflows · 2",
+      "track": "Practice",
+      "before": 28,
+      "added": 221,
+      "after": 249
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000002100",
+      "name": "React · hooks & patterns · 1",
+      "track": "Frontend",
+      "before": 120,
+      "added": 373,
+      "after": 493
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000002101",
+      "name": "React · hooks & patterns · 2",
+      "track": "Frontend",
+      "before": 10,
+      "added": 32,
+      "after": 42
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003001",
+      "name": "SQL · production queries",
+      "track": "Backend",
+      "before": 16,
+      "added": 45,
+      "after": 61
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003002",
+      "name": "Distributed systems · failure scenarios",
+      "track": "Backend",
+      "before": 16,
+      "added": 178,
+      "after": 194
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003003",
+      "name": "API design · contracts & edge cases",
+      "track": "Backend",
+      "before": 16,
+      "added": 145,
+      "after": 161
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003004",
+      "name": "Application security · practical defenses",
+      "track": "Backend",
+      "before": 16,
+      "added": 269,
+      "after": 285
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003005",
+      "name": "TypeScript · model the invariants",
+      "track": "Foundations",
+      "before": 16,
+      "added": 7,
+      "after": 23
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003006",
+      "name": "Testing · meaningful confidence",
+      "track": "Practice",
+      "before": 16,
+      "added": 200,
+      "after": 216
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003007",
+      "name": "Observability · diagnose production",
+      "track": "Practice",
+      "before": 16,
+      "added": 78,
+      "after": 94
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003008",
+      "name": "Systems · processes & concurrency",
+      "track": "Foundations",
+      "before": 16,
+      "added": 157,
+      "after": 173
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000003009",
+      "name": "Delivery · containers & safe releases",
+      "track": "Practice",
+      "before": 16,
+      "added": 98,
+      "after": 114
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004001",
+      "name": "01 · Read your first program",
+      "track": "Start here",
+      "before": 16,
+      "added": 105,
+      "after": 121
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004002",
+      "name": "02 · Follow the flow",
+      "track": "Start here",
+      "before": 16,
+      "added": 105,
+      "after": 121
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004003",
+      "name": "03 · Work with collections",
+      "track": "Start here",
+      "before": 16,
+      "added": 19,
+      "after": 35
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004004",
+      "name": "04 · Understand time and failures",
+      "track": "Start here",
+      "before": 16,
+      "added": 99,
+      "after": 115
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004005",
+      "name": "05 · Understand a web page",
+      "track": "Start here",
+      "before": 16,
+      "added": 107,
+      "after": 123
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004006",
+      "name": "06 · React without the mystery",
+      "track": "Start here",
+      "before": 16,
+      "added": 51,
+      "after": 67
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004007",
+      "name": "07 · Databases in plain English",
+      "track": "Start here",
+      "before": 16,
+      "added": 45,
+      "after": 61
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004008",
+      "name": "08 · Git and the terminal",
+      "track": "Start here",
+      "before": 16,
+      "added": 126,
+      "after": 142
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004011",
+      "name": "09 · Build your first CRUD feature",
+      "track": "Start here",
+      "before": 16,
+      "added": 244,
+      "after": 260
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000004010",
+      "name": "10 · Build reliable small services",
+      "track": "Start here",
+      "before": 16,
+      "added": 285,
+      "after": 301
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005001",
+      "name": "11 · TypeScript you can read",
+      "track": "Keep going",
+      "before": 20,
+      "added": 7,
+      "after": 27
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005002",
+      "name": "12 · Python step by step",
+      "track": "Keep going",
+      "before": 20,
+      "added": 15,
+      "after": 35
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005003",
+      "name": "13 · Debug without guessing",
+      "track": "Keep going",
+      "before": 20,
+      "added": 110,
+      "after": 130
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005004",
+      "name": "14 · Tests that teach you what broke",
+      "track": "Keep going",
+      "before": 20,
+      "added": 250,
+      "after": 270
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005005",
+      "name": "15 · Build interfaces people can use",
+      "track": "Keep going",
+      "before": 20,
+      "added": 347,
+      "after": 367
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005006",
+      "name": "16 · Read and design an API",
+      "track": "Keep going",
+      "before": 20,
+      "added": 178,
+      "after": 198
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005007",
+      "name": "17 · Reason about your database",
+      "track": "Keep going",
+      "before": 20,
+      "added": 56,
+      "after": 76
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005008",
+      "name": "18 · Security habits for your first app",
+      "track": "Keep going",
+      "before": 20,
+      "added": 339,
+      "after": 359
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005009",
+      "name": "19 · Ship and maintain a small app",
+      "track": "Keep going",
+      "before": 20,
+      "added": 122,
+      "after": 142
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000005011",
+      "name": "20 · Fix real CRUD app problems",
+      "track": "Keep going",
+      "before": 20,
+      "added": 218,
+      "after": 238
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006001",
+      "name": "01 · C# from your first line",
+      "track": "C# & .NET",
+      "before": 16,
+      "added": 874,
+      "after": 890
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006002",
+      "name": "02 · Model your web app in C#",
+      "track": "C# & .NET",
+      "before": 16,
+      "added": 666,
+      "after": 682
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006003",
+      "name": "03 · Collections and LINQ for web data",
+      "track": "C# & .NET",
+      "before": 16,
+      "added": 109,
+      "after": 125
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006004",
+      "name": "04 · Async C# without the confusion",
+      "track": "C# & .NET",
+      "before": 16,
+      "added": 122,
+      "after": 138
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006005",
+      "name": "05 · Build ASP.NET Core endpoints",
+      "track": "C# & .NET",
+      "before": 16,
+      "added": 174,
+      "after": 190
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006006",
+      "name": "06 · Services, middleware, and configuration",
+      "track": "C# & .NET",
+      "before": 16,
+      "added": 576,
+      "after": 592
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006007",
+      "name": "07 · Persist data with EF Core",
+      "track": "C# & .NET",
+      "before": 16,
+      "added": 402,
+      "after": 418
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006008",
+      "name": "08 · Validation and web security",
+      "track": "C# & .NET",
+      "before": 16,
+      "added": 237,
+      "after": 253
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006009",
+      "name": "09 · Choose and build a .NET web UI",
+      "track": "C# & .NET",
+      "before": 16,
+      "added": 41,
+      "after": 57
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006010",
+      "name": "10 · Test and debug .NET web apps",
+      "track": "C# & .NET",
+      "before": 16,
+      "added": 189,
+      "after": 205
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006011",
+      "name": "11 · Run a reliable .NET service",
+      "track": "C# & .NET",
+      "before": 16,
+      "added": 99,
+      "after": 115
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000006012",
+      "name": "12 · Build a real notes app, one decision at a time",
+      "track": "C# & .NET",
+      "before": 16,
+      "added": 360,
+      "after": 376
+    }
+  ],
+  "kinds": {
+    "scenario": 72,
+    "knowledge-check": 429,
+    "reference": 3734,
+    "guided-source": 552,
+    "source-reference": 13516
+  },
+  "method": "Authored scenarios and pinned source lessons with complete context. No masked-line or phrase drills."
+}

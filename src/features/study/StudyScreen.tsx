@@ -12,7 +12,7 @@ import {
   PartyPopper,
   RotateCcw,
 } from "lucide-react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { MarkdownView } from "../../components/MarkdownView";
 import { AnswerExplorer } from "../../components/AnswerExplorer";
@@ -26,6 +26,8 @@ import { loadStudy } from "../../db/repos/studyRepo";
 import type { Card } from "../../db/schema";
 import { rate } from "../../srs/scheduler";
 import { RatingBar } from "./RatingBar";
+import { DOTNET_TRACK } from "../../data/dotnet-path";
+import { getDeckInfo } from "../../data/curriculum";
 
 type StudyData = Awaited<ReturnType<typeof loadStudy>>;
 interface UndoSnapshot {
@@ -38,6 +40,10 @@ export function StudyScreen() {
   const { deckId } = useParams();
   const navigate = useNavigate();
   const [params] = useSearchParams();
+  const location = useLocation();
+  const track = params.get("track") === DOTNET_TRACK ? DOTNET_TRACK : undefined;
+  const isDotnet = track === DOTNET_TRACK || (deckId && getDeckInfo(deckId)?.track === DOTNET_TRACK);
+  const backTo = isDotnet ? "/dotnet" : "/";
   const requestedMinutes = Number(params.get("minutes"));
   const minutes = [2, 5, 10].includes(requestedMinutes) ? requestedMinutes : 0;
   const [data, setData] = useState<StudyData>();
@@ -53,6 +59,8 @@ export function StudyScreen() {
   const lastCommitted = useRef("");
   const start = useRef(Date.now());
   const routeGeneration = useRef(0);
+  const writeGeneration = useRef(0);
+  const refreshCurrent = useRef<(() => Promise<void>) | null>(null);
   const current = data?.queue[0];
   const currentKey = current ? `${current.id}:${current.srs_updated_at}` : "";
   const timeUp = minutes > 0 && elapsed >= minutes * 60;
@@ -80,17 +88,22 @@ export function StudyScreen() {
     start.current = Date.now();
     const refresh = async () => {
       if (busy.current) return;
+      const revision = writeGeneration.current;
       try {
-        const next = await loadStudy(deckId);
-        if (active && generation === routeGeneration.current && !busy.current)
+        const next = await loadStudy(deckId, new Date(), track);
+        if (active && generation === routeGeneration.current &&
+          revision === writeGeneration.current && !busy.current) {
           setData(next);
+          setError("");
+        }
       } catch {
-        if (active)
+        if (active && generation === routeGeneration.current && revision === writeGeneration.current)
           setError(
             "Could not load your cards. Please reopen this study session.",
           );
       }
     };
+    refreshCurrent.current = refresh;
     void refresh();
     const timer = window.setInterval(() => {
       if (document.visibilityState === "visible")
@@ -106,14 +119,22 @@ export function StudyScreen() {
     document.addEventListener("visibilitychange", onVisible);
     return () => {
       active = false;
+      if (refreshCurrent.current === refresh) refreshCurrent.current = null;
       window.clearInterval(timer);
       window.clearInterval(dueTimer);
       document.removeEventListener("visibilitychange", onVisible);
     };
-  }, [deckId, minutes]);
+  }, [deckId, minutes, track]);
   useEffect(() => {
     setRevealed(false);
   }, [current?.id]);
+
+  function finishWrite(generation: number) {
+    busy.current = false;
+    setSaving(false);
+    // A new route may have deferred its initial read until this write finishes.
+    if (generation !== routeGeneration.current) void refreshCurrent.current?.();
+  }
 
   async function rateCurrent(rating: 1 | 2 | 3 | 4) {
     if (
@@ -124,6 +145,7 @@ export function StudyScreen() {
     )
       return;
     busy.current = true;
+    writeGeneration.current++;
     setSaving(true);
     setError("");
     const generation = routeGeneration.current;
@@ -135,32 +157,37 @@ export function StudyScreen() {
         data?.preferences.request_retention,
       );
       await applyReview(result.card, result.log);
-      lastCommitted.current = currentKey;
       if (generation !== routeGeneration.current) return;
+      lastCommitted.current = currentKey;
       setUndo({ cardBefore: current, logId: result.log.id, rating });
       setReviewed((count) => count + 1);
       if (rating === 1) setAgain((count) => count + 1);
       setRevealed(false);
-      setData(await loadStudy(deckId));
+      const next = await loadStudy(deckId, new Date(), track);
+      if (generation !== routeGeneration.current) return;
+      setData(next);
       if (minutes > 0 && Date.now() - start.current >= minutes * 60_000)
         setFinished(true);
     } catch {
-      setError(
+      if (generation === routeGeneration.current) setError(
         "We could not finish this review. Your saved progress is safe. Please retry.",
       );
     } finally {
-      busy.current = false;
-      setSaving(false);
+      finishWrite(generation);
     }
   }
   async function undoLast() {
     if (!undo || busy.current) return;
     busy.current = true;
+    writeGeneration.current++;
     setSaving(true);
     setError("");
+    const generation = routeGeneration.current;
     try {
       await undoReview(undo.cardBefore, undo.logId);
-      const next = await loadStudy(deckId);
+      if (generation !== routeGeneration.current) return;
+      const next = await loadStudy(deckId, new Date(), track);
+      if (generation !== routeGeneration.current) return;
       // Return to the exact card that was undone, even in a mixed-deck session.
       const restored = next.queue.find(
         (card) => card.id === undo.cardBefore.id,
@@ -178,31 +205,36 @@ export function StudyScreen() {
       setRevealed(false);
       lastCommitted.current = "";
     } catch {
-      setError("Could not undo that review. Please try again.");
+      if (generation === routeGeneration.current)
+        setError("Could not undo that review. Please try again.");
     } finally {
-      busy.current = false;
-      setSaving(false);
+      finishWrite(generation);
     }
   }
   async function suspendCurrent() {
     if (!current || busy.current) return;
     busy.current = true;
+    writeGeneration.current++;
     setSaving(true);
     setError("");
+    const generation = routeGeneration.current;
     try {
       await updateContent(current.id, { suspended: true });
-      setData(await loadStudy(deckId));
+      if (generation !== routeGeneration.current) return;
+      const next = await loadStudy(deckId, new Date(), track);
+      if (generation !== routeGeneration.current) return;
+      setData(next);
       setRevealed(false);
     } catch {
-      setError("Could not suspend this card. Please try again.");
+      if (generation === routeGeneration.current)
+        setError("Could not suspend this card. Please try again.");
     } finally {
-      busy.current = false;
-      setSaving(false);
+      finishWrite(generation);
     }
   }
   const editCard = () => {
-    if (!current) return;
-    const path = `${deckId ? `/study/${deckId}` : "/study"}${minutes ? `?minutes=${minutes}` : ""}`;
+    if (!current || busy.current) return;
+    const path = location.pathname + location.search;
     navigate(`/cards/${current.id}/edit?returnTo=${encodeURIComponent(path)}`);
   };
   useEffect(() => {
@@ -297,8 +329,8 @@ export function StudyScreen() {
           </p>
         )}
         <div className="completion-actions">
-          <Button icon={Home} variant="primary" onClick={() => navigate("/")}>
-            Back to home
+          <Button icon={Home} variant="primary" onClick={() => navigate(backTo)}>
+            {isDotnet ? "Back to .NET path" : "Back to home"}
           </Button>
           {finished && current && (
             <Button
@@ -334,10 +366,10 @@ export function StudyScreen() {
       <div className="study-topline">
         <button
           className="inline-flex items-center gap-1"
-          onClick={() => navigate("/")}
+          onClick={() => navigate(backTo)}
         >
           <ArrowLeft size={16} />
-          Your workspace
+          {isDotnet ? ".NET path" : "Your workspace"}
         </button>
         <span className="timer">
           <Clock3 size={14} />
@@ -350,7 +382,7 @@ export function StudyScreen() {
         </button>
       </div>
       <h1 className="study-title">
-        {deckId ? currentDeck?.name : "A little of everything."}
+        {deckId ? currentDeck?.name : isDotnet ? "C# & .NET web study" : "A little of everything."}
       </h1>
       <div className="study-meta">
         <span>

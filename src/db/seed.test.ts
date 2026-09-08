@@ -1,8 +1,9 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { db, resetDatabaseForTests } from "./schema";
 import { initializeStudyData, curriculumVersionKey } from "./seed";
 import {
   curriculum,
+  originalCurriculum,
   loadStarterCards,
   starterCardCount,
 } from "../data/curriculum";
@@ -10,6 +11,16 @@ import { applyReview } from "./repos/cardRepo";
 import { newCardFields, rate } from "../srs/scheduler";
 describe("starter curriculum", () => {
   beforeEach(resetDatabaseForTests);
+  it("rolls back every batch and the version marker when saving the queue fails", async () => {
+    const failure = vi.spyOn(db.outbox, "bulkPut").mockRejectedValue(new Error("simulated queue failure"));
+    try {
+      await expect(initializeStudyData()).rejects.toThrow("simulated queue failure");
+      expect(await db.cards.count()).toBe(0);
+      expect(await db.decks.count()).toBe(0);
+      expect(await db.outbox.count()).toBe(0);
+      expect(await db.sync_meta.get(curriculumVersionKey)).toBeUndefined();
+    } finally { failure.mockRestore(); }
+  }, 120_000);
   it("installs complete ready-to-study cards atomically with sync entries", async () => {
     await Promise.all([initializeStudyData(), initializeStudyData()]);
     expect(await db.decks.count()).toBe(curriculum.length);
@@ -40,7 +51,7 @@ describe("starter curriculum", () => {
   it("upgrades a v1 install while preserving edits, schedules, suspended cards, and tombstones", async () => {
     const content = await loadStarterCards();
     const timestamp = "2026-01-01T00:00:00.000Z";
-    for (const deck of curriculum.slice(0, 8)) {
+    for (const deck of originalCurriculum) {
       await db.decks.add({
         id: deck.id,
         name: deck.name,
@@ -51,7 +62,7 @@ describe("starter curriculum", () => {
         deleted_at: null,
       });
       await db.cards.bulkAdd(
-        content.get(deck.id)!.map((card) => ({
+        content.get(deck.id)!.filter((card) => !/^a[1234]000000-/.test(card.id)).map((card) => ({
           ...card,
           deck_id: deck.id,
           note_id: null,
@@ -80,7 +91,8 @@ describe("starter curriculum", () => {
       deleted_at: deletedAt,
     });
     await initializeStudyData();
-    expect(await db.cards.count()).toBe(starterCardCount);
+    const skippedAdditions = curriculum[1].cardCount - originalCurriculum[1].cards.length;
+    expect(await db.cards.count()).toBe(starterCardCount - skippedAdditions);
     expect(await db.cards.get(result.card.id)).toEqual(savedBeforeUpgrade);
     expect((await db.cards.get(originalCards[1].id))?.deleted_at).toBe(
       deletedAt,
@@ -92,13 +104,17 @@ describe("starter curriculum", () => {
     expect(await db.review_logs.count()).toBe(1);
   });
 
-  it("adds beginner decks to a v2 install without changing any existing card or review", async () => {
+  it.each([
+    { version: "v2", count: 2247, excluded: ["Start here", "Keep going", "C# & .NET"] },
+    { version: "v3", count: 2407, excluded: ["Keep going", "C# & .NET"] },
+    { version: "v4", count: 2607, excluded: ["C# & .NET"] },
+  ])("upgrades $version without changing any existing card or review", async ({ version, count, excluded }) => {
     const content = await loadStarterCards();
-    const baseline = curriculum.filter((d) => d.track !== "Start here");
+    const baseline = curriculum.filter((d) => !excluded.includes(d.track));
     const timestamp = "2026-01-01T00:00:00.000Z";
     const schedule = newCardFields(new Date(timestamp));
     const baselineCards = baseline.flatMap((deck) =>
-      content.get(deck.id)!.map((card) => ({
+      content.get(deck.id)!.filter((card) => !/^a[1234]000000-/.test(card.id)).map((card) => ({
         ...card,
         deck_id: deck.id,
         note_id: null,
@@ -111,8 +127,9 @@ describe("starter curriculum", () => {
         deleted_at: null,
       })),
     );
-    // Insert the actual v2 content directly: there is no reason to install v3
-    // and then delete its additions just to arrange the upgrade fixture.
+    // Insert existing tracks directly so the test exercises adding later tracks
+    // from an already populated library with edits and scheduled reviews.
+    expect(baselineCards).toHaveLength(count);
     await db.decks.bulkAdd(
       baseline.map((deck) => ({
         id: deck.id,
@@ -126,7 +143,7 @@ describe("starter curriculum", () => {
     );
     await db.cards.bulkAdd(baselineCards);
     await db.sync_meta.put({
-      key: "starter_curriculum_v2",
+      key: `starter_curriculum_${version}`,
       value: "2026-01-01T00:00:00.000Z",
     });
     const existing = baselineCards[0];

@@ -5,6 +5,7 @@ import {
   ChevronRight,
   Code2,
   Inbox,
+  Hammer,
   LayoutDashboard,
   Library,
   Plus,
@@ -15,12 +16,15 @@ import {
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { SyncBadge } from "./components/SyncBadge";
 import { UpdateToast } from "./components/UpdateToast";
+import { hasPendingPracticeWrites } from "./db/repos/practiceRepo";
 
 const primaryNav = [
   { to: "/", label: "Overview", icon: LayoutDashboard },
   { to: "/decks", label: "My decks", icon: Library },
   { to: "/study", label: "Quick study", icon: BookOpen },
   { to: "/progress", label: "My progress", icon: BarChart3 },
+  { to: "/dotnet", label: "C# & .NET", icon: Code2 },
+  { to: "/practice", label: "Engineering practice", icon: Hammer },
 ];
 const mobileNav = [
   primaryNav[0],
@@ -35,9 +39,14 @@ export function App() {
   const [online, setOnline] = useState(navigator.onLine);
   useEffect(() => {
     const update = () => setOnline(navigator.onLine);
+    const protectPendingWork = (event: BeforeUnloadEvent) => {
+      if (hasPendingPracticeWrites()) { event.preventDefault(); event.returnValue = ""; }
+    };
+    window.addEventListener("beforeunload", protectPendingWork);
     window.addEventListener("online", update);
     window.addEventListener("offline", update);
     return () => {
+      window.removeEventListener("beforeunload", protectPendingWork);
       window.removeEventListener("online", update);
       window.removeEventListener("offline", update);
     };

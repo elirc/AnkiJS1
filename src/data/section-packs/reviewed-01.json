@@ -1,0 +1,489 @@
+[
+  {
+    "id": "a0000000-0000-4000-8000-000000000002",
+    "cards": [
+      {
+        "id": "a2000000-5d91-4482-821b-7a5911d81f22",
+        "front": "A quantity field accepts whole numbers from 0 to 20. The form passes its text through Number(value). Why does an empty field pass the range check, and what checks are needed?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nNumber('') and Number('   ') both produce 0. Reject blank trimmed input before conversion; then require Number.isInteger(quantity) and a value between 0 and 20.\n\n## Why it works\n\nZero is a valid quantity, so a truthiness check would reject good input. Decide whether exponent notation such as '1e1' is allowed; numeric conversion accepts it. A stricter text format needs its own check.\n\n## Verify it\n\nTry '', spaces, '0', '2.5', '-1', '21', and 'abc'. Only '0' passes this set. Test the same rules at the write boundary.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-5320-4f67-868a-364cbdf2d726",
+        "front": "An async saveAll function calls rows.forEach(async row => await save(row)) and immediately shows 'Saved'. save returns a promise. Why is the message early, and how can saveAll wait for every write?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nforEach ignores the promises returned by its callback. For independent writes, await Promise.all(rows.map(row => save(row))). For ordered writes, use a for...of loop and await each save.\n\n## Why it works\n\nPromise.all rejects when one write rejects, but other writes can still commit. Waiting for completion is separate from making the whole batch atomic; use a storage transaction when all-or-nothing behavior is required.\n\n## Verify it\n\nHold one save promise pending. The success message must stay hidden. Reject another and confirm an error appears without claiming every write was rolled back.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-e9ac-4f3b-8a6f-729762b58a2b",
+        "front": "A function receives a caller-owned prices array and returns prices.sort((a, b) => a - b)[0]. The caller's display order changes afterward. What caused it, and what is a small fix?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nsort mutates the array it receives. Sort a copy: [...prices].sort((a, b) => a - b)[0]. Define the empty-array result explicitly; this expression returns undefined when there are no prices.\n\n## Why it works\n\nCopying the array prevents rearranging the caller's elements. It is still a shallow copy, so changing a property on an object element would affect the original object. A minimum-only operation can also scan without sorting.\n\n## Verify it\n\nFor [10, 2, 7], assert the result is 2 and the original array is still [10, 2, 7]. Add an empty-array case.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-318c-4ff7-8b0a-44621d009f7c",
+        "front": "An API returns {\"total\":\"12\"}. TypeScript code casts the parsed JSON as { total: number } and computes data.total + 1. What happens at runtime, and where should this be fixed?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe result is the string '121'. A type assertion does not convert or validate the JSON. Validate the incoming value before allowing it into code that expects a number.\n\n## Why it works\n\nTreat external data as unknown. Either reject a string total because the API contract requires a number, or explicitly convert and validate it if the contract permits numeric strings. Silencing the compiler leaves the runtime value unchanged.\n\n## Verify it\n\nExercise total values 12, '12', null, and a missing property. Record which are accepted and assert that accepted totals are actual finite numbers.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-dede-4ad8-8797-b0c87bf81d91",
+        "front": "An editor copies a saved note using const draft = { ...saved }. It changes draft.settings.color. Cancel still leaves saved.settings.color changed. Why, and what needs copying?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe spread copied only the outer object. Both objects share settings. Copy that changed layer too: const draft = { ...saved, settings: { ...saved.settings } }.\n\n## Why it works\n\nAn edit buffer must not mutate the saved state before commit. Copy every mutable layer you change, or use the project's established immutable update approach. A deep clone has its own supported-type and performance constraints.\n\n## Verify it\n\nChange the draft color, cancel, and compare the complete saved object with a snapshot taken before editing. Then test save as a separate operation.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-53db-4e7a-8bf7-66a5ade5089c",
+        "front": "A review form enables Submit when answers.every(answer => answer.correct). Before answers load, answers is []. Why is Submit enabled, and what extra condition represents the requirement?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nevery returns true for an empty array because no element fails the predicate. If submission requires at least one answer, also require answers.length > 0 and a completed loading state.\n\n## Why it works\n\nThe collection method answers whether every present element passes. It does not establish that the required elements exist or that loading succeeded. Keep completeness, loading, and correctness as separate conditions.\n\n## Verify it\n\nTest loading, failed load, empty loaded results, one wrong answer, and all correct answers. Only the last state should enable Submit under this requirement.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-fd9a-40bd-8601-db520f6bba57",
+        "front": "A settings PATCH accepts an optional enabled boolean. The handler uses if (body.enabled) to decide whether to update it. Why can a user enable the feature but never disable it?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nfalse fails the truthiness test, so the update is skipped. Distinguish an omitted property from a supplied boolean and validate its type before assigning it.\n\n## Why it works\n\nFor a validated object, typeof body.enabled === 'boolean' includes both true and false. If null has meaning, document and handle it separately. Do not let absent, false, and null collapse into one branch.\n\n## Verify it\n\nSend {}, { enabled: true }, { enabled: false }, and { enabled: 'false' }. Omission preserves the setting, booleans update it, and the string is rejected.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-593e-4fea-8780-34e605fdb0fc",
+        "front": "An async save function returns the saved row from try, but its finally block contains return false. What does the caller receive, and what belongs in finally?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe caller receives false. A return in finally overrides a return or throw from try or catch. Remove that return and keep finally for cleanup such as clearing a saving flag.\n\n## Why it works\n\nAn unconditional cleanup return can also hide a rejected write, making the caller believe the operation completed normally. Let the result or error from the main operation propagate unless replacement is intentional and documented.\n\n## Verify it\n\nTest both a resolved save and a rejected save. The first must return the row; the second must reject; cleanup must run in both cases.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000003",
+    "cards": [
+      {
+        "id": "a2000000-650f-40bb-8c21-d7f66db9c347",
+        "front": "A search component requests 'cat', then 'car'. The 'car' response arrives first, but the later 'cat' response replaces it. What should determine whether a response may update the results?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nOnly a response for the currently active request may commit results. Use effect cleanup to ignore stale results, or a request identity check; abort obsolete fetches when supported.\n\n## Why it works\n\nNetwork completion order is not user-intent order. Debouncing reduces request count but cannot guarantee response order. The stale-result guard must also cover delayed parsing and error handling.\n\n## Verify it\n\nResolve two controlled promises in reverse order. The screen must still show 'car' results, and an obsolete request's error must not replace the current state.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-7503-4cfd-8f90-0178065ffb82",
+        "front": "With count initially 0, one React event calls setCount(count + 1) twice. Why is the next count 1, and how can the event add two?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nBoth calls read the same render's count value and request 1. Use setCount(current => current + 1) twice so each queued update receives the preceding result.\n\n## Why it works\n\nState values are snapshots for a render. Functional updaters express a transformation of pending state. Keep updaters pure; do not send requests or mutate external objects inside them.\n\n## Verify it\n\nClick once and expect 2 with functional updates. Repeat from 5 and expect 7 so the check does not depend only on the initial state.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-5183-4b7e-820a-f61db290dd5b",
+        "front": "Editable rows use their array index as the React key. After deleting the first row, typed text appears in the next record. What identity should the key represent?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nUse the stable record ID. Index keys associate component state with a position, which changes when rows are removed, inserted, or reordered.\n\n## Why it works\n\nA key helps React match an element to its previous instance among siblings. Generating a fresh random key on every render also loses continuity and can discard focus or unsaved input.\n\n## Verify it\n\nEdit the second row, delete the first, and assert that the draft remains attached to the same record ID. Repeat after sorting the list.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-49cc-4c12-89ab-2420e12eff7e",
+        "front": "A cart stores items and total in separate React state values. One remove-item handler forgets to update total. What change removes this consistency problem?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nDerive total from items during rendering when total is fully determined by those items. Store the source data once instead of synchronizing a duplicate state value.\n\n## Why it works\n\nFor a small cart, a simple reduce is usually sufficient. Memoization is a performance choice after measurement, not a correctness requirement. Separate state is justified only if it represents independent information.\n\n## Verify it\n\nAdd, remove, and change quantities. After each action, assert that the visible total equals the total computed from the current items, including an empty cart.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-340d-4785-8e29-91756cc32097",
+        "front": "Opening and closing a modal repeatedly makes Escape run its close handler several times. An effect adds a window keydown listener. What lifecycle step is likely missing?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nReturn cleanup that removes the same listener function with the matching event type and capture setting. Each setup should have a corresponding cleanup.\n\n## Why it works\n\nA new anonymous function passed to removeEventListener is not the function previously registered. Keep the handler in the effect's scope so cleanup refers to the exact function used during setup.\n\n## Verify it\n\nOpen and close the modal three times, reopen it, then press Escape once. Assert one close action and no remaining listener behavior after unmount.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-2784-4354-8749-1bc74bc04ec1",
+        "front": "A note save starts for text 'A'. While it is pending, the user types 'AB'. The save handler clears the input when 'A' finishes. How should it avoid losing the newer draft?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nCapture the submitted draft or its revision. Clear or mark the editor clean only if the current revision still matches the submitted revision when the save succeeds.\n\n## Why it works\n\nA successful save confirms one snapshot, not everything the user has typed since. Keep newer edits dirty. A server-generated ID can be applied separately without overwriting the latest text.\n\n## Verify it\n\nHold the save pending, type another character, then resolve it. The new text must remain visible and unsaved. Also test a save that fails.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-c978-4e46-8207-205a9099a759",
+        "front": "An editor uses useState(note.title). Navigating from note A to note B reuses the component, but the input still shows A. Why does the new prop not replace the draft automatically?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe useState argument initializes state on mount; later prop changes do not reinitialize it. Define what switching record identity does to the draft, then reset deliberately or key the editor by note.id.\n\n## Why it works\n\nBlindly copying every prop update into state can overwrite edits during a background refresh. Treat a record switch and a refresh of the same record as different events, with an explicit unsaved-work policy.\n\n## Verify it\n\nSwitch between different note IDs and refresh the same note while editing. Confirm both behaviors match the chosen policy and that unsaved text is not silently discarded.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-2163-47c8-8c52-1844b12eb211",
+        "front": "A list component initializes rows to [] and renders 'No records' whenever rows.length is zero. Users see that message during loading and after a failed request. What state is missing?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nRepresent loading and failure separately from a successful empty result. Render 'No records' only after a successful request returns an empty list.\n\n## Why it works\n\nThe same array value can occur in several different states. An explicit status or a discriminated state object prevents the UI from claiming an empty database when it has not read the database successfully.\n\n## Verify it\n\nTest a pending request, a rejected request, a successful empty response, and a successful populated response. Each should have an appropriate visible state.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000004",
+    "cards": [
+      {
+        "id": "a2000000-c985-480a-88ff-ac5a354ee820",
+        "front": "A create-note request commits, but its response is lost. The client retries and creates a second note. What must the server remember to make this logical operation safe to retry?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nUse a stable operation key scoped to the caller, store its request identity and result, and enforce uniqueness atomically with the create. Replaying the same operation returns the recorded result.\n\n## Why it works\n\nThe same key with different input must not silently become a different operation. Define mismatch and retention behavior. A disabled submit button cannot protect against network retries or concurrent clients.\n\n## Verify it\n\nSend two concurrent requests with the same caller, key, and body. Expect one note. Repeat after a simulated lost response, then test the same key with a different body.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-7f4d-4945-8189-5620e15e356d",
+        "front": "A signed-in user changes /notes/42 to /notes/43 and can edit someone else's note. The endpoint checks authentication. Which additional check is required?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nAuthorize access to the specific note for the authenticated caller. Scope the lookup or mutation by both note identity and the caller's permitted ownership or membership.\n\n## Why it works\n\nAuthentication proves who the caller is, not which records they may change. Never treat an owner ID supplied in the body as proof. Apply the rule to reads, updates, deletes, and related resources.\n\n## Verify it\n\nCreate records for two test users. Attempt each operation as the other user and verify both the response policy and the unchanged stored record.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-d874-41e0-8d5e-d4ff30faf1bc",
+        "front": "An update endpoint spreads the entire request body onto a user row. A client supplies {\"displayName\":\"Ada\",\"isAdmin\":true}. What boundary should control which fields may change?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nDefine an explicit input contract and allowlist the editable fields. Authorization-sensitive fields such as isAdmin must be assigned only through separately authorized server logic.\n\n## Why it works\n\nFrontend forms are not a security boundary. Reject or ignore unknown fields according to the API contract, but never let generic object merging grant privileges or change ownership.\n\n## Verify it\n\nSend the normal payload plus isAdmin, ownerId, and an immutable ID. Confirm that none of those fields changes and that the expected validation response is returned.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-5853-438a-8361-324a918871e1",
+        "front": "A signup handler commits a user and then sends a welcome email. If email sending fails, the handler reports total failure even though the user exists. How can the system track the email reliably?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nCommit the user and an email-job record in the same database transaction. A worker delivers pending jobs and records completion; the API can report the durable signup result.\n\n## Why it works\n\nA database transaction cannot roll back an email already sent through an external provider. Workers may retry after a crash, so delivery needs a duplicate-handling policy or provider idempotency support.\n\n## Verify it\n\nStop the worker after signup and verify the user and pending job exist together. Restart it, retry a job, and inspect both delivery behavior and job state.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-3d88-4ad6-81d3-0213f8756e86",
+        "front": "Two editors load version 7 of a note. The first saves version 8; the second later sends its whole version-7 copy. How can the API detect the stale write before overwriting the first edit?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nRequire the client's original version and perform a conditional update that matches both ID and version. If no row matches, report a conflict and preserve the user's draft for resolution.\n\n## Why it works\n\nChecking the version in one query and writing unconditionally in another leaves a race. The version condition and mutation must be one atomic operation, with the new version produced only on success.\n\n## Verify it\n\nLoad twice, save the first copy, then save the second with the old version. The second write must fail without changing the first edit.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-6fe4-4e61-8d12-54cb2b11ec3d",
+        "front": "A server caches GET /dashboard using only the URL as the key. User B receives user A's dashboard. What must the cache design account for?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe cached result depends on caller identity and permissions. Include the relevant identity and authorization scope in the key, or avoid sharing that personalized response across callers.\n\n## Why it works\n\nA fast response is incorrect if it crosses an access boundary. Also consider permission changes and logout: a previously authorized cached value must not bypass current authorization rules.\n\n## Verify it\n\nRequest the same URL as two users with different data, then change one user's permissions. Verify that neither user receives the other's data or stale unauthorized content.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-5343-4d6d-805f-f122cef05d47",
+        "front": "A client retries every failed request five times, including an invalid-title response. Why will backoff not fix that case, and what should decide whether to retry?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe unchanged invalid input will fail again. Classify failures using the API contract, operation safety, and remaining deadline. Validation failures normally require corrected input, not another identical attempt.\n\n## Why it works\n\nTransient failures can merit bounded backoff, but writes also need protection against duplicate effects. Honor server retry guidance where applicable and keep a visible recovery path after the retry budget is exhausted.\n\n## Verify it\n\nReturn a validation failure and assert one request. Separately simulate a documented transient failure and verify the bounded retry schedule and final error state.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-81d2-4e79-83d3-1b1cb0c696fb",
+        "front": "A list endpoint accepts limit from the query string and sends it straight to the database. A request asks for limit=1000000000. What validation and response behavior should be defined?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nParse a bounded integer and enforce a server-side maximum page size. Reject out-of-range values or clamp them according to an explicit contract, and return a way to request the next page.\n\n## Why it works\n\nA default page size does not constrain a caller-supplied value. Bound response size and query work, and use a stable ordering so the continuation mechanism has a defined meaning.\n\n## Verify it\n\nExercise missing, negative, fractional, nonnumeric, and extremely large limits. Confirm that every accepted request stays within the configured maximum.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000005",
+    "cards": [
+      {
+        "id": "a2000000-0899-42b8-8862-1e07fa52bc20",
+        "front": "A notes table has deleted_at set to NULL for active notes. Why does WHERE deleted_at = NULL return no active notes, and what condition should be used?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nOrdinary equality with NULL produces unknown, not true. Use WHERE deleted_at IS NULL to select active notes.\n\n## Why it works\n\nWHERE keeps rows whose predicate is true. The inverse test is IS NOT NULL. Replacing NULL with a made-up date changes the data model and is unnecessary for this query.\n\n## Verify it\n\nInsert one row with NULL and one with a real deletion timestamp. IS NULL must return only the active row; IS NOT NULL must return only the deleted row.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-96f5-4714-8ce8-b03ed47e9753",
+        "front": "You need every customer, including those with no paid orders. Why does LEFT JOIN orders o ON o.customer_id = c.id WHERE o.status = 'paid' omit customers without paid orders?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe WHERE predicate rejects the NULL-extended rows from the outer join. Put the paid-order condition in ON: LEFT JOIN orders o ON o.customer_id = c.id AND o.status = 'paid'.\n\n## Why it works\n\nON controls which order rows match. The outer join then retains customers without a match. A later WHERE filter on the order side can discard those retained rows.\n\n## Verify it\n\nUse customers with no orders, only unpaid orders, and one paid order. All three customers must appear, with order columns NULL for the first two.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-0d1e-4a69-82a1-b69c2dbb8e1f",
+        "front": "Inventory has one unit. Two requests each SELECT stock, see 1, and then decrement it. How can a single SQL update prevent stock from becoming negative?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nUse UPDATE inventory SET stock = stock - 1 WHERE id = :id AND stock > 0, then inspect the affected-row count. A zero count means the item was missing or no longer available.\n\n## Why it works\n\nThe condition and decrement belong in the same database operation. If an order must also be created, include the decrement and order insert in one transaction. Confirm concurrency behavior on the actual database engine.\n\n## Verify it\n\nRun two concurrent purchase attempts against a one-unit fixture. Exactly one may create the purchase, and the final stock must be zero.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-6e5e-4441-807b-452e9556992a",
+        "front": "A registration handler SELECTs by normalized username, then INSERTs if none exists. Two concurrent requests still create duplicates. Where should uniqueness be enforced?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nAdd a database unique constraint or index on the stored normalized username. Keep any precheck for feedback, but handle a uniqueness violation from the insert as an expected conflict.\n\n## Why it works\n\nBoth prechecks can observe absence before either insert commits. The database constraint arbitrates concurrent writes. Define normalization consistently before storing and querying the value.\n\n## Verify it\n\nSubmit the same normalized username concurrently. Verify one stored user and one success; the other request must produce the documented conflict response.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-f9f7-47e9-8db8-22256362f7eb",
+        "front": "An activity feed orders only by created_at. Several events share the same timestamp, and page boundaries repeat or skip records. What additional ordering information is needed?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nUse a unique tiebreaker, such as ORDER BY created_at DESC, id DESC. For cursor pagination, include both values in the cursor and continuation condition.\n\n## Why it works\n\nA timestamp alone does not define a total order. Stable ordering solves tie ambiguity; concurrent insertions still require a documented pagination consistency policy. Offset pagination and cursor pagination have different behavior under changes.\n\n## Verify it\n\nCreate several records with identical timestamps and page through them with a small page size. Each original record must appear once in a stable, unchanged dataset.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-9d11-47c6-8f3a-e6434280ec6a",
+        "front": "A report LEFT JOINs customers to orders and groups by customer. Why can COUNT(*) report 1 for a customer with no orders, and what should it count instead?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe outer join contributes one NULL-extended row for that customer, and COUNT(*) counts rows. Count a non-nullable order column such as COUNT(o.id) to count matched orders.\n\n## Why it works\n\nCOUNT(column) ignores NULL values. Pick a column guaranteed non-null for actual orders. Further joins can multiply rows, so verify the report's intended counting grain before adding more tables.\n\n## Verify it\n\nUse customers with zero, one, and two orders. Expect counts 0, 1, and 2. Add a separate multi-row child join and check whether it changes the result unexpectedly.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-61d8-4bdd-8e25-95e55878beac",
+        "front": "A common PostgreSQL query filters notes by owner_id and orders by created_at DESC, id DESC with a small LIMIT. What index would you evaluate first, and how would you validate it?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nEvaluate a B-tree index on (owner_id, created_at DESC, id DESC). It aligns the owner equality filter with the requested ordering, but measure the actual plan and workload before deciding.\n\n## Why it works\n\nUse representative row counts and owner distributions. Compare plan, time, and rows examined. Indexes consume storage and add write work; a tiny fixture or an unused index is weak evidence of an improvement.\n\n## Verify it\n\nCompare the query plan before and after the index on representative disposable data. Also measure insert cost and confirm the query still returns the same ordered rows.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-4cb4-4d4b-8ec1-2f8de8198d0b",
+        "front": "Moving a task between projects updates the task's project_id and two project counters. A failure after the first statement leaves inconsistent counters. What belongs in the transaction?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nAll related persistent changes that must succeed together: the task move and both counter updates. Commit only after every required statement succeeds; otherwise roll back.\n\n## Why it works\n\nA transaction protects atomicity, but concurrent moves may still need locking or conditional updates. Consider whether the counters can be derived instead of stored. Do not include unrelated slow network calls in the transaction.\n\n## Verify it\n\nInject failure after each statement and compare all three records with their original values. Then test two concurrent moves of the same task.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000006",
+    "cards": [
+      {
+        "id": "a2000000-3fd9-43b8-8559-0c4ff9d9fc85",
+        "front": "A browser save uses try { await fetch('/notes', options); showSuccess(); } catch { showError(); }. The server returns HTTP 500, but the UI shows success. Why?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nfetch normally fulfills for HTTP error responses. Inspect response.ok or the documented status before reporting success; throw or handle an error response explicitly.\n\n## Why it works\n\nA received HTTP response and a successful application operation are different outcomes. Network failures reject the promise, while response parsing can also fail separately. Preserve the user's input through each failure path.\n\n## Verify it\n\nTest a 500 response, a validation response, a network rejection, and the endpoint's successful status. Only the documented successful outcome should show success.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-5ff8-419e-8cd5-5fae66f73bf3",
+        "front": "A delete endpoint returns 204 No Content. The browser calls response.json() and shows an error even though the record was deleted. What should the client change?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nDo not parse JSON from a response whose contract has no body. Check the status and handle a successful 204 directly; parse JSON only for responses documented to contain it.\n\n## Why it works\n\nAn empty body is not valid JSON. The parsing failure does not undo the completed deletion. Keep transport status, body format, and application result as separate checks.\n\n## Verify it\n\nReturn a real empty-body 204 and expect success without a parse error. Test the endpoint's error response format separately.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-cf57-4de8-8837-4400542205e2",
+        "front": "A 'Show password' button is inside a form and has no type attribute. Clicking it unexpectedly submits the form. What is the smallest markup fix?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nSet type=\"button\" on the visibility toggle. In a form, a button's default behavior can be submission; reserve type=\"submit\" for the submit control.\n\n## Why it works\n\nUse the semantic behavior intended for each control instead of relying on every click handler to prevent submission. The toggle should also have an accessible name that reflects its action.\n\n## Verify it\n\nClick the toggle and confirm the password visibility changes without invoking the submit handler. Press Enter in the form and verify intentional submission still works.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-a573-47af-810c-6f72c1443217",
+        "front": "A keyboard user opens a delete confirmation, presses Escape, and loses track of focus. What should closing the dialog do with focus?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nReturn focus to the control that opened the dialog when it still exists. If that control was removed, move focus to a logical nearby element in the updated workflow.\n\n## Why it works\n\nFocus is part of the interaction state. Opening, keyboard navigation inside, cancellation, and successful deletion each need a predictable destination. Prefer the project's accessible dialog primitive for the full behavior.\n\n## Verify it\n\nOpen and cancel using only the keyboard, then complete deletion. In both cases inspect the active element and confirm the next action is reachable.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-8da7-4b58-8522-d629c3f40d33",
+        "front": "A due date is stored as '2026-01-01'. The UI constructs new Date(value) and formats it in Los Angeles, displaying December 31. What data-model mismatch caused this?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nA date-only ISO string is interpreted as a UTC date by this constructor, while local formatting converts that instant to the previous evening. A calendar due date is not necessarily an instant.\n\n## Why it works\n\nKeep calendar dates as date components or use an established date-only representation. Convert to an instant only when a time and timezone are explicitly part of the requirement. Do not patch the bug by adding a fixed number of hours.\n\n## Verify it\n\nRender the same date in positive and negative UTC offsets. A calendar-date field should keep January 1 in both; an actual timestamp should convert according to its timezone policy.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-8d7f-4045-8e31-9f62933f2f31",
+        "front": "An offline editor shows 'Saved' before its IndexedDB write completes. Storage then rejects the write. What must gate the saved indicator?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nShow saved only after the persistence operation commits successfully. Keep a saving state while pending, and retain the draft with a visible recoverable error when the write fails.\n\n## Why it works\n\nUpdating React state is not proof of durable storage. The user may reload immediately after seeing success. If cloud sync is separate, distinguish local persistence from server acknowledgment.\n\n## Verify it\n\nReject the storage write and verify the text remains editable and is not marked saved. On success, reload and verify the exact submitted content survives.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-d421-4a26-8e8d-634ea91d3f6f",
+        "front": "An installed app loads its home screen offline, but opening a never-visited study route fails after route code was split into a separate JavaScript chunk. What deployment behavior needs checking?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe study chunk must be available in the service worker's offline cache before the route is needed. Verify that the precache or deliberate runtime caching policy includes required route assets.\n\n## Why it works\n\nCode splitting changes when files are requested; it does not automatically provide them offline. Test a production service worker, since a development server cannot demonstrate the installed app's cache behavior.\n\n## Verify it\n\nInstall a fresh production build, wait for offline readiness, disconnect the network, and open the unvisited route. Repeat across an application update.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-9264-45c8-8b25-8713931389d1",
+        "front": "A user cancels a pending create request with AbortController. May the client assume the server did not create the record? Explain the recovery requirement.",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nNo. Aborting the client request does not prove the server stopped or rolled back its work. Reconcile the operation's status or retry using a stable operation identity before creating another record.\n\n## Why it works\n\nCancellation controls the client-side request and response handling. Server work may already have committed. Separate hiding a stale UI result from guaranteeing that a write had no effect.\n\n## Verify it\n\nArrange for the server to commit before the client aborts. On recovery, verify the client discovers the existing record instead of creating a duplicate.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000007",
+    "cards": [
+      {
+        "id": "a2000000-fb21-413a-8c9f-3d248299f586",
+        "front": "A test asserts that clicking Save calls saveNote, but users lose edits after reload. What observable assertion would expose the missing persistence?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nSave a changed value, reopen it through the real persistence boundary, and assert that the changed value is returned or displayed. The test must not substitute the same mock for both writing and reading.\n\n## Why it works\n\nA call assertion can pass when the wrong record is written or the write never commits. Keep a focused repository integration test for durability and a browser test for the important user journey.\n\n## Verify it\n\nTemporarily break the actual write in a disposable test run. The persistence test should fail even though the save handler was invoked.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-f0fe-49fa-830b-35fd5f1e35c1",
+        "front": "A browser test waits exactly 500 ms after saving and then checks a success message. It fails on slower machines. What should the test wait for instead?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nWait for an observable completion condition, such as the saved state or persisted result, using the test framework's bounded waiting assertions.\n\n## Why it works\n\nA fixed sleep guesses how long the system needs and adds delay even when work finishes quickly. A completion condition ties the test to behavior while retaining a timeout for a real hang.\n\n## Verify it\n\nIntroduce controlled slow storage and confirm the test waits successfully. Make the save never complete and confirm the test fails with a useful timeout.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-6a9e-4539-8281-4641b7b9fea3",
+        "front": "A loading optimization is measured once after several page refreshes and reported as a first-load improvement. What important comparison is missing?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nMeasure cold and warm cases separately with the same workload and environment. A warm cache can hide downloads, parsing, database installation, or service-worker work that new users still pay for.\n\n## Why it works\n\nRecord what was reset: HTTP cache, service worker, local database, or all three. Repeat enough runs to see variability and report the metric actually measured, such as usable-screen time.\n\n## Verify it\n\nCompare before and after on a fresh profile and an existing populated profile under the same throttling. Include transfer size and main-thread work alongside elapsed time.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-33d9-445c-8aca-ef0600eaa6a7",
+        "front": "A bulk import writes cards in batches and then queues sync records. Its test only checks a successful import. Which injected failure best checks the all-or-nothing promise?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nFail a later batch or the sync-queue write after earlier card writes have succeeded. Assert that cards, queue entries, and the completion marker all roll back together.\n\n## Why it works\n\nFailing before the first write does not test rollback of completed work. Existing records and edits should remain unchanged. The test should use the real transaction implementation with controlled failure injection.\n\n## Verify it\n\nSeed one existing edited card, force a failure after one new batch, and compare database state with the pre-import snapshot. No success marker may remain.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-2b08-466a-80d4-d684de12e1ab",
+        "front": "A title may contain 1 to 80 characters after trimming. A test suite checks only a 20-character title. Which compact set of cases exercises the actual boundaries?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nTest whitespace-only input, one character, exactly 80 characters, and 81 characters, including leading or trailing spaces to verify when trimming occurs.\n\n## Why it works\n\nExpected results should follow a stated definition of character length. JavaScript string length counts UTF-16 code units; a product requirement based on user-perceived characters needs a different policy.\n\n## Verify it\n\nAssert both acceptance and the stored normalized title. Include one non-ASCII example if the product supports it, with the expected length rule documented.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-cc20-4187-82f3-76e044e0352c",
+        "front": "An idempotency test sends a create request, waits for success, then repeats it. It passes. Which race does this leave untested?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nTwo requests with the same operation key can arrive before either has committed. Start both concurrently and verify that the database contains one effect and both responses follow the duplicate-operation contract.\n\n## Why it works\n\nA sequential test exercises lookup of an already completed operation. It does not prove that duplicate detection and creation are atomic under contention. Include different bodies sharing a key too.\n\n## Verify it\n\nUse a barrier so both requests reach the critical path together. Assert persisted row count, returned identity, and key-mismatch behavior.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-af5c-4fbb-80ab-84358e644f06",
+        "front": "A search race test covers old successes arriving late, but users still see an error from a previous query. What additional interleaving should be tested?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nLet the current request succeed, then reject the older request. The old error must not replace the current result or set the current request's error state.\n\n## Why it works\n\nStale-response protection must cover every state update, including catch and finally. An old finally handler can also clear a loading indicator that belongs to a newer pending request.\n\n## Verify it\n\nTest old-success/new-pending, old-error/new-success, and old-finally/new-pending orders with controlled promises. Check results, errors, and loading state separately.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-dda7-4bf2-8ef4-0452d167df40",
+        "front": "A curriculum update corrects a bundled answer. A learner has already rewritten that card and reviewed it. What migration test protects their work?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nStart from the previous shipped data, edit the answer, add review history, and run the upgrade. Assert that the personal wording, scheduling fields, and review logs survive while eligible untouched content is updated or retired.\n\n## Why it works\n\nAn ID alone establishes the card's origin, not that its content is still the shipped content. Use an explicit comparison with the previous version and respect intentional deletions. Test repeated startup and old backup restoration too.\n\n## Verify it\n\nInclude untouched, edited, reviewed, moved, and deleted fixtures. Run the migration twice and verify that the second run makes no additional changes.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000000008",
+    "cards": [
+      {
+        "id": "a2000000-2fcb-445f-857d-b4ad9de5b045",
+        "front": "A review comment says 'This async code seems risky.' What concrete evidence would turn it into an actionable correctness finding?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nName a reproducible ordering or input, the resulting wrong behavior, and the code location responsible. For example: an older save completion clears text entered after that save started.\n\n## Why it works\n\nExplain the consequence and suggest a focused correction or test. If the behavior has not been established, label it as a question or risk rather than presenting it as a confirmed defect.\n\n## Verify it\n\nAsk whether the author could reproduce the problem from the comment alone and tell when the fix is correct. Remove claims the evidence does not support.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-32d1-4cae-85b0-581ff60c1ea2",
+        "front": "You rename a stored enum value and update every current caller. Existing database rows still contain the old value. What part of the change is missing?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nDefine how stored old values will be read or migrated. Current source references do not account for persisted data, older backups, or clients still using the previous representation.\n\n## Why it works\n\nChoose a compatible reader, an explicit migration, or a staged rollout according to the system's deployment model. A typecheck cannot establish compatibility with yesterday's data.\n\n## Verify it\n\nLoad a fixture created by the previous version and exercise the changed feature. Also test a fresh install and repeated startup after the upgrade.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-f0c2-4714-83b0-74c3534a4a8a",
+        "front": "A page takes four seconds to become usable. A profile shows three seconds installing data and 100 ms rendering. What should guide the first optimization experiment?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nInvestigate the data-installation path first because it dominates this measured workload. Form a specific hypothesis, such as excessive duplicate content or serialized storage requests, then measure a focused change.\n\n## Why it works\n\nA render memoization change cannot remove seconds spent elsewhere. Still verify correctness and other workloads; a faster fresh install that breaks upgrades or offline use is not a complete improvement.\n\n## Verify it\n\nRepeat the same usable-screen measurement before and after, and verify installed counts, data integrity, existing-user startup, and offline access.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-df30-45ac-8277-9f399d56fd3d",
+        "front": "A release deletes a database column and then fails. Someone proposes reverting the application commit. Why is that not a complete recovery plan?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nReverting application code does not restore dropped data or make the old schema reappear. Recovery needs a compatible schema and a tested data restoration or forward-fix procedure.\n\n## Why it works\n\nSource rollback and data recovery are different operations. For future changes, expand-and-contract migrations can preserve compatibility during rollout, but backups still need restoration tests.\n\n## Verify it\n\nOn disposable data, run the release migration and attempt the documented recovery. Verify actual records and old application behavior, not just a successful command exit.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-48a1-4202-8f95-3df0c53dad6d",
+        "front": "A generated flashcard asks for a missing four-word phrase from an explanation, but several unrelated phrases fit. What should a content review require before shipping it?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nRewrite the prompt around a specific concept, decision, prediction, or defect with enough context to judge an answer. Include the expected result and why it follows; remove the card if it adds no distinct learning task.\n\n## Why it works\n\nRestoring the author's exact wording is not the same as understanding the behavior. A quality gate should check correctness, self-contained context, answerability, and duplication rather than reward a target card count.\n\n## Verify it\n\nHave a reviewer answer without seeing the back. Check whether a different correct explanation can be recognized and whether the card tests something beyond a nearby duplicate.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-ddcc-489c-8f87-1c528936ad1a",
+        "front": "A deployment changes curriculum chunk filenames. A learner has the previous service worker and goes offline before accepting the update. What release scenario must be rehearsed?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nExercise old and new application versions with their own cached assets and stored data. Verify that an update is activated only when its required assets are available and that existing study data remains usable.\n\n## Why it works\n\nA successful online refresh does not test the installed offline lifecycle. Hashed filenames help version assets, but cache cleanup, lazy routes, and data upgrades still need a coordinated policy.\n\n## Verify it\n\nInstall version A, study and edit a card, deploy B, then go offline before and after accepting B. Confirm route navigation, edits, and review history in both states.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-15f3-44d0-865a-b8f5e571a697",
+        "front": "A ticket says 'Improve note saving.' What concrete acceptance examples would make the work reviewable before implementation?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nSpecify visible behavior for a successful save, invalid input, a rejected write, and edits made while a save is pending. Include whether saved means local persistence, server acknowledgment, or both.\n\n## Why it works\n\nThe phrase alone leaves durability and recovery undefined. Examples connect the UI to the data contract and help choose tests. Add only the cases relevant to the feature's actual storage model.\n\n## Verify it\n\nFor each example, state the starting data, action, visible result, and stored result. A reviewer should be able to demonstrate pass or fail.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-f2e7-47f7-8556-b3deed4ed190",
+        "front": "A teammate says a new cache caused missing records because the issue appeared after deployment. What evidence is needed before treating that timing as the cause?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nReproduce the failure and compare the relevant path with and without the cache under the same data and request conditions. Inspect cache keys, invalidation, and underlying stored records.\n\n## Why it works\n\nTiming is a useful lead but does not distinguish a cache defect from a migration, permission change, or unrelated data problem. Preserve evidence and separate confirmed observations from hypotheses.\n\n## Verify it\n\nWrite a minimal reproduction and a test that fails for the isolated defect. Verify the proposed fix against that case and a normal cached request.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006007",
+    "cards": [
+      {
+        "id": "a2000000-f0d9-45c6-8df0-9aef264cebd0",
+        "front": "An EF Core handler loads a note using AsNoTracking(), changes its Title, and calls SaveChangesAsync(). Nothing is updated. Which missing relationship explains this?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe entity is not tracked by that context, so its property change is not detected for saving. Use a tracked entity for the edit or deliberately attach and mark the permitted changes.\n\n## Why it works\n\nDo not mark every incoming property modified just to make saving work. Keep ownership checks and an explicit list of editable fields at the write boundary.\n\n## Verify it\n\nSave through the handler, then read the note using a fresh context. Assert the new title and unchanged owner and ID.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-dbd6-4a76-847b-11cf1639d6c1",
+        "front": "Two EF Core queries run inside Task.WhenAll using the same DbContext. The app reports that a second operation started before the first completed. What should change?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nDo not run overlapping operations on one DbContext. Await them sequentially, or use separately scoped context instances when independent parallel operations are justified.\n\n## Why it works\n\nA context represents a unit of work and is not thread-safe. Separate contexts also mean separate tracking and transaction boundaries; they are not a drop-in way to make one atomic operation parallel.\n\n## Verify it\n\nRun the endpoint under repeated concurrent requests and verify that each request's context usage has no overlapping operations. Check that transaction requirements still hold.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-ee2e-4c73-8914-ab804ea9a2b2",
+        "front": "An EF Core note entity has a configured concurrency token. Saving a stale edit throws DbUpdateConcurrencyException. Why should the handler not simply retry the same values forever?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe conflict means the original version no longer matches, so the same attempt remains stale. Read the current state and apply the product's merge, reload, or user-resolution policy.\n\n## Why it works\n\nPreserve the user's draft and handle deletion as a possible conflict result. Only retry after establishing new original values and deciding which proposed changes are still appropriate.\n\n## Verify it\n\nLoad the note in two contexts, save one, then save the other. Verify the conflict response and that neither edit is silently discarded.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-105d-4488-80cf-6735de5b4f08",
+        "front": "An EF Core list query calls ToListAsync() before filtering by owner and taking 20 rows. Why can it be slow, and where should those operations usually occur?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nToListAsync materializes the query results. Apply the translatable owner filter, stable ordering, projection, and page bound to the query before materialization so the database returns the required rows.\n\n## Why it works\n\nLoading all records consumes transfer, memory, and processing time even when the final screen is small. Keep authorization scoping in the query and inspect generated SQL on the actual provider.\n\n## Verify it\n\nUse a large multi-user fixture. Inspect SQL and returned data to verify owner scoping and the page bound, then compare query time and allocated memory.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000006004",
+    "cards": [
+      {
+        "id": "a2000000-f2f6-44df-8d23-be51c75c70e5",
+        "front": "An ordinary C# repository method is async void SaveNote(). Its caller cannot await completion before returning success. What return type should represent this work?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nReturn Task for asynchronous work with no result, or Task<T> when a result is needed. Then await the returned task so completion and failure are observed.\n\n## Why it works\n\nasync void is mainly for event-handler signatures that require void. It does not give ordinary callers a task through which to await completion or catch asynchronous exceptions.\n\n## Verify it\n\nMake persistence wait and verify the caller has not returned success. Then make it fail and verify the caller observes the failure.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-6242-4bce-8e09-705aa74fe0cb",
+        "front": "An ASP.NET Core endpoint receives a CancellationToken but calls a database method without passing it onward. Why can work continue after the request is canceled?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nCancellation is cooperative. Receiving a token does not automatically connect every operation to it. Pass the token to APIs that accept it and observe it at appropriate points in your own work.\n\n## Why it works\n\nDo not assume cancellation reverses a write that already committed. Define the operation's completion and recovery behavior, and avoid reporting an expected cancellation as an unrelated server defect.\n\n## Verify it\n\nCancel before a controlled operation completes and verify it observes the token. Separately test cancellation after commit and confirm the persisted state remains consistent.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-1b6e-410d-80b0-85287ab46ff9",
+        "front": "An ASP.NET Core handler calls an I/O task's .Result to obtain its value. Why can this reduce throughput even when it does not deadlock?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe request thread blocks while waiting for I/O. Await the task through the call chain so the thread can serve other work while the operation is pending.\n\n## Why it works\n\nDeadlock behavior depends on the synchronization context, so 'always deadlocks' is an inaccurate explanation. The direct issue here is synchronous blocking and possible thread-pool starvation under load.\n\n## Verify it\n\nCompare a concurrent I/O-heavy load with blocking and awaited implementations. Check response latency, active threads, and error behavior rather than a single request alone.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-4fcc-4899-849b-8d766db8bc25",
+        "front": "An endpoint starts an unawaited task that uses its request-scoped DbContext, then returns. The task sometimes sees a disposed context. Which lifetime assumption is wrong?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nReturning ends the request scope; background work cannot depend on that scope remaining alive. Await request-owned work, or enqueue a durable job processed with its own service scope.\n\n## Why it works\n\nAn unobserved task also leaves failure handling and shutdown behavior undefined. Choose the background mechanism according to whether the work must survive process exit and be retried.\n\n## Verify it\n\nFinish the request while the work is paused. The chosen design must either have awaited completion or left a recoverable job that creates its own valid dependencies.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000004011",
+    "cards": [
+      {
+        "id": "a2000000-b5d6-4be7-84e0-852aecc258ee",
+        "front": "A new note appears in a list before saving. The database assigns its permanent ID. What identity should subsequent edit and delete requests use after the save succeeds?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nUse the permanent ID returned by the successful create operation. Replace or reconcile the temporary identity without creating another visible copy of the note.\n\n## Why it works\n\nList position and title are not reliable identities: positions move and titles can repeat. Keep the temporary-to-permanent mapping long enough to connect the pending UI item to its saved record.\n\n## Verify it\n\nCreate two notes with the same title, reorder them, and edit one. Verify only the intended saved record changes and no duplicate row appears after create completes.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-2ad4-4cc7-8093-060e38d7665f",
+        "front": "A learner adds a confirmation dialog before deleting a note. What should canceling the dialog change in stored data?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nNothing. Cancellation should close the confirmation and leave the note untouched. Perform the deletion only after confirmation and report success only after the write completes.\n\n## Why it works\n\nOpening a dialog is not permission to mutate data. Keep confirmation state separate from deletion state, and retain a useful recovery path if the confirmed write fails.\n\n## Verify it\n\nCancel, reload, and verify the note remains. Then confirm and verify it disappears after successful persistence. Finally reject the delete write and verify the note is recoverable.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-2b1c-4b4e-88b5-70dc84e8f275",
+        "front": "A create endpoint saves a note correctly, but the list still looks empty until the page is refreshed. Which part of the feature remains incomplete?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe visible list has not been reconciled with the successful write. Update it from the returned saved record or invalidate and reload the relevant query through the app's existing data pattern.\n\n## Why it works\n\nPersistence and displayed state are connected but separate responsibilities. Choose one clear reconciliation path so an optimistic item and a fetched item do not become duplicates.\n\n## Verify it\n\nCreate a note and verify it appears once without a full-page refresh. Reload and verify the same record remains once with the same permanent ID.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-a5a1-472b-86be-fef4babfe26f",
+        "front": "A required title is checked with title.length > 0. A user enters three spaces and creates a visually blank note. What rule should the validation apply?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nValidate the normalized title: trim leading and trailing whitespace, then require at least one remaining character. Persist the normalized value if trimming is the chosen product policy.\n\n## Why it works\n\nThe requirement concerns meaningful input, not whether the raw field contains any characters. Apply the same policy at the write boundary so requests outside the form cannot bypass it.\n\n## Verify it\n\nTry an empty string, spaces, and '  Meeting  '. The first two fail; the last stores 'Meeting' under this policy and remains correct after reload.",
+        "kind": "scenario"
+      }
+    ]
+  },
+  {
+    "id": "a0000000-0000-4000-8000-000000005011",
+    "cards": [
+      {
+        "id": "a2000000-7a78-441c-8150-ad24148dac25",
+        "front": "A task is selected for deletion while a filtered list is open. The handler deletes rows[selectedIndex]. A background refresh reorders rows before confirmation. What should the pending action capture?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nCapture the intended task's stable ID, not its current array position. Confirm and delete that identity, then handle a missing or changed record according to the app's policy.\n\n## Why it works\n\nUI positions are temporary views of data. The confirmation label and mutation should refer to the same record even if filters, sorting, or background updates change the surrounding list.\n\n## Verify it\n\nOpen confirmation, reorder the data, then confirm. Only the originally selected ID may be deleted; the record now at the old index must remain.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-2a53-4f0d-8b05-c991606dbbfa",
+        "front": "A profile PATCH contains only displayName, but the server replaces the entire row and erases bio. What must the update contract say about omitted fields?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nFor this partial-update contract, omitted fields stay unchanged. Apply only validated supplied fields; define explicitly whether null clears a field or is invalid.\n\n## Why it works\n\nDo not infer replacement semantics from a convenient object assignment. Required fields for creation may be optional in a partial update, while field-level validation still applies when they are supplied.\n\n## Verify it\n\nUpdate displayName on a row with a bio and verify the bio remains. Separately send an explicit null and confirm the documented clear-or-reject behavior.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-d7c6-4c25-80fd-0c1151fc241d",
+        "front": "An optimistic delete removes a note immediately. The write later fails, and the error handler restores an old snapshot of the whole list. Why can that lose unrelated recent changes?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nThe snapshot predates other successful edits or additions. Roll back only the failed operation against current state, or reconcile by refetching authoritative data while preserving pending work.\n\n## Why it works\n\nOptimistic operations can overlap. Track enough identity and operation state to undo the intended change without overwriting newer results. A whole-state reset assumes nothing else changed during the request.\n\n## Verify it\n\nDelete A, add B while the delete is pending, then reject A's deletion. A should return and B must remain, without duplicates.",
+        "kind": "scenario"
+      },
+      {
+        "id": "a2000000-cbd9-4ef6-80bf-18429cea61e7",
+        "front": "Deleting a note sets deleted_at. The main list hides it, but searching still finds it. Where should the active-record rule be reviewed?",
+        "back": "<!-- recall:teaching:v1 -->\n\n## The answer\n\nReview every query that exposes active notes, including search, counts, related views, and direct reads. Apply the intended deletion policy consistently at the repository or authorization boundary.\n\n## Why it works\n\nHiding a row in one component does not define its visibility everywhere. Restoration and audit views may intentionally include deleted records, so make those exceptions explicit rather than scattering inconsistent filters.\n\n## Verify it\n\nDelete a note, then check list, search, counts, and direct navigation. Also verify any deliberate trash or restoration view still behaves as designed.",
+        "kind": "scenario"
+      }
+    ]
+  }
+]

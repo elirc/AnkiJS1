@@ -52,16 +52,24 @@
     </p>
     <h2>Original Recall curriculum</h2>
     <p>
-      448 original cards: the first 128 core questions plus 160 engineering
+      880 original cards: 72 reviewed scenarios, 112 core questions, and 144 engineering
       scenarios covering SQL, distributed systems, APIs, security, TypeScript,
-      testing, observability, processes, deployment, and algorithms, plus 160
+      testing, observability, processes, and deployment, plus 160
       beginner cards teaching 80 ideas through original explanations, analogies,
-      examples, mistakes, and practice questions. Decks link to official
-      documentation for further study.
+      examples, mistakes, and practice questions, plus 200 follow-on cards
+      teaching 100 additional ideas in the Keep going collection. Another 192
+      original cards teach 96 C# and .NET web development lessons. These cover
+      C#, LINQ, async, ASP.NET Core, EF Core, security, web UIs, testing,
+      deployment, and a notes-app project path, using .NET 10 as the baseline.
+      The Keep going
+      lessons cover TypeScript, Python, debugging, testing, accessible interfaces,
+      HTTP APIs, databases, security, delivery, and real CRUD app problems. Decks link to
+      official documentation for further study; the lesson prose and examples
+      are original Recall material.
     </p>
     <h2>30 seconds of code</h2>
     <p>
-      2,355 cards are adapted from
+      1,991 cards are adapted from
       <a href="https://github.com/30-seconds/30-seconds-of-code"
         >30 seconds of code</a
       >, by its authors and contributors, under
@@ -77,17 +85,42 @@
       Adaptations include splitting articles into smaller question-and-answer
       units, adding recall prompts and code-completion exercises, removing
       embedded media and navigation, normalizing links and formatting, and
-      correcting the declaration in an asynchronous loop example. The answer
+      correcting the declaration in an asynchronous loop example. The quality review
+      also rewrites 14 examples for self-contained context, safe text rendering,
+      keyboard behavior, state semantics, and explicit edge cases. Source-site
+      code-tab wrappers are removed from portable Markdown. The answer
       reader also offers related beginner lessons and jargon definitions while
       preserving the full original answer and attribution. Sections requiring
       missing context, some obsolete APIs, and selected problematic examples
-      were excluded. Attribution does not imply endorsement of Recall.
+      were excluded, along with DSA, coding puzzles, and unrelated mathematical exercises. Attribution does not imply endorsement of Recall.
     </p>
     <p>
-      The adapted library contains 1,438 explanation cards and 917
+      The retained adapted base collection contains 1,211 explanation cards and 780
       code-completion cards. Related exercises are separated in the daily
       new-card queue.
     </p>
+    <h2>Expanded source library</h2>
+    <p>
+      Version 12 retains 4,163 topic-matched reference and knowledge-check cards.
+      Each answer links to its pinned source revision and retains its source license.
+      Selected source explanations and examples accompany knowledge checks; incomplete source fragments
+      and arbitrary missing-line drills are excluded. Attribution does not imply endorsement.
+    </p>
+    <p>
+      Version 13 adds 14,068 source-backed cards, including 552 three-part guided lessons.
+      Each guided lesson is counted once; its component sections are not repeated as
+      separate reference cards. Source section headings remain visible, site-only markup
+      is normalized, and selected wording is clarified. The 32 additional engineering
+      missions are original assignments. Structural checks cover the complete library;
+      semantic review is sampled, and imported examples are not all independently executed.
+    </p>
+    <ul>
+      <li>MDN contributors: <a href="/licenses/library-mdn--content.txt">CC BY-SA 2.5 prose; source code licenses</a>. Adapted MDN prose retains CC BY-SA 2.5.</li>
+      <li>Microsoft and contributors: <a href="/licenses/library-dotnet--docs.txt">C# and .NET</a>, <a href="/licenses/library-dotnet--AspNetCore.Docs.txt">ASP.NET Core</a>, and <a href="/licenses/library-dotnet--EntityFramework.Docs.txt">EF Core</a>, CC BY 4.0 prose and MIT code.</li>
+      <li>Meta and React contributors: <a href="/licenses/library-reactjs--react.dev.txt">CC BY 4.0</a>.</li>
+      <li>GitHub and contributors: <a href="/licenses/library-github--docs.txt">CC BY 4.0 prose and MIT code</a>.</li>
+      <li>freeCodeCamp and contributors: <a href="/licenses/library-freeCodeCamp--freeCodeCamp.txt">BSD-3-Clause</a>.</li>
+    </ul>
     <h2>How this library is maintained</h2>
     <p>
       The project includes the source revision, full license, build scripts, and

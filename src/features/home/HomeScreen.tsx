@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import {
   ArrowRight,
+  BookOpen,
   Check,
   Clock3,
+  Code2,
   Flame,
   Inbox,
   Layers,
@@ -21,6 +23,28 @@ import { listInbox } from "../../db/repos/noteRepo";
 import { getDeckInfo, curriculum } from "../../data/curriculum";
 import { useNow } from "../../lib/useNow";
 import { CreateDeckDialog } from "../decks/CreateDeckDialog";
+import { PracticeSummary } from "../practice/PracticeSummary";
+
+const learningPaths = [
+  {
+    to: "/decks?track=Start+here",
+    icon: BookOpen,
+    label: "First-week coding",
+    text: "Plain-language cards for the web, terminal, Git, and app structure.",
+  },
+  {
+    to: "/dotnet",
+    icon: Code2,
+    label: "C# to web app",
+    text: "A focused .NET path from syntax to APIs, persistence, and shipping.",
+  },
+  {
+    to: "/practice",
+    icon: Target,
+    label: "Evidence missions",
+    text: "Guided work samples for debugging, reviewing, migrations, and release readiness.",
+  },
+];
 
 export function HomeScreen() {
   const navigate = useNavigate();
@@ -58,7 +82,7 @@ export function HomeScreen() {
           <h1>
             A little better, every day<span className="text-primary">.</span>
           </h1>
-          <p>Turn your spare minutes into your next engineering superpower.</p>
+          <p>Practice building real web apps: forms, APIs, databases, and reliable CRUD flows.</p>
         </div>
         <span className="date-label">
           {now.toLocaleDateString([], {
@@ -194,6 +218,7 @@ export function HomeScreen() {
           </Link>
         </section>
       </div>
+      <PracticeSummary />
       <Link className="beginner-banner" to="/decks?track=Start+here">
         <span>
           <strong>New to coding? Start here.</strong>
@@ -204,6 +229,41 @@ export function HomeScreen() {
         </span>
         <ArrowRight size={20} aria-hidden="true" />
       </Link>
+      <Link className="next-step-link" to="/decks?track=Keep+going">
+        Ready for the next step? Explore 10 practical decks
+        <ArrowRight size={16} aria-hidden="true" />
+      </Link>
+      <Link className="dotnet-banner" to="/dotnet">
+        <span className="dotnet-banner-mark" aria-hidden="true">C#</span>
+        <span><strong>Your C# & .NET web development path</strong><small>12 decks. From your first line to a working app. Study in 2, 5, or 10 minutes.</small></span>
+        <ArrowRight size={20} aria-hidden="true" />
+      </Link>
+      <section className="pathway-panel" aria-labelledby="pathway-heading">
+        <div className="section-heading">
+          <div>
+            <h2 id="pathway-heading">Choose a path</h2>
+            <p>More ways to study than one big queue.</p>
+          </div>
+          <Link className="text-link" to="/decks">
+            Browse library
+            <ArrowRight size={15} />
+          </Link>
+        </div>
+        <div className="pathway-grid">
+          {learningPaths.map((path) => (
+            <Link className="pathway-card" to={path.to} key={path.to}>
+              <span className="pathway-icon">
+                <path.icon size={18} aria-hidden="true" />
+              </span>
+              <span>
+                <strong>{path.label}</strong>
+                <small>{path.text}</small>
+              </span>
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          ))}
+        </div>
+      </section>
       <section className="stats-row" aria-label="Study statistics">
         <div className="stat-item">
           <span className="stat-icon mint">
@@ -260,7 +320,7 @@ export function HomeScreen() {
               Your learning decks{" "}
               <span className="count-pill">{data.summaries.length}</span>
             </h2>
-            <p>A well-rounded toolkit for the engineer you’re becoming.</p>
+            <p>Forms, APIs, databases, testing, and shipping web apps.</p>
           </div>
           <Link className="text-link" to="/decks">
             View all decks

@@ -957,6 +957,98 @@ a {
   gap: 7px;
   font-size: 10px;
 }
+.practice-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px;
+  margin: 24px 0;
+  background: #eaf2ed;
+  border: 1px solid #cfdfd4;
+  border-radius: 16px;
+  color: #24543f;
+}
+.practice-banner > span {
+  flex: 1;
+  min-width: 0;
+}
+.practice-banner strong,
+.practice-banner small {
+  display: block;
+}
+.practice-banner strong {
+  font-size: 17px;
+  margin-bottom: 5px;
+}
+.practice-banner small {
+  line-height: 1.7;
+  color: #51665a;
+}
+.practice-banner > svg {
+  flex-shrink: 0;
+}
+.pathway-panel {
+  margin: 22px 0 24px;
+}
+.pathway-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.pathway-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  min-width: 0;
+  min-height: 118px;
+  padding: 17px;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 11px;
+  color: #405045;
+  transition:
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.pathway-card:hover {
+  border-color: #cbd7c4;
+  transform: translateY(-2px);
+  box-shadow: 0 7px 19px #49593a08;
+}
+.pathway-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #f3f6ef;
+  color: #5f815f;
+}
+.pathway-card > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.pathway-card strong,
+.pathway-card small {
+  display: block;
+}
+.pathway-card strong {
+  font-size: 13px;
+  font-weight: 650;
+  margin-bottom: 6px;
+}
+.pathway-card small {
+  color: #7a8579;
+  font-size: 10px;
+  line-height: 1.7;
+}
+.pathway-card > svg {
+  color: #aab5a4;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
 .search-field {
   display: flex;
   align-items: center;
@@ -1332,8 +1424,6 @@ a {
   color: #69785b;
 }
 .study-actions {
-  position: sticky;
-  bottom: 0;
   background: var(--color-background);
   padding: 17px 0 max(15px, env(safe-area-inset-bottom));
   margin-top: 4px;
@@ -1686,6 +1776,9 @@ a {
   .deck-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .pathway-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .deck-card {
     padding: 20px;
   }
@@ -1903,6 +1996,20 @@ a {
   }
   .deck-grid {
     gap: 12px;
+  }
+  .pathway-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .pathway-card {
+    min-height: auto;
+  }
+  .practice-banner {
+    padding: 18px 14px;
+    gap: 10px;
+  }
+  .practice-banner strong {
+    font-size: 15px;
   }
   .deck-card {
     padding: 16px;
@@ -2501,6 +2608,118 @@ a {
 }
 .beginner-banner svg {
   flex-shrink: 0;
+}
+.next-step-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 8px 2px;
+  margin: -12px 0 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #34583e;
+}
+.next-step-link svg {
+  flex-shrink: 0;
+}
+.next-step-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.dotnet-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid #ddd2ee;
+  border-radius: 14px;
+  background: #f3eef9;
+  color: #553c78;
+}
+.dotnet-banner-mark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #e6daf4;
+  font-size: 20px;
+  font-weight: 750;
+}
+.dotnet-banner > span:nth-child(2) { flex: 1; min-width: 0; }
+.dotnet-banner strong, .dotnet-banner small { display: block; }
+.dotnet-banner strong { font-size: 15px; line-height: 1.5; }
+.dotnet-banner small { margin-top: 5px; font-size: 13px; line-height: 1.7; color: #6a597e; }
+.dotnet-banner > svg { flex-shrink: 0; }
+.dotnet-banner:hover { border-color: #aa90cd; }
+.dotnet-screen { display: grid; gap: 30px; }
+.dotnet-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 1fr);
+  gap: 32px;
+  padding: 32px;
+  border: 1px solid #e1d7ed;
+  border-radius: 20px;
+  background: linear-gradient(125deg, #f2edf8, #faf9f5);
+}
+.dotnet-intro { align-self: center; min-width: 0; }
+.dotnet-kicker { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #6b4c91; }
+.dotnet-intro h1 { margin: 18px 0; font-size: clamp(28px, 3vw, 42px); line-height: 1.2; letter-spacing: -1.2px; font-weight: 650; color: #352346; }
+.dotnet-intro > p { max-width: 48ch; font-size: 16px; line-height: 1.8; color: #655773; }
+.dotnet-facts { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0 18px; font-size: 13px; color: #665874; }
+.dotnet-facts strong { font-size: 23px; color: #49325e; margin-right: 3px; }
+.dotnet-edition { display: block; font-size: 12px; line-height: 1.7; color: #6a597e; }
+.dotnet-session { align-self: center; min-width: 0; padding: 24px; border: 1px solid #e5ddeb; border-radius: 15px; background: #ffffffd9; }
+.dotnet-session .eyebrow { color: #6b4c91; font-size: 10px; }
+.dotnet-session h2 { font-size: 22px; font-weight: 650; margin: 10px 0; color: #352346; }
+.dotnet-session > p { font-size: 14px; color: #655773; line-height: 1.7; }
+.dotnet-session .time-options { display: flex; gap: 8px; margin: 20px 0 12px; }
+.dotnet-session .time-options button { flex: 1; min-height: 44px; font-size: 13px; padding: 0 7px; background: #faf8fc; border-color: #ded4e9; color: #655773; }
+.dotnet-session .time-options button[aria-pressed="true"] { background: #f0e8f8; border-color: #7d56a5; box-shadow: 0 0 0 1px #7d56a5; color: #553778; }
+.dotnet-start { width: 100%; min-height: 48px; background: #65418b; border-color: #65418b; box-shadow: none; }
+.dotnet-start:hover { background: #51316f; }
+.dotnet-session p.dotnet-session-note { font-size: 12px; margin: 12px 0; }
+.dotnet-session .subtle-link { display: inline-flex; min-height: 44px; align-items: center; gap: 7px; font-size: 12px; line-height: 1.6; }
+.dotnet-session .subtle-link svg { flex-shrink: 0; }
+.dotnet-how { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; padding: 0 4px; }
+.dotnet-how > div { display: flex; gap: 10px; }
+.dotnet-how > div > span { color: #8d73a6; font-size: 12px; line-height: 1.8; font-weight: 650; }
+.dotnet-how p { color: #74706d; font-size: 13px; line-height: 1.8; }
+.dotnet-how strong { display: block; font-weight: 600; color: #4d414f; }
+.dotnet-path-heading { margin-bottom: 0; padding-top: 8px; }
+.dotnet-path-heading .text-link { min-height: 44px; }
+.dotnet-stage-heading { display: flex; align-items: flex-start; gap: 13px; margin-bottom: 18px; }
+.dotnet-stage-number { flex-shrink: 0; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #eee6f5; color: #6b4c91; font-size: 14px; font-weight: 650; }
+.dotnet-stage-heading h2 { font-size: 20px; font-weight: 600; color: #493951; }
+.dotnet-stage-heading p { font-size: 13px; line-height: 1.8; margin-top: 5px; color: #78706e; }
+.dotnet-stage .deck-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dotnet-footer-note { border-top: 1px solid #e6deeb; padding-top: 20px; color: #776a7e; font-size: 13px; line-height: 1.8; }
+.dotnet-footer-note a { display: flex; align-items: center; gap: 7px; min-height: 44px; color: #65418b; }
+@media (max-width: 1190px) {
+  .dotnet-hero { gap: 24px; padding: 24px; }
+}
+@media (max-width: 1000px) {
+  .dotnet-hero { grid-template-columns: minmax(0, 1fr); }
+  .dotnet-intro > p { max-width: none; }
+  .dotnet-how { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+}
+@media (max-width: 600px) {
+  .dotnet-screen { gap: 26px; }
+  .dotnet-banner { padding: 16px; gap: 10px; }
+  .dotnet-banner-mark { width: 36px; height: 40px; font-size: 17px; }
+  .dotnet-hero { padding: 20px 16px; gap: 24px; border-radius: 15px; }
+  .dotnet-intro h1 { font-size: 28px; letter-spacing: -0.8px; margin: 14px 0; }
+  .dotnet-intro > p, .dotnet-edition { display: none; }
+  .dotnet-facts { gap: 8px 16px; margin: 12px 0 0; }
+  .dotnet-facts strong { font-size: 20px; }
+  .dotnet-session { padding: 18px 14px; }
+  .dotnet-session h2 { font-size: 21px; }
+  .dotnet-session .time-options button { font-size: 12px; gap: 4px; padding: 0 5px; white-space: nowrap; }
+  .dotnet-stage .deck-grid { grid-template-columns: minmax(0, 1fr); }
+  .dotnet-path-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
 }
 @media (max-width: 600px) {
   .explanation-heading {

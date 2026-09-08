@@ -4,6 +4,7 @@ import { ArrowRight, Check, Flame, TrendingUp } from "lucide-react";
 import { getDashboard } from "../../db/repos/dashboardRepo";
 import { DeckIcon } from "../../components/DeckCard";
 import { useNow } from "../../lib/useNow";
+import { PracticeSummary } from "../practice/PracticeSummary";
 export function ProgressScreen() {
   const now = useNow();
   const data = useLiveQuery(() => getDashboard(now), [now.getTime()]);
@@ -19,6 +20,7 @@ export function ProgressScreen() {
           <p>Every review is a small investment in what comes next.</p>
         </div>
       </div>
+      <PracticeSummary />
       <div className="stats-row">
         <div className="stat-item">
           <span className="stat-icon mint">
