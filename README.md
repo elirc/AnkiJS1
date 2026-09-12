@@ -1,6 +1,6 @@
 # Recall — Engineering practice, in your pocket
 
-A local-first spaced-repetition web app with **21,102 practical web development flashcards across 75 decks** and 48 hands-on engineering missions. The card library includes 72 authored debugging scenarios and 828 guided lessons. No API key or account is required. The library focuses on forms, APIs, SQL, authentication, validation, testing, and shipping CRUD apps. LeetCode and DSA exercises are excluded.
+A local-first spaced-repetition web app with **2,871 practical web development flashcards across 75 decks** and 48 hands-on engineering missions. The card library includes 72 authored debugging scenarios and 552 guided lesson cards. No API key or account is required. The library focuses on forms, APIs, SQL, authentication, validation, testing, and shipping CRUD apps. LeetCode and DSA exercises are excluded.
 
 ## Start the app
 
@@ -32,7 +32,7 @@ The development server also prints your local network address for testing on the
 
 ## Included toolkit
 
-The library is **about 22× the original 128-card version**:
+The library is **2,871 cards across 75 decks**:
 
 - **808 original cards:** core SWE foundations, realistic engineering scenarios, 160 beginner cards, 200 follow-on cards, and 192 C#/.NET cards.
 - **Start here:** ten numbered beginner decks covering your first program, control flow, collections, async and debugging, web pages, React, databases, Git, CRUD features, and reliable services.
@@ -43,7 +43,7 @@ The library is **about 22× the original 128-card version**:
 
 Revealing an answer opens an explanation reader. **Next explanation**, Previous, and the explanation picker let you try another teaching approach without recording a review. All 552 guided cards have five views: plain English, a worked example, an analogy, a common mistake, and a practice prompt with a separate **Check my answer** button. Rate the card based on what you remembered before revealing it.
 
-Existing installations receive the CRUD curriculum automatically on the next app load after updating. Version 6 removes retired bundled puzzle cards, adds the new practical lessons, and preserves personal content and progress on retained cards.
+Existing installations receive the CRUD curriculum automatically on the next app load after updating. Version 6 removes retired bundled puzzle cards, adds the new practical lessons, and preserves personal content and progress on retained cards. Version 15 removes the generated source-derived library the same way; see [Version 15](#version-15--the-curated-library).
 
 Older cards retain their complete original answers and source credits. The reader adds a related beginner lesson, code view, or jargon translations where applicable; these are supporting examples, not a new bespoke solution to every advanced exercise. Use **Full original answer** to see all of the original detail. Add your own explanations in the card editor and preview them before saving. Teaching pages are stored with the Markdown answer, so they travel with existing backups and sync.
 
@@ -117,19 +117,13 @@ python scripts/build-curriculum.py
 
 The builder downloads only the declared pinned public source revision when its local cache is absent. It does not execute downloaded examples. Generated IDs depend on source identity, not card position. `src/data/content-report.json` records the content totals and source provenance. The `c0000000` and `e0000000` UUID prefixes and final variant digit identify related adapted exercises and guided cards; preserve these IDs when maintaining the curriculum. Curriculum v6 removes 434 bundled algorithm/puzzle cards and adds 38 guided CRUD cards. Retained card identities, deck membership, edits, and review schedules stay unchanged. Explicit retirement IDs also apply to older backups and cloud pulls; personal cards remain visible. The builder filters after assigning the original deck boundaries, so repeated builds cannot move retained cards between decks. `scripts/crud-content-policy.json` records the source exclusions.
 
-### Current expansion (v13)
+### Version 15 — the curated library
 
-Version 13 adds **14,068 distinct source-backed cards**, including **552 three-part guided lessons**, and **32 original engineering missions**. Overall cards, guided lessons, and missions are each three times their v12 totals; individual deck growth varies with topic coverage. New content ships in 62 lazy-loaded packs below 600 KB each. Existing card identities and saved progress remain intact.
+Version 15 retires the generated source-derived library that shipped as curriculum versions 12 through 14. It was too large to install and study on a phone in short sessions, and its quality was uneven: selection was automatic, so structural checks covered all of it while semantic review only ever covered a sample. The curated set is the intended product. What ships now is **2,871 cards across 75 decks**: 2,799 retained base cards plus the 72 authored scenarios, which travel in a single lazy-loaded pack of about 67 KB.
 
-The review removes site templates, navigation-only fragments, incomplete includes, and off-topic administration material. It normalizes documentation links, preserves code, and keeps source credits visible across explanation pages. Structural checks cover the full library; semantic review is sampled, not a claim that every imported example has been executed. See [the comprehensive expansion review](docs/COMPREHENSIVE-EXPANSION.md).
+On upgrade, an existing installation drops the retired cards, whose IDs all begin with `a3000000-` or `a4000000-`. A retired card you never edited becomes a tombstone, so it stops appearing in study and library views while remaining in backups with its history. A retired card you rewrote yourself is kept: the migration compares the stored text against the shipped original and its recorded revisions rather than classifying cards by their content. No deck is removed: the retired cards lived in decks the curated library still uses. Review history is never rewritten — ratings and review logs for retained and personal cards are untouched, and retirement runs inside the same transaction as installation, so an interrupted upgrade rolls back.
 
-`npm run content:expand-all` rebuilds this selection from the pinned local archives and source cache. Normal app builds use the generated packs without downloading documentation. Run `npm run content:check` and `npm run content:runtime` after content changes.
-
-### Earlier expansion (v12)
-
-Version 12 includes 4,163 source-backed additions to the retained v10 library: **2.45 times the previous content**. Pinned material from MDN, Microsoft, React, GitHub, and freeCodeCamp is selected for topic fit and self-contained context, with attribution and license texts available offline. The 22 new chunks are each kept below 600 KB. Existing card identities and saved progress remain intact. The final version marker also applies corrected TypeScript wording to installations that loaded the v11 draft.
-
-`npm run content:build` rebuilds the inventory using the checked-in packs. `npm run content:expand` refreshes selection from the pinned candidate cache under `artifacts`; it requires the existing source cache and `scripts/build-section-expansion.py` candidate output. Run `npm run content:check` and `npm run content:runtime` after any content changes. See [the expansion review](docs/LIBRARY-EXPANSION.md) for scope and limitations.
+`npm run content:build` rebuilds the scenario pack and manifest from the checked-in authored source. Normal app builds use the generated pack and need no download. Run `npm run content:check` and `npm run content:runtime` after content changes.
 
 ### Reviewed scenarios (v10)
 

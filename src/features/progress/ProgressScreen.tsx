@@ -13,11 +13,8 @@ export function ProgressScreen() {
     <div className="space-y-6">
       <div className="page-heading">
         <div>
-          <div className="eyebrow">PROGRESS OVER PERFECTION</div>
-          <h1>
-            Look how far you’ll go<span className="text-primary">.</span>
-          </h1>
-          <p>Every review is a small investment in what comes next.</p>
+          <h1>Progress</h1>
+          <p>Reviews, streak, activity, and where each deck stands.</p>
         </div>
       </div>
       <PracticeSummary />
@@ -61,7 +58,7 @@ export function ProgressScreen() {
       </div>
       <section className="content-panel">
         <div className="panel-heading">
-          <h2>Showing up adds up</h2>
+          <h2>Activity</h2>
           <span className="text-sm text-muted">Last 28 days</span>
         </div>
         <div className="activity-grid">
@@ -85,7 +82,7 @@ export function ProgressScreen() {
       </section>
       <section className="content-panel">
         <div className="panel-heading">
-          <h2>Your skill toolkit</h2>
+          <h2>Decks</h2>
           <span className="text-sm text-muted">Cards in the review stage</span>
         </div>
         <div className="skill-list">

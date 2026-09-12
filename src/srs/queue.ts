@@ -2,11 +2,11 @@ import type { Card, Deck } from "../db/schema";
 import { siblingKey } from "./siblings";
 
 function byDueAsc(a: Card, b: Card): number {
-  return new Date(a.due).getTime() - new Date(b.due).getTime();
+  return Date.parse(a.due) - Date.parse(b.due);
 }
 
 function byCreatedAsc(a: Card, b: Card): number {
-  return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+  return Date.parse(a.created_at) - Date.parse(b.created_at);
 }
 
 export function buildQueue(
@@ -15,39 +15,61 @@ export function buildQueue(
   newStudiedToday: number,
   now: Date,
 ): Card[] {
-  const active = cards.filter(
-    (card) =>
-      card.deck_id === deck.id && card.deleted_at === null && !card.suspended,
-  );
+  return buildQueues(cards, [deck], new Map([[deck.id, newStudiedToday]]), now).get(deck.id) ?? [];
+}
+
+// One pass over the library serves every deck: grouping cards and computing the
+// practiced-family set once instead of once per deck.
+export function buildQueues(
+  cards: Card[],
+  decks: Deck[],
+  newStudiedToday: Map<string, number>,
+  now: Date,
+): Map<string, Card[]> {
   const nowMs = now.getTime();
-  const dueLearning = active
-    .filter(
-      (card) =>
-        (card.state === "learning" || card.state === "relearning") &&
-        new Date(card.due).getTime() <= nowMs,
-    )
-    .sort(byDueAsc);
-  const dueReviews = active
-    .filter(
-      (card) =>
-        card.state === "review" && new Date(card.due).getTime() <= nowMs,
-    )
-    .sort(byDueAsc);
-  const remainingNew = Math.max(0, deck.new_per_day - newStudiedToday);
-  const practiced = new Set(cards.filter((card) => card.state !== "new" || card.reps > 0).map(siblingKey));
-  const seen = new Set<string>();
-  const newCards = active
-    .filter((card) => card.state === "new")
-    // Revisit an eligible familiar idea before moving to another new concept.
-    .sort((a, b) => Number(practiced.has(siblingKey(b))) - Number(practiced.has(siblingKey(a))) || byCreatedAsc(a, b))
-    .filter((card) => {
-      const key = siblingKey(card);
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    })
-    .slice(0, remainingNew);
-  return [...dueLearning, ...dueReviews, ...newCards];
+  const byDeck = new Map<string, Card[]>(decks.map((deck) => [deck.id, []]));
+  for (const card of cards) {
+    if (card.deleted_at !== null || card.suspended) continue;
+    byDeck.get(card.deck_id)?.push(card);
+  }
+  let practiced: Set<string> | undefined;
+  const queues = new Map<string, Card[]>();
+  for (const deck of decks) {
+    const dueLearning: Card[] = [];
+    const dueReviews: Card[] = [];
+    const fresh: Card[] = [];
+    for (const card of byDeck.get(deck.id) ?? []) {
+      if (card.state === "new") fresh.push(card);
+      else if (Date.parse(card.due) <= nowMs)
+        (card.state === "review" ? dueReviews : dueLearning).push(card);
+    }
+    dueLearning.sort(byDueAsc);
+    dueReviews.sort(byDueAsc);
+    const remainingNew = Math.max(0, deck.new_per_day - (newStudiedToday.get(deck.id) ?? 0));
+    let newCards: Card[] = [];
+    if (remainingNew > 0 && fresh.length > 0) {
+      practiced ??= new Set(
+        cards.filter((card) => card.state !== "new" || card.reps > 0).map(siblingKey),
+      );
+      const familiar = practiced;
+      const keys = new Map(fresh.map((card) => [card.id, siblingKey(card)]));
+      const seen = new Set<string>();
+      newCards = fresh
+        // Revisit an eligible familiar idea before moving to another new concept.
+        .sort((a, b) =>
+          Number(familiar.has(keys.get(b.id)!)) - Number(familiar.has(keys.get(a.id)!)) ||
+          byCreatedAsc(a, b))
+        .filter((card) => {
+          const key = keys.get(card.id)!;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        })
+        .slice(0, remainingNew);
+    }
+    queues.set(deck.id, [...dueLearning, ...dueReviews, ...newCards]);
+  }
+  return queues;
 }
 
 // Prioritize due work globally; alternate new cards between decks for variety.

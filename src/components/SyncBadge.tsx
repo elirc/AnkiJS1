@@ -26,7 +26,7 @@ export function SyncBadge() {
       </span>
     );
   const label = offline
-    ? `Offline - ${pending} pending`
+    ? `Offline · ${pending} pending`
     : state.phase === "error"
       ? "Sync error"
       : syncing

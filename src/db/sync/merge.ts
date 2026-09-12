@@ -78,6 +78,8 @@ export function mergeCard(
   };
 }
 
+// Review logs are append-only and never edited, so an existing local log is kept
+// as-is. If logs ever become editable, this needs a timestamp comparison.
 export function mergeReviewLog(
   local: ReviewLog | undefined,
   remoteRow: RemoteRow<ReviewLog>,

@@ -21,7 +21,25 @@ describe('InboxScreen', () => {
 
   it('shows the empty state when the inbox is clear', async () => {
     renderInbox();
-    expect(await screen.findByText(/Inbox zero/i)).toBeInTheDocument();
+    expect(await screen.findByText(/No notes in the inbox/i)).toBeInTheDocument();
+  });
+
+  it('asks before deleting a note and deletes only after confirmation', async () => {
+    const user = userEvent.setup();
+    const note = await captureNote('A note to remove.');
+    renderInbox();
+
+    await user.click(await screen.findByRole('button', { name: /^Delete$/ }));
+    const dialog = screen.getByRole('dialog', { name: /Delete this note/ });
+    expect(dialog).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect((await db.notes.get(note.id))?.deleted_at).toBeNull();
+
+    await user.click(screen.getByRole('button', { name: /^Delete$/ }));
+    await user.click(screen.getByRole('button', { name: 'Delete note' }));
+    await waitFor(async () => expect((await db.notes.get(note.id))?.deleted_at).not.toBeNull());
+    expect(await screen.findByText(/No notes in the inbox/i)).toBeInTheDocument();
   });
 
   it('lists a captured note and archives it out of the inbox', async () => {
@@ -33,7 +51,7 @@ describe('InboxScreen', () => {
     await user.click(screen.getByRole('button', { name: /Archive/i }));
 
     await waitFor(() => expect(screen.queryByText('Spaced repetition beats cramming.')).not.toBeInTheDocument());
-    expect(await screen.findByText(/Inbox zero/i)).toBeInTheDocument();
+    expect(await screen.findByText(/No notes in the inbox/i)).toBeInTheDocument();
     expect((await db.notes.toArray())[0]?.status).toBe('archived');
   });
 

@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
-import { Sparkles } from 'lucide-react';
+import { Inbox } from 'lucide-react';
 
 export function EmptyState({
   title,
   action,
-  icon: Icon = Sparkles,
+  icon: Icon = Inbox,
 }: {
   title: string;
   action?: ReactNode;

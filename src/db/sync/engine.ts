@@ -139,29 +139,39 @@ async function pushOutbox(uid: string): Promise<void> {
   }
 }
 
+export const pullPageSize = 500;
+
+// Keyset pagination over (server_updated_at, id). A batched upsert stamps every row
+// with the same server_updated_at, so paging on the timestamp alone skips rows that
+// share the boundary value beyond one page. The id tie-breaker makes the cursor exact.
 async function pullRemote(uid: string): Promise<void> {
   const client = getSupabaseClient();
   if (!client) return;
   for (const tableName of pullOrder) {
     let cursor = (await db.sync_meta.get(`cursor:${tableName}`))?.value ?? '1970-01-01T00:00:00.000Z';
+    let cursorId = (await db.sync_meta.get(`cursor_id:${tableName}`))?.value ?? '';
     let keepGoing = true;
     while (keepGoing) {
-      const { data, error } = await client
-        .from(tableName)
-        .select('*')
-        .eq('user_id', uid)
-        .gt('server_updated_at', cursor)
+      const query = client.from(tableName).select('*').eq('user_id', uid);
+      const { data, error } = await (cursorId
+        ? query.or(`server_updated_at.gt.${cursor},and(server_updated_at.eq.${cursor},id.gt.${cursorId})`)
+        : query.gt('server_updated_at', cursor))
         .order('server_updated_at', { ascending: true })
-        .limit(500);
+        .order('id', { ascending: true })
+        .limit(pullPageSize);
       if (error) throw error;
       const rows = (data ?? []) as RemoteRow<Deck | Note | Card | ReviewLog>[];
       await mergeRows(tableName, rows);
-      const last = rows.at(-1)?.server_updated_at;
-      if (last) {
-        cursor = last;
-        await db.sync_meta.put({ key: `cursor:${tableName}`, value: cursor });
+      const last = rows.at(-1);
+      if (last?.server_updated_at) {
+        cursor = last.server_updated_at;
+        cursorId = last.id;
+        await db.sync_meta.bulkPut([
+          { key: `cursor:${tableName}`, value: cursor },
+          { key: `cursor_id:${tableName}`, value: cursorId },
+        ]);
       }
-      keepGoing = rows.length === 500;
+      keepGoing = rows.length === pullPageSize;
     }
   }
 }

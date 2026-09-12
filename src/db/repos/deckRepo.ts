@@ -84,12 +84,7 @@ export async function deckCounts(
     (card) => card.deleted_at === null && !card.suspended,
   );
   const due = cards.filter(
-    (card) =>
-      card.state !== "new" &&
-      (card.state === "learning" ||
-        card.state === "relearning" ||
-        card.state === "review") &&
-      new Date(card.due).getTime() <= now.getTime(),
+    (card) => card.state !== "new" && Date.parse(card.due) <= now.getTime(),
   ).length;
   const study = await loadStudy(id, now);
   const new_available = study.queue.filter(

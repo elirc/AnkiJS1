@@ -3,6 +3,7 @@ import { sectionExpansionVersion } from "../data/section-expansion";
 import { newCardFields } from "../srs/scheduler";
 import { db, type Card, type Deck, type SyncTableName } from "./schema";
 import { retireLegacyCurriculum } from "./retiredCurriculum";
+import { installTimestamp } from "./retiredLibrary";
 
 export const curriculumVersionKey = `starter_curriculum_v${sectionExpansionVersion}`;
 
@@ -23,7 +24,8 @@ export async function installStarterDecks(onProgress?: (progress: CurriculumProg
     db.outbox,
     db.sync_meta,
     async () => {
-      const timestamp = "2026-01-01T00:00:00.000Z";
+      // Retirement relies on this exact timestamp to tell shipped text from a personal edit.
+      const timestamp = installTimestamp;
       const existingDecks = new Map(
         (await db.decks.toArray()).map((deck) => [deck.id, deck]),
       );

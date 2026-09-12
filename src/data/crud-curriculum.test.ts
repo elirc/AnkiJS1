@@ -3,8 +3,7 @@ import { curriculum, loadStarterCards } from "./curriculum";
 import retirement from "./retired-curriculum.json";
 import beginner from "./teaching-lessons.json";
 import practical from "./practical-lessons.json";
-import library from "./library-expansion-manifest.json";
-import comprehensive from "./comprehensive-manifest.json";
+import { sectionAdditionCount } from "./section-expansion";
 import { parseAnswerPages } from "../teaching/answers";
 
 describe("practical CRUD content", () => {
@@ -38,11 +37,9 @@ describe("practical CRUD content", () => {
         expect(parseAnswerPages(found.back)).toHaveLength(5);
       }
     }
-    for (const name of ["Build your first CRUD", "Fix real CRUD"]) {
+    for (const [name, authored] of [["Build your first CRUD", 16], ["Fix real CRUD", 20]] as const) {
       const deck = curriculum.find(d => d.name.includes(name))!;
-      const additions = library.sections.find(section => section.id === deck.id)!.added
-        + comprehensive.sections.find(section => section.id === deck.id)!.added;
-      expect(deck.cardCount).toBe((name.startsWith("Build") ? 20 : 24) + additions);
+      expect(deck.cardCount).toBe(authored + sectionAdditionCount(deck.id));
     }
   });
 });

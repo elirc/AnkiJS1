@@ -1,7 +1,7 @@
 {
-  "totalCards": 21102,
+  "totalCards": 2871,
   "originalCards": 880,
-  "adaptedCards": 20222,
+  "adaptedCards": 1991,
   "beginnerCards": 160,
   "practicalCards": 200,
   "dotnetCards": 192,
@@ -22,20 +22,13 @@
     "outside practical CRUD scope": 364
   },
   "baseCards": 2799,
-  "retrievalCards": 0,
-  "curriculumVersion": 13,
+  "curriculumVersion": 15,
   "scenarioCards": 72,
   "retiredRetrievalCards": 10810,
   "baseAdaptedCards": 1991,
-  "libraryCards": 18231,
-  "librarySources": {
-    "https://github.com/dotnet/AspNetCore.Docs": 1462,
-    "https://github.com/dotnet/EntityFramework.Docs": 244,
-    "https://github.com/dotnet/docs": 4021,
-    "https://github.com/freeCodeCamp/freeCodeCamp": 642,
-    "https://github.com/github/docs": 1593,
-    "https://github.com/mdn/content": 9809,
-    "https://github.com/reactjs/react.dev": 460
-  },
-  "guidedLessons": 828
+  "guidedLessons": 552,
+  "retiredLibraryPrefixes": [
+    "a3000000-",
+    "a4000000-"
+  ]
 }

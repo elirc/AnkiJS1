@@ -8,6 +8,10 @@ import {
   teachingMarker,
 } from "./answers";
 import { curriculum, loadStarterCards } from "../data/curriculum";
+import {
+  loadSectionExpansion,
+  sectionAdditionCount,
+} from "../data/section-expansion";
 
 describe("beginner explanations", () => {
   it("parses explicitly authored pages without splitting code samples or ordinary imported Markdown", () => {
@@ -87,7 +91,19 @@ describe("beginner explanations", () => {
     const beginnerDecks = curriculum.filter((d) => d.track === "Start here");
     expect(beginnerDecks).toHaveLength(10);
     const packs = await loadStarterCards();
-    const cards = beginnerDecks.flatMap((d) => packs.get(d.id)!);
+    // Reviewed section-expansion packs sit on top of the authored beginner lessons
+    // and carry their own (shorter) explanation format, so scope this to the lessons.
+    const expansionIds = new Set(
+      (await loadSectionExpansion()).flatMap((pack) =>
+        pack.cards.map((card) => card.id),
+      ),
+    );
+    const allCards = beginnerDecks.flatMap((d) => packs.get(d.id)!);
+    expect(allCards).toHaveLength(
+      160 +
+        beginnerDecks.reduce((total, d) => total + sectionAdditionCount(d.id), 0),
+    );
+    const cards = allCards.filter((card) => !expansionIds.has(card.id));
     expect(cards).toHaveLength(160);
     for (const card of cards) {
       const pages = parseAnswerPages(card.back)!;

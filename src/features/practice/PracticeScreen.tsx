@@ -52,19 +52,18 @@ export function PracticeScreen() {
   return (
     <div className="practice-screen">
       <section className="practice-hero">
-        <div className="eyebrow">YOUR ENGINEERING WORKBENCH</div>
-        <h1>Turn knowledge into shipped work.</h1>
-        <p>Build independence, reliability, and technical judgment in an app you own. Start with the first mission, or choose a skill you need at work. No puzzle drills.</p>
+        <h1>Engineering practice</h1>
+        <p>Hands-on missions to do in Recall or your own project, with a journal for your evidence. Start with the first mission, or pick the skill you need at work.</p>
         <div className="practice-hero-actions">
           <Link className="practice-primary-link" to={next ? `/practice/${next.id}` : `/practice/${engineeringMissions[0].id}`}>
-            {next ? "Continue your next mission" : "Revisit your first mission"}<ArrowRight size={17} />
+            {next ? "Continue your next mission" : "Revisit the first mission"}<ArrowRight size={17} />
           </Link>
           <span>{completed} / {engineeringMissions.length} completed with evidence</span>
         </div>
         <progress aria-label="Missions completed with evidence" value={completed} max={engineeringMissions.length} />
       </section>
       <section className="content-panel practice-session">
-        <div><h2>One useful session today</h2><p>Use a short review to recall an idea, then apply it. Missions can span several sessions.</p></div>
+        <div><h2>Plan a session</h2><p>Review an idea briefly, then apply it. Missions can span several sessions.</p></div>
         <div className="time-options" role="group" aria-label="Practice time budget">
           {[15, 30, 60].map((minutes) => <button key={minutes} aria-pressed={budget === minutes} onClick={() => setBudget(minutes)}>{minutes} min</button>)}
         </div>
@@ -95,8 +94,8 @@ export function PracticeScreen() {
         </section>
       ))}
       <section className="content-panel practice-portability">
-        <h2>Your work is the evidence</h2>
-        <p>Keep a local path, commit, PR link, or concrete result in each journal entry. Completion is your self-review of a work sample; it does not certify a job level. Repeat the work with less guidance and more responsibility.</p>
+        <h2>Your evidence</h2>
+        <p>Keep a file path, commit, PR link, or concrete result in each journal entry. Completion is your own review of a work sample, not a certification. Repeat missions later with less guidance.</p>
         <div className="practice-hero-actions"><Button icon={Download} disabled={entries.length === 0} onClick={() => exportEvidence(entries)}>Export evidence</Button><Link className="text-link" to="/settings">Back up or restore your journal <ArrowRight size={15} /></Link></div>
         <p className="practice-note">Saved on this device and included in Recall JSON backups. Practice entries do not use automatic cloud sync.</p>
       </section>

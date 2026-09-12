@@ -286,7 +286,6 @@ export function StudyScreen() {
         <span className="completion-icon">
           {reviewed ? <PartyPopper size={31} /> : <Check size={31} />}
         </span>
-        <div className="eyebrow justify-center">ONE STEP FURTHER</div>
         <h1>{reviewed ? "Session complete" : "You’re all caught up."}</h1>
         <p>
           {reviewed
@@ -369,7 +368,7 @@ export function StudyScreen() {
           onClick={() => navigate(backTo)}
         >
           <ArrowLeft size={16} />
-          {isDotnet ? ".NET path" : "Your workspace"}
+          {isDotnet ? ".NET path" : "Home"}
         </button>
         <span className="timer">
           <Clock3 size={14} />
@@ -382,7 +381,7 @@ export function StudyScreen() {
         </button>
       </div>
       <h1 className="study-title">
-        {deckId ? currentDeck?.name : isDotnet ? "C# & .NET web study" : "A little of everything."}
+        {deckId ? currentDeck?.name : isDotnet ? "C# & .NET web study" : "All decks"}
       </h1>
       <div className="study-meta">
         <span>

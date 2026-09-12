@@ -26,13 +26,21 @@ for (const section of manifest.sections) {
   assert.equal(section.before, base); assert.equal(section.added, added); assert.equal(section.after, base + added);
 }
 const scenarios = additions.flatMap(pack => pack.cards).filter(card => card.kind === 'scenario');
+// Revisions for retired library cards stay in the file: the app uses them to recognise an
+// unedited retired card on upgrade. They no longer correspond to a shipped card.
+const retiredPrefixes = read('src/data/content-report.json').retiredLibraryPrefixes;
+const isRetiredLibraryId = id => retiredPrefixes.some(prefix => id.startsWith(prefix));
+let corrected = 0;
 for (const correction of read('src/data/content-corrections.json')) {
+  assert(correction.previous.length > 0, `Missing previous content for ${correction.id}`);
+  if (isRetiredLibraryId(correction.id)) continue;
+  corrected++;
   const card = all.find(card => card.id === correction.id);
   assert(card, `Missing corrected card ${correction.id}`);
   assert.equal(card.front, correction.front);
   assert.equal(card.back, correction.back);
-  assert(correction.previous.length > 0, `Missing previous content for ${correction.id}`);
 }
+assert.equal(corrected, read('src/data/content-quality-report.json').correctedBaseCards, 'Corrected base card count drifted');
 assert.equal(scenarios.length, manifest.kinds.scenario);
 for (const card of scenarios) {
   assert(!/____|\[recall\]/.test(card.front));

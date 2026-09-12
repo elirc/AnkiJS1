@@ -5,7 +5,7 @@ import {
   type StudyPreferences,
 } from "../../srs/preferences";
 import { newCardCandidates } from "../../srs/siblings";
-import { buildQueue, interleaveQueues } from "../../srs/queue";
+import { buildQueues, interleaveQueues } from "../../srs/queue";
 import { getDeckInfo, type Track } from "../../data/curriculum";
 
 export async function getStudyPreferences(): Promise<StudyPreferences> {
@@ -32,19 +32,15 @@ export function introductionCounts(
   now: Date,
 ) {
   const today = localDateStamp(now);
-  const ids = new Set(
-    logs
-      .filter(
-        (log) =>
-          log.state_before === "new" &&
-          localDateStamp(new Date(log.reviewed_at)) === today,
-      )
-      .map((log) => log.card_id),
-  );
+  const ids = new Set<string>();
+  for (const log of logs)
+    if (log.state_before === "new" && localDateStamp(new Date(log.reviewed_at)) === today)
+      ids.add(log.card_id);
   const byDeck = new Map<string, number>();
-  for (const card of cards)
-    if (ids.has(card.id))
-      byDeck.set(card.deck_id, (byDeck.get(card.deck_id) ?? 0) + 1);
+  if (ids.size)
+    for (const card of cards)
+      if (ids.has(card.id))
+        byDeck.set(card.deck_id, (byDeck.get(card.deck_id) ?? 0) + 1);
   // Deleted or moved cards still consume today's global allowance.
   return { total: ids.size, byDeck };
 }
@@ -72,24 +68,23 @@ export async function loadStudy(deckId?: string, now = new Date(), track?: Track
     : 0;
   const rotated = [...decks.slice(offset), ...decks.slice(0, offset)];
   const candidates = newCardCandidates(allCards, logs, now);
-  const queues = rotated.map((deck) =>
-    buildQueue(candidates, deck, counts.byDeck.get(deck.id) ?? 0, now),
-  );
-  const future = allCards
-    .filter(
-      (card) =>
-        ids.has(card.deck_id) &&
-        !card.deleted_at &&
-        !card.suspended &&
-        card.state !== "new" &&
-        Date.parse(card.due) > now.getTime(),
-    )
-    .sort((a, b) => Date.parse(a.due) - Date.parse(b.due));
+  const byDeck = buildQueues(candidates, rotated, counts.byDeck, now);
+  const queues = rotated.map((deck) => byDeck.get(deck.id) ?? []);
+  let nextDue: string | null = null;
+  let nextDueMs = Infinity;
+  for (const card of allCards) {
+    if (!ids.has(card.deck_id) || card.deleted_at || card.suspended || card.state === "new") continue;
+    const dueMs = Date.parse(card.due);
+    if (dueMs > now.getTime() && dueMs < nextDueMs) {
+      nextDueMs = dueMs;
+      nextDue = card.due;
+    }
+  }
   return {
     decks,
     // A focused path introduces new cards in curriculum order; due reviews stay first.
     queue: interleaveQueues(track ? [queues.flat()] : queues, remainingNew),
-    nextDue: future[0]?.due ?? null,
+    nextDue,
     preferences,
     remainingNew,
   };

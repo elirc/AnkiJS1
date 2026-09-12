@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../../components/Button";
-import { Modal } from "../../components/Modal";
+import { ConfirmDialog } from "../../components/ConfirmDialog";
 import { MarkdownView } from "../../components/MarkdownView";
 import { AnswerExplorer } from "../../components/AnswerExplorer";
 import { DeckIcon } from "../../components/DeckCard";
@@ -57,12 +57,13 @@ export function DeckDetailScreen() {
     };
   }, [deckId, query, now.getTime()]);
   if (data === undefined)
-    return <p className="loading-state">Opening your deck…</p>;
+    return <p className="loading-state">Loading deck</p>;
   if (data === null)
     return (
       <div className="empty-panel">
-        <h1>Deck not found.</h1>
-        <Link to="/decks">Back to your decks</Link>
+        <h1>Deck not found</h1>
+        <p>It may have been deleted, or the link is wrong.</p>
+        <Link to="/decks">All decks</Link>
       </div>
     );
   const { deck, counts, cards } = data;
@@ -75,7 +76,7 @@ export function DeckDetailScreen() {
     try {
       await work();
     } catch {
-      setError("Could not save that change. Please try again.");
+      setError("That change was not saved. Try again.");
     } finally {
       setBusy(false);
     }
@@ -92,10 +93,10 @@ export function DeckDetailScreen() {
             <DeckIcon id={deck.id} />
             <div>
               <div className="eyebrow">
-                {info?.track ?? "YOUR PERSONAL DECK"}
+                {info?.track ?? "Personal deck"}
               </div>
               <h1>{deck.name}</h1>
-              <p>{info?.description ?? "Make this knowledge your own."}</p>
+              <p>{info?.description ?? "Cards you added yourself."}</p>
             </div>
           </div>
           <div className="detail-actions">
@@ -158,8 +159,8 @@ export function DeckDetailScreen() {
           </label>
         </div>
         <p className="mt-3 text-xs text-muted">
-          The daily allowance in Settings also applies across all decks. Related
-          new exercises wait until another day.
+          The global new-card limit in Settings also applies. Related new
+          exercises are introduced on different days.
         </p>
         {info && (
           <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -184,7 +185,7 @@ export function DeckDetailScreen() {
         <Search size={18} />
         <input
           aria-label="Search cards"
-          placeholder="Search questions and answers…"
+          placeholder="Search questions and answers"
           value={query}
           onChange={(event) => {
             setQuery(event.target.value);
@@ -199,15 +200,15 @@ export function DeckDetailScreen() {
       )}
       <section className="content-panel">
         <div className="panel-heading">
-          <h2>Inside this deck</h2>
-          <span className="text-xs text-muted">Tap a question to peek</span>
+          <h2>Cards</h2>
+          <span className="text-xs text-muted">Select a question to show its answer</span>
         </div>
         {cards.length === 0 ? (
           <div className="empty-panel">
             <p>
               {query
-                ? "No cards match your search."
-                : "Your first card is a good place to start."}
+                ? "No cards match the search."
+                : "This deck has no cards yet."}
             </p>
             {!query && (
               <Button
@@ -295,35 +296,28 @@ export function DeckDetailScreen() {
         <CreateDeckDialog deck={deck} onClose={() => setRenaming(false)} />
       )}
       {deleting && (
-        <Modal
+        <ConfirmDialog
           title={deleting.deck ? "Delete this deck?" : "Delete this card?"}
-          onClose={() => setDeleting(null)}
+          confirmLabel={deleting.deck ? "Delete deck" : "Delete card"}
+          busy={busy}
+          onCancel={() => setDeleting(null)}
+          onConfirm={() =>
+            void action(async () => {
+              if (deleting.deck) {
+                await deleteDeck(deleting.id);
+                navigate(backTo);
+              } else await deleteCard(deleting.id);
+              setDeleting(null);
+            })
+          }
         >
-          <p className="text-muted">
+          <p>
             {deleting.deck
-              ? `“${deck.name}” and its cards will be removed from your library.`
-              : "This card will be removed from your deck and study queue."}{" "}
-            Export a backup in Settings if you want to keep a copy.
+              ? `“${deck.name}” and its ${counts.total} cards will be removed, including their review history.`
+              : "This card and its review history will be removed."}{" "}
+            Export a backup in Settings first if you want to keep a copy.
           </p>
-          <div className="modal-actions">
-            <Button onClick={() => setDeleting(null)}>Keep it</Button>
-            <Button
-              variant="danger"
-              disabled={busy}
-              onClick={() =>
-                void action(async () => {
-                  if (deleting.deck) {
-                    await deleteDeck(deleting.id);
-                    navigate(backTo);
-                  } else await deleteCard(deleting.id);
-                  setDeleting(null);
-                })
-              }
-            >
-              Delete {deleting.deck ? "deck" : "card"}
-            </Button>
-          </div>
-        </Modal>
+        </ConfirmDialog>
       )}
     </div>
   );

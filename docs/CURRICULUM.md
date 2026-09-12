@@ -1,6 +1,6 @@
 # Recall curriculum
 
-The current v13 library contains 21,102 cards across 75 decks, including 72 authored scenarios and 828 guided lessons, plus 48 hands-on engineering missions. It adds 14,068 cards to the retained v12 library. Overall card, lesson, and mission counts are each three times their v12 totals; growth varies by deck. See [the expansion and verification scope](COMPREHENSIVE-EXPANSION.md). The automatic retrieval layer remains retired; [the earlier quality review](CONTENT-REVIEW.md) documents that decision.
+The current v15 library contains 2,871 cards across 75 decks: 2,799 retained base cards plus 72 authored scenarios, including 552 guided lesson cards across 276 lessons, alongside 48 hands-on engineering missions. Version 15 retires the generated source-derived library added in curriculum versions 12 through 14; [the release notes](RELEASE.md) record what that does to an existing installation. The automatic retrieval layer remains retired as well; [the earlier quality review](CONTENT-REVIEW.md) documents that decision.
 
 ## Historical v8 inventory
 
@@ -90,7 +90,7 @@ The base Start here path teaches 80 ideas, and Keep going teaches 100 further id
 
 The default schedule introduces 10 new cards per local day across all decks, with due reviews first. Related introductions revisit the same idea after 1, then 3, then 7 local calendar days. Eligible familiar ideas take priority within a deck. Due reviews and learning retries are not delayed by this introduction spacing. FSRS retention defaults to 90%, configurable in Settings.
 
-The authored C# & .NET path contains 96 lessons and 192 paired cards. Together with the earlier authored paths, the retained guided set contains 276 lessons and 552 cards; v13 adds 552 source-guided lessons. The dedicated `/dotnet` page groups its decks into C# fundamentals, web backend development, and completing a working app. Focused sessions keep due reviews first and introduce new cards in deck order while sharing the existing global daily allowance. The authored path uses .NET 10 as its baseline, with official Microsoft Learn links for further reading. Source references retain their documented platform context.
+The authored C# & .NET path contains 96 lessons and 192 paired cards. Together with the earlier authored paths, the retained guided set contains 276 lessons and 552 cards. The dedicated `/dotnet` page groups its decks into C# fundamentals, web backend development, and completing a working app. Focused sessions keep due reviews first and introduce new cards in deck order while sharing the existing global daily allowance. The authored path uses .NET 10 as its baseline, with official Microsoft Learn links for further reading. Source references retain their documented platform context.
 
 Curriculum version 6 removes 434 bundled DSA, puzzle, and unrelated math cards and replaces the guided algorithm material with 38 CRUD cards. The new decks are **09 · Build your first CRUD feature** and **20 · Fix real CRUD app problems**; an early-return lesson also replaces the recursion exercise. The C# & .NET path remains available at `/dotnet`.
 

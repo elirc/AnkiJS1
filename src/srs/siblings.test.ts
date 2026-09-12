@@ -2,8 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { Card, ReviewLog } from "../db/schema";
 import { newCardFields } from "./scheduler";
 import { newCardCandidates, siblingKey } from "./siblings";
-import { buildQueue, interleaveQueues } from "./queue";
-import familyText from "../data/related-family-index.json?raw";
+import { buildQueue, buildQueues, interleaveQueues } from "./queue";
 
 const stamp = new Date(2026, 2, 7, 12).toISOString();
 function card(id: string, overrides: Partial<Card> = {}): Card {
@@ -42,13 +41,20 @@ describe("related retrieval spacing", () => {
     const personal = card("personal", {note_id: null});
     expect(newCardCandidates([...cards, personal], logs, new Date(2026, 2, 9))).toEqual([personal]);
   });
-  it("connects generated variants to their original card without database metadata", () => {
-    const index = JSON.parse(familyText) as Record<string, string>;
-    const [prefix, original] = Object.entries(index)[0];
-    const variant = card(`${prefix}abcdef0`, {note_id: null});
-    expect(siblingKey(variant)).toBe(original);
-    expect(siblingKey(card(original, {note_id: null}))).toBe(original);
-    expect(newCardCandidates([variant], [log(original, 7)], new Date(2026, 2, 7))).toEqual([]);
+  it("pairs adapted exercises and guided lessons by their reserved identity prefix", () => {
+    const explain = card("c0000000-1234-4567-8901-123456789ab0", {note_id: null});
+    const complete = card("c0000000-1234-4567-8901-123456789ab1", {note_id: null});
+    expect(siblingKey(explain)).toBe(siblingKey(complete));
+    expect(siblingKey(card("personal", {note_id: null}))).toBe("personal");
+    expect(newCardCandidates([complete], [log(explain.id, 7)], new Date(2026, 2, 7))).toEqual([]);
+  });
+  it("builds every deck's queue in one pass with the same result as one deck at a time", () => {
+    const decks = ["deck", "other"].map((id) => ({id, name: id, new_per_day: 2, user_id: null, created_at: stamp, updated_at: stamp, deleted_at: null}));
+    const library = [...cards, card("five", {deck_id: "other", note_id: null}), card("six", {deck_id: "other", note_id: null, state: "review", reps: 2, due: stamp})];
+    const combined = buildQueues(library, decks, new Map([["deck", 1], ["other", 0]]), new Date(stamp));
+    for (const deck of decks)
+      expect(combined.get(deck.id)).toEqual(buildQueue(library, deck, deck.id === "deck" ? 1 : 0, new Date(stamp)));
+    expect(combined.get("other")!.map((c) => c.id)).toEqual(["six", "five"]);
   });
   it("revisits an eligible familiar idea ahead of an older unseen concept", () => {
     const deck = {id: "deck", name: "Deck", new_per_day: 10, user_id: null, created_at: stamp, updated_at: stamp, deleted_at: null};

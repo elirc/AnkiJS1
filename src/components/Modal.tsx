@@ -40,10 +40,15 @@ export function Modal({
         const nodes = focusable();
         const first = nodes[0],
           last = nodes.at(-1);
-        if (event.shiftKey && document.activeElement === first) {
+        const active = document.activeElement;
+        if (!dialogRef.current?.contains(active)) {
+          // Focus escaped (for example after a click on the backdrop); bring it back.
+          event.preventDefault();
+          (event.shiftKey ? last : first)?.focus();
+        } else if (event.shiftKey && active === first) {
           event.preventDefault();
           last?.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
+        } else if (!event.shiftKey && active === last) {
           event.preventDefault();
           first?.focus();
         }
@@ -58,7 +63,12 @@ export function Modal({
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end bg-black/50 p-0 backdrop-blur-sm md:items-center md:justify-center md:p-4">
+    <div
+      className="fixed inset-0 z-50 flex items-end bg-black/50 p-0 backdrop-blur-sm md:items-center md:justify-center md:p-4"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) closeRef.current();
+      }}
+    >
       <div
         role="dialog"
         ref={dialogRef}

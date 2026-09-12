@@ -34,7 +34,7 @@ export function DeckListScreen() {
     return next;
   }, { replace: true });
   const [creating, setCreating] = useState(false);
-  if (!data) return <p className="loading-state">Loading your library…</p>;
+  if (!data) return <p className="loading-state">Loading decks</p>;
   const rows = data.summaries.filter(
     (item) =>
       (filter === "All decks" ||
@@ -47,13 +47,9 @@ export function DeckListScreen() {
     <div className="space-y-6">
       <div className="page-heading">
         <div>
-          <div className="eyebrow">YOUR KNOWLEDGE, COMPOUNDING</div>
-          <h1>
-            Good things to know<span className="text-primary">.</span>
-          </h1>
+          <h1>Decks</h1>
           <p>
-            {data.totalCards} cards. {data.summaries.length} decks. A stronger
-            foundation, one review at a time.
+            {data.totalCards} cards in {data.summaries.length} decks.
           </p>
         </div>
         <Button variant="primary" icon={Plus} onClick={() => setCreating(true)}>
@@ -66,7 +62,7 @@ export function DeckListScreen() {
           aria-label="Search decks"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Find a deck or topic…"
+          placeholder="Search by deck name or topic"
         />
       </div>
       <div className="filter-row" role="group" aria-label="Filter decks">
@@ -81,7 +77,7 @@ export function DeckListScreen() {
         ))}
       </div>
       {filter === "C# & .NET" && <Link to="/dotnet" className="next-step-link">
-        Follow the C# & .NET learning path and start a focused study session
+        Open the C# & .NET path for these decks in order
       </Link>}
       {rows.length ? (
         <div className="deck-grid">
@@ -91,8 +87,8 @@ export function DeckListScreen() {
         </div>
       ) : (
         <div className="empty-panel">
-          <h2>No decks found</h2>
-          <p>Try another search or start a deck of your own.</p>
+          <h2>No decks match</h2>
+          <p>Change the search or filter, or create a deck.</p>
           <Button icon={Plus} onClick={() => setCreating(true)}>
             Create a deck
           </Button>

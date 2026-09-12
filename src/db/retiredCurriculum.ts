@@ -2,6 +2,7 @@ import retirement from "../data/retired-curriculum.json";
 import { nowISO } from "../lib/dates";
 import { db, type Card, type Deck, type SyncTableName } from "./schema";
 import { unchangedRetiredRetrievalCards } from "./retiredRetrieval";
+import { unchangedRetiredLibraryCards } from "./retiredLibrary";
 import { reviewedContentUpdates } from "./contentCorrections";
 
 // Explicit shipped identities only: never classify a user's cards by their text.
@@ -11,7 +12,8 @@ export async function retireLegacyCurriculum(): Promise<boolean> {
     const timestamp = nowISO();
     const corrected = await reviewedContentUpdates(timestamp);
     const cards: Card[] = [...await db.cards.bulkGet(retirement.cardIds),
-      ...await unchangedRetiredRetrievalCards()]
+      ...await unchangedRetiredRetrievalCards(),
+      ...await unchangedRetiredLibraryCards()]
       .filter((card): card is Card => Boolean(card && !card.deleted_at))
       .map((card) => ({
         ...card,

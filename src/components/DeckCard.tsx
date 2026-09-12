@@ -54,7 +54,7 @@ export function DeckCard({ summary }: { summary: DeckSummary }) {
       </div>
       <h3>{deck.name}</h3>
       <p className="deck-description">
-        {info?.description ?? "Your own questions. Your next breakthrough."}
+        {info?.description ?? "Cards you added yourself."}
       </p>
       <div className="deck-progress-label">
         <span>{total} cards</span>
@@ -67,7 +67,7 @@ export function DeckCard({ summary }: { summary: DeckSummary }) {
         <span className={due + newAvailable > 0 ? "ready-dot" : "muted-dot"}>
           {due + newAvailable > 0
             ? `${due + newAvailable} ready to study`
-            : "All caught up"}
+            : "Nothing due"}
         </span>
         <span>{newAvailable} new</span>
       </div>

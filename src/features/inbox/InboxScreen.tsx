@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { Link } from 'react-router-dom';
 import { Archive, Check, CreditCard, Trash2 } from 'lucide-react';
 import { Button } from '../../components/Button';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { EmptyState } from '../../components/EmptyState';
 import { TextArea } from '../../components/TextArea';
 import { listDecks } from '../../db/repos/deckRepo';
@@ -16,6 +18,7 @@ export function InboxScreen() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState('');
   const [converting, setConverting] = useState<Note | null>(null);
+  const [deleting, setDeleting] = useState<Note | null>(null);
 
   function startEdit(note: Note) {
     setEditingId(note.id);
@@ -32,12 +35,21 @@ export function InboxScreen() {
       <div className="flex items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Inbox</h1>
-          <p className="text-muted">{notes.length} notes waiting</p>
+          <p className="text-muted">
+            {notes.length} {notes.length === 1 ? 'note' : 'notes'} waiting
+          </p>
         </div>
       </div>
 
       {notes.length === 0 ? (
-        <EmptyState title="Inbox zero. Go capture something." />
+        <EmptyState
+          title="No notes in the inbox."
+          action={
+            <Link className="text-link" to="/capture">
+              Write a note
+            </Link>
+          }
+        />
       ) : (
         <div className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
           {notes.map((note) => (
@@ -66,13 +78,7 @@ export function InboxScreen() {
                 <Button icon={Archive} onClick={() => void archiveNote(note.id)}>
                   Archive
                 </Button>
-                <Button
-                  icon={Trash2}
-                  variant="ghost"
-                  onClick={() => {
-                    if (window.confirm('Delete this note?')) void deleteNote(note.id);
-                  }}
-                >
+                <Button icon={Trash2} variant="ghost" onClick={() => setDeleting(note)}>
                   Delete
                 </Button>
               </div>
@@ -83,6 +89,20 @@ export function InboxScreen() {
 
       {converting ? (
         <ConvertNoteDialog note={converting} decks={decks} onClose={() => setConverting(null)} />
+      ) : null}
+      {deleting ? (
+        <ConfirmDialog
+          title="Delete this note?"
+          confirmLabel="Delete note"
+          onCancel={() => setDeleting(null)}
+          onConfirm={() => {
+            void deleteNote(deleting.id);
+            setDeleting(null);
+          }}
+        >
+          <p className="line-clamp-3 whitespace-pre-wrap">{deleting.body}</p>
+          <p className="mt-2">Cards already made from this note are kept.</p>
+        </ConfirmDialog>
       ) : null}
     </div>
   );

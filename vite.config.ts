@@ -13,8 +13,10 @@ export default defineConfig({
         "icons/maskable-512.png",
       ],
       workbox: {
-        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,txt}"],
+        // Install-only data: fetched once while online, then it lives in IndexedDB.
+        globIgnores: ["**/expanded-cards-*.js", "**/retired-retrieval-hashes-*.js"],
         navigateFallback: "/index.html",
         runtimeCaching: [
           {
@@ -66,16 +68,36 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    rolldownOptions: {
+      output: {
+        // Stable vendor chunks survive app deploys in the browser cache.
+        codeSplitting: {
+          groups: [
+            { name: "react", test: /node_modules[\\/](react|react-dom|scheduler|react-router|react-router-dom)[\\/]/ },
+            { name: "supabase", test: /node_modules[\\/]@supabase[\\/]/ },
+            { name: "dexie", test: /node_modules[\\/]dexie(-react-hooks)?[\\/]/ },
+            { name: "markdown", test: /node_modules[\\/](react-markdown|remark-gfm)[\\/]/ },
+          ],
+        },
+      },
+    },
+  },
   test: {
     exclude: ["e2e/**", "node_modules/**", "dist/**"],
-    environment: "jsdom",
+    // happy-dom loads in seconds; jsdom took 30-100 s to load on Windows and tripped
+    // Vitest's fixed 60 s worker-start timeout.
+    environment: "happy-dom",
     setupFiles: "./src/test/setup.ts",
     globals: true,
     testTimeout: 30_000,
     hookTimeout: 30_000,
-    pool: "threads",
+    // A forked child starts faster than a worker_thread on this host.
+    pool: "forks",
     maxWorkers: 1,
     fileParallelism: false,
+    // One shared module registry: files must mock with vi.spyOn on the module
+    // namespace, because a vi.mock factory cannot replace an already-imported module.
     isolate: false,
   },
 });

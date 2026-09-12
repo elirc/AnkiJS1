@@ -1,6 +1,20 @@
 # Personal release notes
 
-The current v13 curriculum contains 21,102 cards, including 72 authored scenarios and 828 guided lessons, plus 48 engineering practice missions. These overall card, guided-lesson, and mission counts are each 3x their v12 totals. Existing identities and review progress remain intact. See [the comprehensive expansion review](COMPREHENSIVE-EXPANSION.md) for provenance, checks, and limitations. The v8 verification and packaging notes below are historical, not validation of v13.
+The current v15 curriculum contains 2,871 cards — 2,799 retained base cards and 72 authored scenarios — including 552 guided lesson cards, plus 48 engineering practice missions. Existing identities and review progress remain intact. The v8 verification and packaging notes below are historical, not validation of v15.
+
+## Version 15 — the generated library is retired
+
+Version 15 removes the generated source-derived library that shipped as curriculum versions 12 through 14, along with its build and check scripts, its expansion documents, and its bundled third-party license files. Two reasons: the collection had grown too large to install and study on a phone in short sessions, and its quality was uneven, because selection was automatic and semantic review only ever covered a sample of it. The curated library — the authored curriculum, the adapted _30 seconds of code_ material, and the 72 reviewed scenarios — is the intended product, and it is what ships.
+
+What happens to an existing install on the first load after updating:
+
+- Retired cards are identified only by their shipped identities: every ID beginning with `a3000000-` or `a4000000-`. No card is classified by its text.
+- A retired card you never edited becomes a tombstone. It stops appearing in study and library views and remains in JSON backups with its history.
+- A retired card you edited is kept. The migration treats a card as unedited only when its content timestamp is still the install timestamp, or when its exact text still matches the shipped original or a recorded correction; anything else is a personal rewrite and stays.
+- Review history is not rewritten. Ratings and review logs are untouched for retained, personal, and tombstoned cards, and scheduling fields on retained cards are unchanged.
+- No deck is removed. The retired cards lived in decks the curated library still uses, so every deck and its retained cards stay. The permanent retired-deck list from earlier versions keeps applying unchanged: such a deck is hidden only while it holds none of your own cards.
+- Retirement runs inside the same transaction as installation, so an interrupted upgrade rolls back cards, decks, sync queue, and the version marker together.
+- Older backup imports and cloud pulls apply the same rules, so a stale device cannot reintroduce the retired library.
 
 ## Verification for this package
 
@@ -48,7 +62,7 @@ Large installations now write 500-card batches within one atomic transaction and
 
 No account or backend is needed. Journal entries are stored in this browser and included in JSON backups; they are not included in optional Supabase sync. Export a JSON backup before replacing a deployed version or moving devices. Markdown evidence reports are for reading, not restoration.
 
-The package now ships curriculum v8: 13,609 cards (4.86x v6), including 10,810 related retrieval variations. All 75 decks receive additional practice. The generated packs and family index are included for offline use. Original card IDs and progress remain unchanged; the v8 marker installs missing additions on upgrade. The unused external-source candidate bank is not shipped.
+Historical note: curriculum v8 shipped 13,609 cards (4.86x v6), including 10,810 related retrieval variations across all 75 decks. Those variations were retired in v10; their packs and the family index stay in the repository for existing review history and personally edited copies, and are not bundled into the app. The unused external-source candidate bank is not shipped. Across every version, original card IDs and progress remain unchanged and each version marker installs only missing additions on upgrade.
 
 ## Verify and package
 

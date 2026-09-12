@@ -30,19 +30,18 @@ export function DotnetScreen() {
     <div className="dotnet-screen">
       <section className="dotnet-hero" aria-labelledby="dotnet-title">
         <div className="dotnet-intro">
-          <span className="dotnet-kicker"><Braces size={18} aria-hidden="true" /> YOUR C# & .NET WEB PATH</span>
-          <h1 id="dotnet-title">From your first line<br />to a working web app.</h1>
-          <p>Learn C#, ASP.NET Core, and EF Core in the minutes you have. Start with everyday explanations, then follow the code all the way to a real feature.</p>
+          <span className="dotnet-kicker"><Braces size={18} aria-hidden="true" /> Learning path</span>
+          <h1 id="dotnet-title">C# &amp; .NET</h1>
+          <p>From your first line of C# to a working ASP.NET Core app with EF Core. Plain explanations first, then the code all the way to a real feature.</p>
           <div className="dotnet-facts" aria-label="Your .NET library">
             <span><strong>{own.length}</strong> decks</span>
             <span><strong>{total}</strong> active cards</span>
             <span><strong>{learned}</strong> in review</span>
           </div>
-          <span className="dotnet-edition">Built around .NET 10 · Beginner through practical web development</span>
+          <span className="dotnet-edition">Built around .NET 10 · Beginner to practical web development</span>
         </div>
         <div className="dotnet-session">
-          <span className="eyebrow">A LITTLE .NET, EVERY DAY</span>
-          <h2>Your next few minutes</h2>
+          <h2>Study session</h2>
           <p><strong>{due} due</strong> reviews · <strong>{fresh} new</strong> cards ready</p>
           <div className="time-options" role="group" aria-label=".NET session length">
             {([2, 5, 10] as const).map((value) => (
@@ -73,7 +72,7 @@ export function DotnetScreen() {
         <div><span>03</span><p><strong>Rate what you remembered.</strong> Spaced repetition brings it back when it needs another look.</p></div>
       </section>
       <div className="section-heading dotnet-path-heading">
-        <div><h2>A path you can follow</h2><p>Start at deck 01, or jump to what you need for your current project.</p></div>
+        <div><h2>Decks in order</h2><p>Start at deck 01, or jump to what you need for your current project.</p></div>
         <Link to={`/decks?${new URLSearchParams({ track: DOTNET_TRACK })}`} className="text-link">Search .NET decks <ArrowRight size={15} /></Link>
       </div>
       {dotnetStages.map((stage, index) => (

@@ -1,12 +1,7 @@
-﻿import type { Card, ReviewLog } from "../db/schema";
-import familyIndexText from "../data/related-family-index.json?raw";
-
-const familyIndex: Record<string, string> = JSON.parse(familyIndexText);
+import type { Card, ReviewLog } from "../db/schema";
 
 export function siblingKey(card: Pick<Card, "id" | "note_id">): string {
   if (card.note_id) return `note:${card.note_id}`;
-  if (card.id.startsWith("a1000000-"))
-    return familyIndex[card.id.slice(0, -7)] ?? card.id;
   // Reserved prefixes identify paired adapted exercises and guided lessons.
   return /^(c|e|f)0000000-/.test(card.id) ? card.id.slice(0, -1) : card.id;
 }

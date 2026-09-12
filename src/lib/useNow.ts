@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-export function useNow(interval = 30_000): Date {
+// Due counts drift by the minute at most, and each tick re-reads the library.
+export function useNow(interval = 60_000): Date {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const update = () => setNow(new Date());

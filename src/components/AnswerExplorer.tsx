@@ -42,7 +42,7 @@ function AnswerReader({ front, back }: { front: string; back: string }) {
     <div className="answer-explorer">
       <div className="explanation-topline">
         <span>
-          <BookOpen size={15} /> LET IT CLICK
+          <BookOpen size={15} /> Answer
         </span>
         {multiple && (
           <span role="status">

@@ -1,15 +1,16 @@
 import { test, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
+import { engineeringMissions } from "../src/data/engineering-missions";
 
 test("engineering practice persists offline, exports evidence, and restores from backup", async ({ page, context }, testInfo) => {
   test.setTimeout(300_000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: /A little better/ })).toBeVisible({ timeout: 120_000 });
-  await page.getByRole("link", { name: /Build your engineering skills/ }).click({ timeout: 120_000 });
-  await expect(page.getByRole("heading", { name: "Turn knowledge into shipped work." })).toBeVisible();
-  await expect(page.locator(".mission-card")).toHaveCount(12);
+  await expect(page.getByRole("heading", { name: "Today", exact: true })).toBeVisible({ timeout: 120_000 });
+  await page.locator(".pathway-card", { hasText: "Engineering practice" }).click({ timeout: 120_000 });
+  await expect(page.getByRole("heading", { name: "Engineering practice", exact: true, level: 1 })).toBeVisible();
+  await expect(page.locator(".mission-card")).toHaveCount(engineeringMissions.length);
   await page.getByRole("button", { name: "15 min", exact: true }).click();
   await expect(page.locator(".practice-session-plan")).toContainText("10 min");
   await page.screenshot({ path: `artifacts/${testInfo.project.name}-engineering-practice.png`, fullPage: true });
@@ -42,7 +43,7 @@ test("engineering practice persists offline, exports evidence, and restores from
   await expect(page.getByLabel("Search decks")).toHaveValue("debugging");
   expect(await page.locator(".deck-card").count()).toBeGreaterThan(0);
   await page.goto("/practice");
-  await expect(page.locator(".practice-hero")).toContainText("1 / 12 completed with evidence");
+  await expect(page.locator(".practice-hero")).toContainText(`1 / ${engineeringMissions.length} completed with evidence`);
   const evidenceDownload = page.waitForEvent("download");
   await page.getByRole("button", { name: "Export evidence" }).click();
   const evidence = await evidenceDownload;

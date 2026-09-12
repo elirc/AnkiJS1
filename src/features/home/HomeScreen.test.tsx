@@ -42,6 +42,6 @@ describe('HomeScreen', () => {
   it('surfaces the inbox count when notes are waiting', async () => {
     await captureNote('a waiting thought');
     renderHome();
-    await waitFor(() => expect(screen.getByText(/1 notes waiting/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/1 note waiting/i)).toBeInTheDocument());
   });
 });

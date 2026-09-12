@@ -125,11 +125,8 @@ export function SettingsScreen() {
     <div className="mx-auto max-w-3xl">
       <div className="page-heading">
         <div>
-          <div className="eyebrow">MAKE YOURSELF AT HOME</div>
-          <h1>
-            Your study space, your way<span className="text-primary">.</span>
-          </h1>
-          <p>Small habits work best when they fit your life.</p>
+          <h1>Settings</h1>
+          <p>Daily goal, new-card limit, backups, imports, and sync.</p>
         </div>
       </div>
       {message && (
@@ -138,7 +135,7 @@ export function SettingsScreen() {
         </p>
       )}
       <section className="content-panel settings-section">
-        <h2>Keep it sustainable</h2>
+        <h2>Daily study</h2>
         <p>
           Your daily goal counts reviews across all decks. Spaced repetition
           brings difficult cards back sooner and gradually spaces out stronger
@@ -228,7 +225,7 @@ export function SettingsScreen() {
       <section className="content-panel settings-section">
         <div className="flex items-center gap-3 mb-2">
           <Smartphone size={20} className="text-primary" />
-          <h2 className="!mb-0">Your pocket-sized learning habit</h2>
+          <h2 className="!mb-0">Install on your phone</h2>
         </div>
         <p>
           {installed
@@ -276,7 +273,7 @@ export function SettingsScreen() {
         </p>
       </section>
       <section className="content-panel settings-section">
-        <h2>Your knowledge, kept safe</h2>
+        <h2>Backup and restore</h2>
         <p>
           Export all decks, cards, notes, review history, and your practice journal. Import a Recall
           backup to restore or merge progress on another device.
@@ -321,7 +318,7 @@ export function SettingsScreen() {
         </div>
       </section>
       <section className="content-panel settings-section">
-        <h2>Bring your own cards</h2>
+        <h2>Import cards</h2>
         <p>
           Import Anki’s plain-text export (.txt) or a tab-separated file (.tsv):
           question in the first column, answer in the second. Disable “Include
@@ -356,7 +353,7 @@ export function SettingsScreen() {
         </div>
       </section>
       <section className="content-panel settings-section">
-        <h2>Across your devices</h2>
+        <h2>Sync between devices</h2>
         {!configured ? (
           <>
             <p>
@@ -444,8 +441,7 @@ export function SettingsScreen() {
         )}
       </section>
       <p className="mt-5 text-xs text-muted">
-        The expanded library includes adapted, openly licensed learning
-        material.{" "}
+        The library includes adapted, openly licensed learning material.{" "}
         <a
           className="subtle-link"
           href="/content-credits.html"
@@ -457,8 +453,7 @@ export function SettingsScreen() {
       </p>
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-muted">
         <span>
-          Recall · {starterCardCount} starter cards · Built for the curious
-          engineer
+          Recall · {starterCardCount} bundled cards
         </span>
         <a
           href="https://github.com/open-spaced-repetition/fsrs4anki"

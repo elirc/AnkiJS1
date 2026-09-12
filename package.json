@@ -13,9 +13,7 @@
     "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit",
     "content:build": "node scripts/build-reviewed-content.mjs",
-    "content:expand": "node scripts/expand-library.mjs && node scripts/build-reviewed-content.mjs",
-    "content:expand-all": "python scripts/read-source-archives.py && node scripts/build-comprehensive-content.mjs && node scripts/build-reviewed-content.mjs",
-    "content:check": "node scripts/export-retrieval-baseline.mjs && node scripts/check-reviewed-content.mjs && node scripts/check-library-content.mjs && node scripts/check-comprehensive-content.mjs",
+    "content:check": "node scripts/export-retrieval-baseline.mjs && node scripts/check-reviewed-content.mjs",
     "content:runtime": "vite build --config scripts/quality-check.config.mjs && node artifacts/quality-check/check.mjs"
   },
   "devDependencies": {
@@ -27,7 +25,7 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "fake-indexeddb": "^6.2.5",
-    "jsdom": "^29.1.1",
+    "happy-dom": "^20.14.5",
     "mdast-util-to-string": "^4.0.0",
     "remark-parse": "^11.0.0",
     "remark-stringify": "^11.0.0",

@@ -1,6 +1,6 @@
 # Content and implementation review
 
-This document records the v10 quality pass. The current v12 expansion is documented in [Library expansion](LIBRARY-EXPANSION.md). The v10 install marker ensured that existing v9 installations received the completed correction pass; v12 retains those protections.
+This document records the v10 quality pass. The generated source-derived library that later shipped on top of it has since been retired; [the release notes](RELEASE.md) record the version 15 change. The v10 install marker ensured that existing v9 installations received the completed correction pass, and version 15 retains those protections.
 
 ## Findings and corrections
 

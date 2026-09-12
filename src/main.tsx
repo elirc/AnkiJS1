@@ -4,9 +4,9 @@ import { registerSW } from "virtual:pwa-register";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { App } from "./App";
 import { HomeScreen } from "./features/home/HomeScreen";
-import { initializeStudyData } from "./db/seed";
-import { initAuth } from "./db/sync/auth";
-import { setupSyncTriggers } from "./db/sync/engine";
+import { curriculumVersionKey, initializeStudyData } from "./db/seed";
+import { db } from "./db/schema";
+import { isSupabaseConfigured, loadSupabaseClient } from "./db/sync/supabaseClient";
 import { notifyAppUpdate } from "./lib/appUpdate";
 import "./styles.css";
 
@@ -61,30 +61,104 @@ const StudyScreen = lazy(() =>
   })),
 );
 
-function RouteFallback() {
+function Loading({ children }: { children: React.ReactNode }) {
   return (
     <div className="loading-state" role="status">
       <span className="loading-dot" />
-      Loading this workspace...
+      {children}
     </div>
   );
 }
 
-async function initialize() {
-  await initializeStudyData(({ completed, total, phase }) => {
-    root.render(
-      <div className="loading-state" role="status">
-        <span className="loading-dot" />
-        <span>{phase === "saving" ? "Saving your study library…" : `Preparing practice cards · ${completed.toLocaleString()} of ${total.toLocaleString()}`}</span>
-      </div>,
-    );
-  });
-  void initAuth()
-    .then(setupSyncTriggers)
-    .catch(() => {
-      // Local study remains available if optional authentication is unreachable.
-      setupSyncTriggers();
+const fallback = <Loading>Loading…</Loading>;
+
+const root = ReactDOM.createRoot(document.getElementById("root")!);
+
+function renderApp() {
+  root.render(
+    <React.StrictMode>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<App />}>
+            <Route index element={<HomeScreen />} />
+            <Route path="dotnet" element={<Suspense fallback={fallback}><DotnetScreen /></Suspense>} />
+            <Route path="capture" element={<Suspense fallback={fallback}><CaptureScreen /></Suspense>} />
+            <Route path="inbox" element={<Suspense fallback={fallback}><InboxScreen /></Suspense>} />
+            <Route path="study" element={<Suspense fallback={fallback}><StudyScreen /></Suspense>} />
+            <Route path="study/:deckId" element={<Suspense fallback={fallback}><StudyScreen /></Suspense>} />
+            <Route path="decks" element={<Suspense fallback={fallback}><DeckListScreen /></Suspense>} />
+            <Route path="decks/:deckId" element={<Suspense fallback={fallback}><DeckDetailScreen /></Suspense>} />
+            <Route path="cards/new" element={<Suspense fallback={fallback}><CardEditorScreen /></Suspense>} />
+            <Route path="cards/:cardId/edit" element={<Suspense fallback={fallback}><CardEditorScreen /></Suspense>} />
+            <Route path="settings" element={<Suspense fallback={fallback}><SettingsScreen /></Suspense>} />
+            <Route path="progress" element={<Suspense fallback={fallback}><ProgressScreen /></Suspense>} />
+            <Route path="practice" element={<Suspense fallback={fallback}><PracticeScreen /></Suspense>} />
+            <Route path="practice/:missionId" element={<Suspense fallback={fallback}><PracticeScreen /></Suspense>} />
+            <Route
+              path="*"
+              element={
+                <div className="empty-panel">
+                  <h1>Page not found.</h1>
+                  <a href="/">Back to home</a>
+                </div>
+              }
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </React.StrictMode>,
+  );
+}
+
+function renderStorageError() {
+  root.render(
+    <div className="empty-panel">
+      <h1>Recall could not open its local storage.</h1>
+      <p>
+        Allow site storage for this page, then try again. Nothing already saved
+        has been removed.
+      </p>
+      <button onClick={() => window.location.reload()}>Try again</button>
+    </div>,
+  );
+}
+
+// A first install must finish before the UI is useful, so it shows progress.
+// A curriculum upgrade runs behind the existing library; if it fails (for
+// example while offline), the current cards stay usable and it retries later.
+async function prepareLibrary(): Promise<void> {
+  if (await db.sync_meta.get(curriculumVersionKey)) return;
+  if ((await db.decks.count()) === 0) {
+    await initializeStudyData(({ completed, total, phase }) => {
+      root.render(
+        <Loading>
+          {phase === "saving"
+            ? "Saving your library…"
+            : `Installing cards · ${completed.toLocaleString()} of ${total.toLocaleString()}`}
+        </Loading>,
+      );
     });
+    return;
+  }
+  const upgrade = () => initializeStudyData().catch(() => {
+    window.addEventListener("online", upgrade, { once: true });
+  });
+  void upgrade();
+}
+
+async function startSync(): Promise<void> {
+  if (!isSupabaseConfigured()) return;
+  void loadSupabaseClient();
+  const [{ initAuth }, { setupSyncTriggers }] = await Promise.all([
+    import("./db/sync/auth"),
+    import("./db/sync/engine"),
+  ]);
+  try {
+    await initAuth();
+  } finally {
+    // Local study remains available if optional authentication is unreachable.
+    setupSyncTriggers();
+  }
 }
 
 const updateSW = registerSW({
@@ -92,97 +166,10 @@ const updateSW = registerSW({
 });
 window.addEventListener("recall:apply-update", () => void updateSW(true));
 
-const root = ReactDOM.createRoot(document.getElementById("root")!);
-root.render(
-  <div className="loading-state">
-    <span className="loading-dot" />
-    Preparing your engineering toolkit…
-  </div>,
-);
-void initialize()
-  .then(() =>
-    root.render(
-      <React.StrictMode>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<App />}>
-              <Route index element={<HomeScreen />} />
-              <Route
-                path="dotnet"
-                element={<Suspense fallback={<RouteFallback />}><DotnetScreen /></Suspense>}
-              />
-              <Route
-                path="capture"
-                element={<Suspense fallback={<RouteFallback />}><CaptureScreen /></Suspense>}
-              />
-              <Route
-                path="inbox"
-                element={<Suspense fallback={<RouteFallback />}><InboxScreen /></Suspense>}
-              />
-              <Route
-                path="study"
-                element={<Suspense fallback={<RouteFallback />}><StudyScreen /></Suspense>}
-              />
-              <Route
-                path="study/:deckId"
-                element={<Suspense fallback={<RouteFallback />}><StudyScreen /></Suspense>}
-              />
-              <Route
-                path="decks"
-                element={<Suspense fallback={<RouteFallback />}><DeckListScreen /></Suspense>}
-              />
-              <Route
-                path="decks/:deckId"
-                element={<Suspense fallback={<RouteFallback />}><DeckDetailScreen /></Suspense>}
-              />
-              <Route
-                path="cards/new"
-                element={<Suspense fallback={<RouteFallback />}><CardEditorScreen /></Suspense>}
-              />
-              <Route
-                path="cards/:cardId/edit"
-                element={<Suspense fallback={<RouteFallback />}><CardEditorScreen /></Suspense>}
-              />
-              <Route
-                path="settings"
-                element={<Suspense fallback={<RouteFallback />}><SettingsScreen /></Suspense>}
-              />
-              <Route
-                path="progress"
-                element={<Suspense fallback={<RouteFallback />}><ProgressScreen /></Suspense>}
-              />
-              <Route
-                path="practice"
-                element={<Suspense fallback={<RouteFallback />}><PracticeScreen /></Suspense>}
-              />
-              <Route
-                path="practice/:missionId"
-                element={<Suspense fallback={<RouteFallback />}><PracticeScreen /></Suspense>}
-              />
-              <Route
-                path="*"
-                element={
-                  <div className="empty-panel">
-                    <h1>That page took a wrong turn.</h1>
-                    <a href="/">Back to your study space</a>
-                  </div>
-                }
-              />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </React.StrictMode>,
-    ),
-  )
-  .catch(() =>
-    root.render(
-      <div className="empty-panel">
-        <h1>We couldn’t open your study space.</h1>
-        <p>
-          Please allow browser storage, then try again. Your existing data has
-          not been erased.
-        </p>
-        <button onClick={() => window.location.reload()}>Try again</button>
-      </div>,
-    ),
-  );
+root.render(<Loading>Opening Recall…</Loading>);
+prepareLibrary()
+  .then(() => {
+    renderApp();
+    void startSync().catch(() => undefined);
+  })
+  .catch(renderStorageError);

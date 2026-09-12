@@ -143,7 +143,8 @@ describe("StudyScreen", () => {
 
     expect(await screen.findByText("Question")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Show answer" }));
-    expect(await screen.findByText("Answer")).toBeInTheDocument();
+    // The explorer header is also labelled "Answer", so match the rendered body.
+    expect(await screen.findByText("Answer", { selector: "p" })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: /Good/ }));
     await screen.findByRole("heading", { name: "Session complete" }, { timeout: 5000 });
     await waitFor(async () => expect(await db.review_logs.count()).toBe(1));

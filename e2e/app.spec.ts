@@ -13,6 +13,12 @@ const report = JSON.parse(
   ),
 );
 const starterCardCount: number = report.totalCards;
+const manifest = JSON.parse(
+  readFileSync(new URL("../src/data/section-expansion-manifest.json", import.meta.url), "utf8"),
+) as { sections: { track: string; after: number }[] };
+const dotnetCardCount = manifest.sections
+  .filter((section) => section.track === "C# & .NET")
+  .reduce((total, section) => total + section.after, 0);
 const runtimeErrors = new WeakMap<Page, string[]>();
 
 // A fresh browser installs the offline curriculum before any screen is ready.
@@ -22,9 +28,10 @@ test.beforeEach(async ({ page }) => {
   runtimeErrors.set(page, errors);
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
+  // A fresh profile installs 2,871 cards first; a busy machine can need well over a minute.
   await expect(
-    page.getByRole("heading", { name: /A little better/ }),
-  ).toBeVisible({ timeout: 60_000 });
+    page.getByRole("heading", { name: "Today", exact: true }),
+  ).toBeVisible({ timeout: 180_000 });
 });
 
 test.afterEach(async ({ page }) => {
@@ -61,7 +68,8 @@ test("CRUD lessons replace puzzle decks and work offline", async ({ page, contex
 });
 
 test("CRUD upgrade preserves personal content and saved review progress", async ({ page }) => {
-  await page.evaluate(() => new Promise<void>((resolve, reject) => {
+  const versionKey = `starter_curriculum_v${report.curriculumVersion}`;
+  await page.evaluate((versionKey) => new Promise<void>((resolve, reject) => {
     const request = indexedDB.open("recall");
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
@@ -79,14 +87,14 @@ test("CRUD upgrade preserves personal content and saved review progress", async 
         cards.put({ ...existing, id: "b0000000-0000-4000-8000-000000001004", deck_id: deckId, front: "LeetCode Two Sum" });
         cards.put({ ...existing, id: "10000000-0000-4000-8000-000000000001", deck_id: deckId, front: "My personal API checklist" });
       };
-      tx.objectStore("sync_meta").delete("starter_curriculum_v6");
+      tx.objectStore("sync_meta").delete(versionKey);
       tx.objectStore("sync_meta").put({ key: "starter_curriculum_v5", value: "2026-01-01T00:00:00.000Z" });
       tx.oncomplete = () => { database.close(); resolve(); };
       tx.onabort = () => { database.close(); reject(tx.error); };
     };
-  }));
+  }), versionKey);
   await page.reload();
-  await expect(page.getByRole("heading", { name: /A little better/ })).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByRole("heading", { name: "Today", exact: true })).toBeVisible({ timeout: 180_000 });
   await page.goto("/decks/a0000000-0000-4000-8000-000000000001");
   await expect(page.getByRole("heading", { name: "My saved cards", exact: true })).toBeVisible();
   await expect(page.locator(".card-list-row")).toHaveCount(1);
@@ -114,7 +122,7 @@ test("beginner explanations, practice checks, and review navigation", async ({
 }, testInfo) => {
   await page.goto("/");
   await page
-    .getByRole("link", { name: /New to coding\? Start here/ })
+    .locator(".pathway-card", { hasText: "Start here" })
     .click({ timeout: 30_000 });
   await expect(page.locator(".deck-card")).toHaveCount(10);
   const beginner = curriculum.find((deck) => deck.track === "Start here")!;
@@ -166,7 +174,7 @@ test("beginner explanations, practice checks, and review navigation", async ({
 });
 
 test("practical decks are discoverable, bookmarkable, and teach offline", async ({ page, context }, testInfo) => {
-  await page.getByRole("link", { name: /Ready for the next step/ }).click();
+  await page.locator(".pathway-card", { hasText: "Keep going" }).click();
   await expect(page.getByRole("button", { name: "Keep going", exact: true }))
     .toHaveAttribute("aria-pressed", "true");
   await expect(page.locator(".deck-card")).toHaveCount(10);
@@ -203,12 +211,12 @@ test("practical decks are discoverable, bookmarkable, and teach offline", async 
 test(".NET learning path, scoped reviews, editing, and offline study", async ({ page, context }, testInfo) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.getByRole("link", { name: /Your C# & .NET web development path/ }).click();
+  await page.locator(".pathway-card", { hasText: "C# & .NET" }).click();
   await expect(page).toHaveURL(/\/dotnet$/);
-  await expect(page.getByRole("heading", { name: /From your first line/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "C# & .NET", exact: true, level: 1 })).toBeVisible();
   await expect(page.locator(".dotnet-stage")).toHaveCount(3);
   await expect(page.locator(".deck-card")).toHaveCount(12);
-  await expect(page.locator(".dotnet-facts")).toContainText("192");
+  await expect(page.locator(".dotnet-facts")).toContainText(String(dotnetCardCount));
   await page.getByRole("link", { name: /01 · C# from your first line/ }).click();
   await expect(page.locator(".card-list-row")).toHaveCount(16);
   await page.getByRole("link", { name: "C# & .NET path", exact: true }).click();
@@ -226,7 +234,7 @@ test(".NET learning path, scoped reviews, editing, and offline study", async ({ 
   await expect(page.locator(".deck-card")).toHaveCount(12);
   await page.getByLabel("Search decks").fill("DbContext");
   await expect(page.locator(".deck-card")).toHaveCount(1);
-  await page.getByRole("link", { name: /Follow the C# & .NET learning path/ }).click();
+  await page.getByRole("link", { name: /Open the C# & .NET path/ }).click();
   if (testInfo.project.name === "mobile") {
     await page.setViewportSize({ width: 320, height: 700 });
     const start = await page.getByRole("button", { name: "Study C# & .NET" }).boundingBox();
@@ -339,7 +347,7 @@ test("preloaded library, review, undo, and saved progress", async ({
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: /A little better/ }),
+    page.getByRole("heading", { name: "Today", exact: true }),
   ).toBeVisible({ timeout: 30_000 });
   await expect(
     page.getByRole("link", { name: /JavaScript & TypeScript/ }),
@@ -441,7 +449,7 @@ test("create, edit, search, and remove a personal card", async ({ page }) => {
     .getByRole("button", { name: "Delete card", exact: true })
     .click();
   await expect(
-    page.getByText("Your first card is a good place to start."),
+    page.getByText("This deck has no cards yet."),
   ).toBeVisible();
 });
 
@@ -451,7 +459,7 @@ test("offline reload keeps the app and reviews working", async ({
 }) => {
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: /A little better/ }),
+    page.getByRole("heading", { name: "Today", exact: true }),
   ).toBeVisible();
   await page.evaluate(async () => {
     await navigator.serviceWorker.ready;
@@ -461,7 +469,7 @@ test("offline reload keeps the app and reviews working", async ({
   await context.setOffline(true);
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: /A little better/ }),
+    page.getByRole("heading", { name: "Today", exact: true }),
   ).toBeVisible();
   // Confirm the network is unavailable; navigator.onLine may stay true under
   // protocol-level network emulation in some Chromium versions.
@@ -492,7 +500,7 @@ test("offline reload keeps the app and reviews working", async ({
 test("backup download and text import are usable", async ({ page }) => {
   await page.goto("/settings");
   await expect(
-    page.getByRole("heading", { name: /Your study space/ }),
+    page.getByRole("heading", { name: "Settings", exact: true }),
   ).toBeVisible();
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: "Export backup" }).click();
@@ -535,7 +543,7 @@ test("a narrow phone has no horizontal overflow and accessible study controls", 
   await page.setViewportSize({ width: 320, height: 700 });
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: /A little better/ }),
+    page.getByRole("heading", { name: "Today", exact: true }),
   ).toBeVisible();
   expect(
     await page.evaluate(

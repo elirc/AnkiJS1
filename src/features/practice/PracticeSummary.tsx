@@ -28,15 +28,15 @@ export function PracticeSummary() {
     <Link className="practice-banner" to="/practice">
       <Hammer size={23} aria-hidden="true" />
       <span>
-        <strong>Build your engineering skills</strong>
+        <strong>Engineering practice</strong>
         <small>
           {entries
-            ? `${completed} of ${engineeringMissions.length} missions completed with evidence. ${
+            ? `${completed} of ${engineeringMissions.length} missions completed. ${
                 next
                   ? `Next: ${next.title}.`
-                  : "Revisit your work and choose a stretch challenge."
+                  : "All missions are complete."
               }`
-            : "12 hands-on missions: build, debug, review, and ship."}
+            : `${engineeringMissions.length} hands-on missions with a journal for your evidence.`}
         </small>
       </span>
       <ArrowRight size={20} aria-hidden="true" />

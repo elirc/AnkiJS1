@@ -9,7 +9,7 @@ import {
 } from "../../srs/preferences";
 
 import { newCardCandidates } from "../../srs/siblings";
-import { buildQueue, interleaveQueues } from "../../srs/queue";
+import { buildQueues, interleaveQueues } from "../../srs/queue";
 
 export interface DeckSummary {
   deck: Deck;
@@ -26,41 +26,47 @@ export function calculateProgress(
   preferences: StudyPreferences = defaultStudyPreferences,
 ) {
   const today = localDateStamp(now);
+  const nowMs = now.getTime();
   const activeDecks = decks.filter((deck) => !deck.deleted_at);
-  const deckIds = new Set(activeDecks.map((deck) => deck.id));
-  const active = cards.filter(
-    (card) => !card.deleted_at && !card.suspended && deckIds.has(card.deck_id),
+  const tallies = new Map(
+    activeDecks.map((deck) => [deck.id, { total: 0, learned: 0, due: 0 }]),
   );
-  const todayLogs = logs.filter(
-    (log) => localDateStamp(new Date(log.reviewed_at)) === today,
-  );
+  let totalCards = 0;
+  let learned = 0;
+  for (const card of cards) {
+    const tally = tallies.get(card.deck_id);
+    if (!tally || card.deleted_at || card.suspended) continue;
+    totalCards++;
+    tally.total++;
+    if (card.state === "review") {
+      learned++;
+      tally.learned++;
+    }
+    if (card.state !== "new" && Date.parse(card.due) <= nowMs) tally.due++;
+  }
+  const byDay = new Map<string, number>();
+  let todayCount = 0;
+  let todayRecalled = 0;
+  for (const log of logs) {
+    const day = localDateStamp(new Date(log.reviewed_at));
+    byDay.set(day, (byDay.get(day) ?? 0) + 1);
+    if (day === today) {
+      todayCount++;
+      if (log.rating > 1) todayRecalled++;
+    }
+  }
   const introduced = introductionCounts(cards, logs, now);
   const remainingNew = Math.max(0, preferences.new_per_day - introduced.total);
   const candidates = newCardCandidates(cards, logs, now).filter(
-    (card) => !card.deleted_at && !card.suspended && deckIds.has(card.deck_id),
+    (card) => !card.deleted_at && !card.suspended && tallies.has(card.deck_id),
   );
-  const queues = new Map(
-    activeDecks.map((deck) => [
-      deck.id,
-      buildQueue(candidates, deck, introduced.byDeck.get(deck.id) ?? 0, now),
-    ]),
-  );
+  const queues = buildQueues(candidates, activeDecks, introduced.byDeck, now);
   const summaries: DeckSummary[] = activeDecks
     .map((deck) => {
-      const own = active.filter((card) => card.deck_id === deck.id);
-      return {
-        deck,
-        total: own.length,
-        learned: own.filter((card) => card.state === "review").length,
-        due: own.filter(
-          (card) =>
-            card.state !== "new" && Date.parse(card.due) <= now.getTime(),
-        ).length,
-        newAvailable: Math.min(
-          remainingNew,
-          queues.get(deck.id)!.filter((card) => card.state === "new").length,
-        ),
-      };
+      const tally = tallies.get(deck.id)!;
+      let fresh = 0;
+      for (const card of queues.get(deck.id) ?? []) if (card.state === "new") fresh++;
+      return { deck, ...tally, newAvailable: Math.min(remainingNew, fresh) };
     })
     .sort((a, b) => {
       const aInfo = getDeckInfo(a.deck.id),
@@ -68,11 +74,6 @@ export function calculateProgress(
       if (aInfo && bInfo) return a.deck.id.localeCompare(b.deck.id);
       return aInfo ? -1 : bInfo ? 1 : a.deck.name.localeCompare(b.deck.name);
     });
-  const byDay = new Map<string, number>();
-  for (const log of logs) {
-    const day = localDateStamp(new Date(log.reviewed_at));
-    byDay.set(day, (byDay.get(day) ?? 0) + 1);
-  }
   let streak = 0;
   const cursor = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   if (!byDay.has(today)) cursor.setDate(cursor.getDate() - 1);
@@ -101,22 +102,16 @@ export function calculateProgress(
     preferences,
     remainingNew,
     summaries,
-    todayCount: todayLogs.length,
+    todayCount,
     streak,
     days,
     totalReviews: logs.length,
-    recall: todayLogs.length
-      ? Math.round(
-          (todayLogs.filter((log) => log.rating > 1).length /
-            todayLogs.length) *
-            100,
-        )
-      : null,
+    recall: todayCount ? Math.round((todayRecalled / todayCount) * 100) : null,
     ready: due + newAvailable,
     due,
     newAvailable,
-    totalCards: active.length,
-    learned: active.filter((card) => card.state === "review").length,
+    totalCards,
+    learned,
   };
 }
 export async function getDashboard(now = new Date()) {
