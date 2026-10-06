@@ -2,6 +2,8 @@
 
 Use this path when you want a weekend-sized win: run the app, understand the shape, trace capture/study, and make one safe docs-or-test-sized contribution.
 
+> Line anchors throughout this curriculum are exact at commit `06c8835`; the code has moved since. See "Anchor Baseline" in [README.md](README.md) before chasing a line number that doesn't match.
+
 ## Install, Run, Test
 
 Verified from `package.json:6-12`.

@@ -5,7 +5,7 @@
 | Layer | Owns | Must not own | Anchors |
 | --- | --- | --- | --- |
 | UI screens | Form state, navigation, display | Timestamps, outbox, SQL | `src/features/*` |
-| Components | Reusable presentation | Product decisions | `src/components/Button.tsx:20-49` |
+| Components | Reusable presentation | Product decisions | `src/components/Button.tsx:7-44` |
 | Repositories | Local writes, transactions, timestamps | Remote API calls | `src/db/repos/*.ts` |
 | SRS domain | Scheduling calculations | Dexie/Supabase I/O | `src/srs/scheduler.ts:78-124`, `src/srs/queue.ts:11-37` |
 | Sync engine | Remote push/pull, cursors, merge writes | UI concerns | `src/db/sync/engine.ts:45-193` |

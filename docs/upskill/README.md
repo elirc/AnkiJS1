@@ -4,6 +4,32 @@ This curriculum turns Recall into a training lab for a junior engineer growing t
 
 Recall is a single-app React/Vite/TypeScript PWA for local-first spaced repetition. The browser owns the primary data store through Dexie/IndexedDB (`src/db/schema.ts:80-101`). Repositories are the write boundary (`src/db/repos/cardRepo.ts:7-99`, `src/db/repos/noteRepo.ts:6-67`, `src/db/repos/deckRepo.ts:7-89`). Study scheduling is isolated in pure SRS helpers (`src/srs/scheduler.ts:78-124`, `src/srs/queue.ts:11-37`). Supabase is optional: auth and sync are disabled if env vars are missing (`src/db/sync/supabaseClient.ts:5-19`). The app routes are declared in one place (`src/main.tsx:28-43`), and the PWA service worker/share target live in Vite config (`vite.config.ts:8-58`). Tests cover core SRS, queueing, merge behavior, repositories, and two UI smoke flows (`src/srs/queue.test.ts:42-96`, `src/db/sync/merge.test.ts:31-72`, `src/features/study/StudyScreen.test.tsx:10-32`).
 
+## Anchor Baseline — Read This First
+
+Every `path:line` anchor in this folder is exact at commit **`06c8835`**, the
+commit this curriculum was written against. The repo has since shipped two
+large commits ("Expand reviewed curriculum and improve offline study
+loading" and "Ship curriculum v15: curated library, simplified UI") that
+reworked parts of `src/db/sync/`, the study and settings screens, and added
+whole new modules the curriculum does not cover yet: the practice feature
+(`src/features/practice/`, `src/db/repos/practiceRepo.ts`), the .NET study
+screen (`src/features/dotnet/DotnetScreen.tsx`), and the retired-curriculum
+machinery (`src/db/retiredCurriculum.ts`, `src/db/retiredRetrieval.ts`,
+`src/db/retiredLibrary.ts`).
+
+File names and the layer map are unchanged, so the prose still reads
+correctly at HEAD — but line numbers into the files above may have shifted.
+To study with exact anchors, check out the baseline beside your working
+copy:
+
+```sh
+git worktree add ../recall-06c8835 06c8835
+```
+
+Reading at HEAD instead, trust the path and the described behaviour over
+the line number. When you catch a drifted claim, updating it is a
+real contribution — treat it as a standing good-first ticket.
+
 ## How To Use This
 
 **One weekend:** read [00-fast-track.md](00-fast-track.md), trace capture and study in [01-codebase-cartography/05-key-flows.md](01-codebase-cartography/05-key-flows.md), do two drills from [04-code-reading-gym/01-annotation-drills.md](04-code-reading-gym/01-annotation-drills.md), then run `npm test`.

@@ -184,7 +184,7 @@
 
 **Persistence and side effects:** import is one transaction and reuses merge functions.
 
-**Tests that cover it:** No direct import/export tests found.
+**Tests that cover it:** `src/db/repos/dataRepo.test.ts:18-91` covers round-trip export, versioned backup shape, and import-merge; no component-level test drives the Settings upload UI itself.
 
 **What juniors usually miss:** import is merge, not blind overwrite.
 

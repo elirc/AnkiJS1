@@ -11,7 +11,7 @@
 | 5 | `src/features/home/HomeScreen.tsx:9-95` | Dashboard composition. | `useLiveQuery` and repo calls. |
 | 6 | `src/features/capture/CaptureScreen.tsx:9-62` | Smallest complete feature. | Save flow and share params. |
 | 7 | `src/db/repos/noteRepo.ts:6-67` | Repository pattern. | Timestamp + outbox. |
-| 8 | `src/components/Button.tsx:20-49` | Shared UI pattern. | Variants and accessibility. |
+| 8 | `src/components/Button.tsx:7-44` | Shared UI pattern. | Variants and accessibility. |
 | 9 | `src/components/MarkdownView.tsx:5-17` | Markdown rendering boundary. | `skipHtml`. |
 | 10 | `src/features/capture/CaptureScreen.test.tsx:8-25` | UI smoke test style. | Arrange, act, assert. |
 
